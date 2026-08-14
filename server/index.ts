@@ -1,0 +1,26 @@
+import express from 'express';
+import { readFileSync, existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { cpus } from 'node:os';
+import { createRun, getProfile, getRun, paths, profiles, runs, saveProfile } from './db.js';
+import { buildInput, parseProfile } from './profile.js';
+import { cancel, execute } from './runner.js';
+import { runtime, smokeTest } from './runtime.js';
+import { lootCatalog } from './loot.js';
+import type { Scenario } from './types.js';
+
+const app=express(); app.use(express.json({limit:'5mb'}));
+const defaults: Scenario={name:'Single Target',fightStyle:'Patchwerk',duration:300,variation:20,targets:1,bloodlust:'pull',raidBuffs:true,consumables:true,rawOverride:''};
+app.get('/api/health',(_,res)=>res.json({ok:true,runtime:runtime()}));
+app.get('/api/profiles',(_,res)=>res.json(profiles()));
+app.post('/api/profiles',(req,res)=> { try { const p=parseProfile(req.body.rawProfile); res.status(201).json(saveProfile({name:p.name,className:p.className,spec:p.spec,rawProfile:p.raw})); } catch(e) { res.status(422).json({error:(e as Error).message}); } });
+app.get('/api/runs',(_,res)=>res.json(runs()));
+app.get('/api/runs/:id',(req,res)=> { const run=getRun(Number(req.params.id)); if(!run)return res.sendStatus(404);res.json(run); });
+app.get('/api/runs/:id/input',(req,res)=> { const run=getRun(Number(req.params.id)); if(!run)return res.sendStatus(404);res.type('text/plain').send(run.input); });
+app.get('/api/runs/:id/report',(req,res)=> { const run=getRun(Number(req.params.id)); if(!run?.reportPath || !existsSync(run.reportPath)) return res.status(404).json({error:'Report unavailable'}); res.type('text/html').send(readFileSync(run.reportPath)); });
+app.post('/api/runs',(req,res)=> { const profile=getProfile(Number(req.body.profileId)); if(!profile)return res.status(404).json({error:'Profile not found'}); const scenario={...defaults,...req.body.scenario} as Scenario; const threads=Math.max(1,Math.min(Number(req.body.threads)||cpus().length,cpus().length)); const input=buildInput(profile.rawProfile,scenario,threads); const id=createRun({mode:req.body.mode||'quick',title:req.body.title||`${profile.name} — ${scenario.name}`,status:'queued',scenario,input,simcVersion:runtime().version}); execute(id,input).catch(()=>undefined); res.status(202).json({id,input}); });
+app.post('/api/runs/:id/cancel',(req,res)=>res.json({cancelled:cancel(Number(req.params.id))}));
+app.get('/api/loot',(_,res)=>res.json(lootCatalog));
+app.post('/api/runtime/smoke-test',async(_,res)=> { const rt=runtime(); if(!rt.path)return res.status(409).json({error:'No SimC executable configured'}); try {await smokeTest(rt.path);res.json({ok:true});}catch(e){res.status(422).json({error:(e as Error).message});} });
+app.get('/api/config',(_,res)=>res.json({defaults,threads:cpus().length,dataDir:paths.root}));
+app.listen(4317,'127.0.0.1',()=>console.log('Local Sim Dashboard API: http://127.0.0.1:4317'));
