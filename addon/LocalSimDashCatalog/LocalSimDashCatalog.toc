@@ -1,0 +1,8 @@
+## Interface: 120100
+## Title: Local Sim Dashboard Catalog
+## Notes: Captures exact live Encounter Journal item variants for Local Sim Dashboard.
+## Author: Local Sim Dashboard
+## Version: 0.1.0
+## SavedVariables: LocalSimDashCatalogDB
+SeasonManifest.lua
+LocalSimDashCatalog.lua

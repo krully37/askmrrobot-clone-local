@@ -1,0 +1,12 @@
+{
+  "schema": 2,
+  "clientBuildPrefix": "12.1",
+  "requiredTables": ["Item", "ItemSparse", "JournalEncounterItem", "Difficulty", "ContentTuning", "ItemBonus", "ItemBonusTree"],
+  "optionalTables": ["ItemXItemEffect", "SpellItemEnchantment", "ItemEffect", "SpellEffect"],
+  "layouts": {
+    "Item": "996192aa",
+    "JournalEncounterItem": "8ed8eaea",
+    "SpellItemEnchantment": "d5d2c264"
+  },
+  "notes": "Table names and field mappings are deliberately pinned per client build. Enhancement rows are advisory until they match a checked-in curated SimC mapping. Optional enhancement tables enrich diagnostics but never block a loot-variant prefill."
+}

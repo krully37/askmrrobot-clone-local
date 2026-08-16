@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "season": "midnight-season-2",
+  "categories": [
+    {"id":"raid-lair","name":"Current-season raids & lairs","captureMode":"journal","tracks":["Raid Finder","Normal","Heroic","Mythic"]},
+    {"id":"mythic-plus","name":"Mythic+ dungeons","captureMode":"link","tracks":["Mythic+"]},
+    {"id":"delve","name":"Delves","captureMode":"link","tracks":["Tier 8","Tier 11"]},
+    {"id":"great-vault","name":"Great Vault","captureMode":"link","tracks":["Raid","Mythic+","Delve"]},
+    {"id":"bonus-roll","name":"Bonus-roll variants","captureMode":"link","tracks":["Raid Finder","Normal","Heroic","Mythic"]},
+    {"id":"crafted","name":"Crafted items","captureMode":"link","tracks":["Quality 1","Quality 2","Quality 3","Quality 4","Quality 5"]},
+    {"id":"catalyst","name":"Catalyst conversions","captureMode":"link","tracks":["Champion","Hero","Myth"]}
+  ]
+}

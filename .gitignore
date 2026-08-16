@@ -3,3 +3,5 @@ dist/
 .localsimdash/
 runtime/
 *.log
+.env
+.catalog-staging/

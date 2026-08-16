@@ -1,0 +1,14 @@
+Created At: 2026-08-16T19:24:55-04:00
+Completed At: 2026-08-16T19:26:56-04:00
+
+				The command exited with code 0.
+				Output:
+				Created At: 2026-08-16T19:16:03-04:00
+Completed At: 2026-08-16T19:16:03-04:00
+File Path: `file:///c:/Users/SeanS/Downloads/localsimdash/src/main.tsx`
+Total Lines: 85
+Total Bytes: 50722
+Showing lines 60 to 80
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+60: function TopGear(p:any){if(!p.inventory)return
+
