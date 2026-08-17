@@ -81,7 +81,11 @@ export function buildProfilesetInput(base:string,plans:PlannedLoadout[]){
       bySlot.set(candidate.slot,candidate);
     }
     const gear=[...bySlot.values()].map(candidate=>`profileset."${escaped}"+=${candidate.rawLine.replace(/^\s*[a-z_0-9]+=/i,`${candidate.slot}=`)}`);
-    return [`profileset."${escaped}"+=talents=${plan.talent.talents}`,...gear].join('\n');
+    const profileOptions = [`profileset."${escaped}"+=talents=${plan.talent.talents}`];
+    if (plan.talent.spec) profileOptions.push(`profileset."${escaped}"+=spec=${plan.talent.spec}`);
+    if (plan.talent.hero_talents !== undefined) profileOptions.push(`profileset."${escaped}"+=hero_talents=${plan.talent.hero_talents}`);
+    else profileOptions.push(`profileset."${escaped}"+=hero_talents=`);
+    return [...profileOptions,...gear].join('\n');
   });
   return `${base.trim()}\n\n# Local Sim Dashboard Top Gear profile sets\n${groups.join('\n\n')}\n`;
 }

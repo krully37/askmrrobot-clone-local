@@ -20,7 +20,8 @@ export async function runDroptimizer(runId:number, rawProfile:string, drops:Drop
   const scores=new Map<string,number>(), failures=new Map<string,string>(); const reports:string[]=[];
   const rows=()=>drops.map(drop=>{const candidates=paired(drop.slot).map(slot=>({slot,dps:scores.get(`drop_${drop.id}_${slot}`)||0,error:failures.get(`drop_${drop.id}_${slot}`)})).filter(x=>x.dps);const best=candidates.sort((a,b)=>b.dps-a.dps)[0];const failure=paired(drop.slot).map(slot=>failures.get(`drop_${drop.id}_${slot}`)).find(Boolean);return {itemId:drop.id,name:drop.name,boss:drop.boss,difficulty:drop.difficulty,slot:best?.slot||drop.slot,itemLevel:drop.itemLevel,dps:best?.dps||0,delta:(best?.dps||0)-baseline,relative:baseline?((best?.dps||0)-baseline)/baseline:0,enhancement:'Preserved equipped-slot enhancement when available',error:best?undefined:failure};}).sort((a,b)=>b.delta-a.delta);
   const save=(patch:Partial<DropProgress>={})=>{
-    const completedProfiles=scores.size+failures.size, elapsedMs=Date.now()-started, remaining=Math.max(0,entries.length-completedProfiles);
+    const completedProfiles=patch.completedProfiles ?? (scores.size+failures.size);
+    const elapsedMs=Date.now()-started, remaining=Math.max(0,entries.length-completedProfiles);
     const msPerProfile=completedProfiles?elapsedMs/completedProfiles:undefined;
     const plannedRemainingBatches=Math.ceil(remaining/Math.max(1,batchSize));
     const progress:DropProgress={stage:'simulating',totalProfiles:entries.length,completedProfiles,currentBatch,totalBatches:currentBatch+plannedRemainingBatches,elapsedMs,estimatedRemainingMs:msPerProfile?Math.round(remaining*msPerProfile):undefined,partialResults:rows().filter(x=>x.dps).slice(0,8).map(x=>({name:x.name,dps:x.dps,boss:x.boss,delta:x.delta})),reports,failedProfiles:failures.size,threads,...patch};
@@ -31,7 +32,7 @@ export async function runDroptimizer(runId:number, rawProfile:string, drops:Drop
     if(!batch.length||cancelled())return;
     const batchStarted=Date.now();
     try {
-      const result=await execute(runId,buildInput(inputFor(rawProfile,batch),scenario,threads),{suffix:`batch-${currentBatch}-${Date.now()}`,finalize:false});
+      const result=await execute(runId,buildInput(inputFor(rawProfile,batch),scenario,threads),{suffix:`batch-${currentBatch}-${Date.now()}`,finalize:false,onProgress:c=>save({completedProfiles:scores.size+failures.size+c})});
       reports.push(result.reportPath);
       const resultScores=new Map(result.profilesets.map(x=>[x.name,x.dps||0]));
       for(const entry of batch){const score=resultScores.get(entry.name);if(score)scores.set(entry.name,score);else failures.set(entry.name,'Simulation returned no DPS result.');}

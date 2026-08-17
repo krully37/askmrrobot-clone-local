@@ -31,11 +31,46 @@ export function parseInventory(clean: string): ParsedInventory {
   const lines=clean.split('\n'); const candidates: GearCandidate[]=[]; const talents: TalentBuild[]=[]; let source: GearCandidate['source']='equipped'; let sequence=0;
   let pendingItem: PendingItemComment | undefined;
   for(let i=0;i<lines.length;i++) { const line=lines[i]; const header=sourceHeader(line); if(header) { source=header; pendingItem=undefined; continue; }
-    const item=candidateFromLine(line,source,sequence++,pendingItem); if(item) { candidates.push(item); pendingItem=undefined; continue; }
+    const item=candidateFromLine(line,source,sequence++,pendingItem); if(item) { 
+      candidates.push(item);
+      if (item.itemId === 248583 && typeof item.rawLine === 'string') {
+        const loaMatch = item.rawLine.match(/1318[3-6]/);
+        if (loaMatch) {
+          const currentLoa = loaMatch[0];
+          const loas: Record<string, string> = { '13183': 'Critical Strike', '13184': 'Haste', '13185': 'Mastery', '13186': 'Versatility' };
+          const baseName = (item.name || 'Drum of Renewed Bonds').replace(/\s*\([^)]+\)/g, '');
+          item.name = `${baseName} (${loas[currentLoa]})`;
+          for (const loa of Object.keys(loas)) {
+            if (loa !== currentLoa) {
+              const syntheticLine = item.rawLine.replace(currentLoa, loa);
+              const syntheticCandidate = candidateFromLine(syntheticLine, 'custom', sequence++, { name: `${baseName} (${loas[loa]})`, itemLevel: item.itemLevel });
+              if (syntheticCandidate) {
+                syntheticCandidate.slot = item.slot; 
+                candidates.push(syntheticCandidate);
+              }
+            }
+          }
+        }
+      }
+      pendingItem=undefined; 
+      continue; 
+    }
     const comment=line.match(/^\s*#\s*(.+?)\s*$/); if(comment && !/^\s*#\s*(?:Saved Loadout:|talents=)/i.test(line)) { const itemLevel=Number(comment[1].match(/\s+\((\d+)\)\s*$/)?.[1]) || undefined; pendingItem={name:comment[1].replace(/\s+\(\d+\)\s*$/,'').trim(),itemLevel}; }
-    const loadout=line.match(/^\s*#\s*Saved Loadout:\s*(.+)$/i); if(loadout) { const talentLine=lines.slice(i+1,i+4).find(x=>/^\s*#?\s*talents=/.test(x)); const talentsValue=talentLine?.replace(/^\s*#\s*/, '').match(/^talents=(.+)$/)?.[1]; if(talentsValue) talents.push({id:`saved-${talents.length}`,name:loadout[1].trim(),talents:talentsValue,selected:false}); }
+    const loadout=line.match(/^\s*#\s*Saved Loadout:\s*(.+)$/i); if(loadout) { 
+      const loadoutLines = lines.slice(i+1, i+6);
+      const talentLine = loadoutLines.find(x=>/^\s*#?\s*talents=/.test(x)); 
+      const specLine = loadoutLines.find(x=>/^\s*#?\s*spec=/.test(x)); 
+      const heroLine = loadoutLines.find(x=>/^\s*#?\s*hero_talents=/.test(x)); 
+      const talentsValue = talentLine?.replace(/^\s*#\s*/, '').match(/^talents=(.+)$/)?.[1]; 
+      const specValue = specLine?.replace(/^\s*#\s*/, '').match(/^spec=(.+)$/)?.[1]; 
+      const heroValue = heroLine?.replace(/^\s*#\s*/, '').match(/^hero_talents=(.+)$/)?.[1]; 
+      if(talentsValue) talents.push({id:`saved-${talents.length}`,name:loadout[1].trim(),talents:talentsValue,spec:specValue,hero_talents:heroValue,selected:false}); 
+    }
   }
-  const active=clean.match(/^\s*talents=(.+)$/mi)?.[1]; if(active) talents.unshift({id:'active',name:'Active loadout',talents:active,selected:true});
+  const active=clean.match(/^\s*talents=(.+)$/mi)?.[1]; 
+  const activeSpec=clean.match(/^\s*spec=(.+)$/mi)?.[1]; 
+  const activeHero=clean.match(/^\s*hero_talents=(.+)$/mi)?.[1]; 
+  if(active) talents.unshift({id:'active',name:'Active loadout',talents:active,spec:activeSpec,hero_talents:activeHero,selected:true});
   const className=clean.match(/^\s*(deathknight|death_knight|demonhunter|demon_hunter|druid|evoker|hunter|mage|monk|paladin|priest|rogue|shaman|warlock|warrior)=/mi)?.[1]||'';
   const spec=clean.match(/^\s*spec=([^\n]+)/mi)?.[1]||'';
   return { candidates, talents, vaultDetected:candidates.some(c=>c.source==='vault'), dualWieldCapable:canDualWield(className,spec) };

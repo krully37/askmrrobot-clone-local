@@ -17,7 +17,7 @@ export interface GearCandidate {
   gems?: string[]; enchant?: string; icon?: string; quality?: string; handedness?: WeaponHandedness;
 }
 export interface Enhancement { id:string; type:'gem'|'enchant'|'weapon'; name:string; effect?:string; slots:string[]; simcFragment:string; icon?:string; provenance?:string; clientBuild?:string; currentSeason?:boolean; weaponHands?:WeaponHandedness[]; reviewStatus?:'reviewed'|'unreviewed'; db2Status?:'matched'|'unavailable'; simcValidation?:'syntax-valid'|'unvalidated'; }
-export interface TalentBuild { id: string; name: string; talents: string; selected: boolean; }
+export interface TalentBuild { id: string; name: string; talents: string; spec?: string; hero_talents?: string; selected: boolean; }
 export interface ParsedInventory { candidates: GearCandidate[]; talents: TalentBuild[]; vaultDetected: boolean; dualWieldCapable: boolean; }
 export interface OptimizationRequest {
   profileId: number; scenario: Scenario; candidateIds: string[]; lockedSlots: string[];
