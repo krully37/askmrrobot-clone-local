@@ -18,8 +18,8 @@ export function parseSimcResult(jsonPath:string, kind:LocalResult['kind']='quick
   return {version:1,kind,dps:number(dps.mean),error:number(dps.mean_std_dev),iterations:number(dps.count),elapsedSeconds:number(sim.statistics?.elapsed_time_seconds),warnings,character:{name:player.name,race:player.race,level:player.level,specialization:player.specialization,talents:player.talents,potion:player.potion,flask:player.flask,food:player.food},gear,damage:actions,buffs};
 }
 
-export function topGearResult(results:{name:string;dps?:number}[], plans:PlannedLoadout[]):LocalResult {
-  const byName=new Map(plans.map(p=>[p.name,p])); const rows=results.map(row=>{const plan=byName.get(row.name);return {name:row.name,dps:number(row.dps),talent:plan?.talent.name,source:plan?.source,vaultCandidateId:plan?.vaultCandidateId,gear:plan?.candidates.map(c=>({slot:c.slot,name:c.name,itemId:c.itemId,itemLevel:c.itemLevel,source:c.source,rawLine:c.rawLine}))||[]};});
+export function topGearResult(results:{name:string;dps?:number;iterations?:number;error?:number}[], plans:PlannedLoadout[]):LocalResult {
+  const byName=new Map(plans.map(p=>[p.name,p])); const rows=results.map(row=>{const plan=byName.get(row.name);return {name:row.name,dps:number(row.dps),iterations:number(row.iterations),error:number(row.error),talent:plan?.talent.name,source:plan?.source,vaultCandidateId:plan?.vaultCandidateId,gear:plan?.candidates.map(c=>({slot:c.slot,name:c.name,itemId:c.itemId,itemLevel:c.itemLevel,source:c.source,rawLine:c.rawLine}))||[]};});
   const grouped=new Map<string, typeof rows>();
   for(const row of rows){
     const sig=row.talent+'|'+row.gear.map(g=>g.rawLine.replace(/^\s*[a-z_0-9]+=/i,'')).sort().join(';');
@@ -28,8 +28,10 @@ export function topGearResult(results:{name:string;dps?:number}[], plans:Planned
   }
   const deduped=Array.from(grouped.values()).map(group=>{
     const avgDps=group.reduce((sum,r)=>sum+r.dps,0)/group.length;
-    return {...group[0],dps:avgDps};
+    const avgIterations=group.reduce((sum,r)=>sum+r.iterations,0)/group.length;
+    const avgError=group.reduce((sum,r)=>sum+r.error,0)/group.length;
+    return {...group[0],dps:avgDps,iterations:avgIterations,error:avgError};
   }).sort((a,b)=>b.dps-a.dps);
   const baseline=deduped.find(x=>x.source==='bags')?.dps||deduped[0]?.dps||0;
-  return {version:1,kind:'topgear',dps:deduped[0]?.dps||0,error:0,iterations:0,elapsedSeconds:0,warnings:[],gear:deduped[0]?.gear||[],damage:[],buffs:[],comparisons:deduped.map(x=>({...x,delta:x.dps-baseline,relative:baseline?(x.dps-baseline)/baseline:0}))};
+  return {version:1,kind:'topgear',dps:deduped[0]?.dps||0,error:deduped[0]?.error||0,iterations:deduped[0]?.iterations||0,elapsedSeconds:0,warnings:[],gear:deduped[0]?.gear||[],damage:[],buffs:[],comparisons:deduped.map(x=>({...x,delta:x.dps-baseline,relative:baseline?(x.dps-baseline)/baseline:0}))};
 }

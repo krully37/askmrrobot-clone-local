@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 import { copyFileSync, existsSync, mkdirSync, readFileSync, renameSync, unlinkSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { pathsForCatalog } from './catalog.js';
+import { pathsForCatalog, openCatalog } from './catalog.js';
 
 interface DerivedItem { itemId:number; name?:string; iconFileDataId?:number; inventoryType?:number; classId?:number; subclassId?:number; handedness?:string; }
 interface DerivedEnhancement { enchantId:number; name:string; iconFileDataId?:number; type:'enchant'; slots:string[]; status:'derived'; }
@@ -22,10 +22,7 @@ export function installDerivedCatalog(packagePath=defaultPackage){
   if(value.schema!==3||value.status!=='derived'||!Array.isArray(value.items)||!Array.isArray(value.enhancements))throw new Error('Unsupported DB2 derived package. Run catalog:db2:prefill again with the current tool.');
   const catalog=pathsForCatalog();
   if(!existsSync(catalog.catalogPath))return {installed:false,reason:'Refresh the Blizzard catalog before installing DB2 metadata.'};
-  mkdirSync(catalog.staging,{recursive:true});
-  const staged=join(catalog.staging,`derived-${Date.now()}.db`);
-  copyFileSync(catalog.catalogPath,staged);
-  const db=new Database(staged);
+  const db=openCatalog();
   try {
     setup(db);
     const item=db.prepare(`INSERT INTO derived_item_metadata (item_id,name,icon_file_data_id,inventory_type,class_id,subclass_id,handedness,client_build,generated_at) VALUES (?,?,?,?,?,?,?,?,?) ON CONFLICT(item_id) DO UPDATE SET name=excluded.name,icon_file_data_id=excluded.icon_file_data_id,inventory_type=excluded.inventory_type,class_id=excluded.class_id,subclass_id=excluded.subclass_id,handedness=excluded.handedness,client_build=excluded.client_build,generated_at=excluded.generated_at`);
@@ -46,16 +43,13 @@ export function installDerivedCatalog(packagePath=defaultPackage){
       saveDiagnostic.run(JSON.stringify({clientBuild:value.clientBuild,mapping:value.mapping,generatedAt:value.generatedAt,tables:value.tables,items:value.items.length,journalDrops:value.journalDrops.length,enhancements:value.enhancements.length,diagnostics:value.diagnostics||[]}),new Date().toISOString());
     })();
     db.close();
-    const backup=`${catalog.catalogPath}.previous`;
-    if(existsSync(backup))unlinkSync(backup);
-    renameSync(catalog.catalogPath,backup);
-    renameSync(staged,catalog.catalogPath);
     const manifest=existsSync(catalog.manifestPath)?JSON.parse(readFileSync(catalog.manifestPath,'utf8')) as Record<string,unknown>:{};
-    writeFileSync(catalog.manifestPath,JSON.stringify({...manifest,db2Derived:{clientBuild:value.clientBuild,mapping:value.mapping,generatedAt:value.generatedAt,items:value.items.length,journalDrops:value.journalDrops.length,enhancements:value.enhancements.length}},null,2));
+    const tmp=`${catalog.manifestPath}.${Date.now()}.tmp`;
+    writeFileSync(tmp,JSON.stringify({...manifest,db2Derived:{clientBuild:value.clientBuild,mapping:value.mapping,generatedAt:value.generatedAt,items:value.items.length,journalDrops:value.journalDrops.length,enhancements:value.enhancements.length}},null,2));
+    renameSync(tmp,catalog.manifestPath);
     return {installed:true,items:value.items.length,journalDrops:value.journalDrops.length,enhancements:value.enhancements.length};
   } catch(error) {
     db.close();
-    if(existsSync(staged))unlinkSync(staged);
     throw error;
   }
 }

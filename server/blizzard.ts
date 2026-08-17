@@ -16,4 +16,7 @@ export class BlizzardClient {
   journalEncounter(id:number) { return this.data(`/data/wow/journal-encounter/${id}`); }
   item(id:number):Promise<BlizzardItem> { return this.data(`/data/wow/item/${id}`); }
   itemMedia(id:number) { return this.data(`/data/wow/media/item/${id}`); }
+  spell(id:number) { return this.data(`/data/wow/spell/${id}`); }
+  spellMedia(id:number) { return this.data(`/data/wow/media/spell/${id}`); }
+  searchSpell(name:string) { return this.data(`/data/wow/search/spell?name.en_US=${encodeURIComponent(name)}&orderby=id&_page=1`); }
 }
