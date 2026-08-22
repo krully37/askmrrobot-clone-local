@@ -1748,15 +1748,16 @@ function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses }: 
   }, []);
   useEffect(() => {
     if (source)
-      api(`/catalog/drops?instance=${encodeURIComponent(source)}`).then(
+      api(`/droptimizer/drops?profileId=${profileId}&instance=${encodeURIComponent(source)}`).then(
         setDrops,
       );
-  }, [source]);
+  }, [source, profileId]);
   const difficulties = [...new Set(drops.map((d) => d.difficulty))];
   const shown = difficulty
       ? drops.filter((d) => d.difficulty === difficulty)
       : drops,
-    verified = shown.filter((d) => d.status === "verified");
+    verified = shown.filter((d) => d.status === "verified"),
+    unverifiedEligibility = shown.filter((d) => d.eligibility?.confidence === "unknown");
   const start = async () => {
     if (!profileId) {
       setError("Import or select a character before running Droptimizer.");
@@ -1848,6 +1849,7 @@ function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses }: 
                   ? `${shown.length - verified.length} need captured variant data.`
                   : "Every listed drop has an exact SimC variant."}
               </span>
+              {unverifiedEligibility.length > 0 && <span className="result-warnings">{unverifiedEligibility.length} shown with unverified equipment eligibility.</span>}
             </div>
             <div className="upgrade-options" style={{ marginTop: '24px', padding: '16px', background: 'rgba(0,0,0,0.2)', borderRadius: '4px' }}>
               <h3 style={{ marginTop: 0, marginBottom: '16px' }}>Upgrade Track (Optional)</h3>
@@ -2308,10 +2310,12 @@ function DroptimizerResults({
             <strong>
               {x.error ? "—" : Math.round(x.dps).toLocaleString()}
             </strong>
-            <em className={x.delta >= 0 ? "gain" : "loss"}>
+            <em className={x.significant === false ? "neutral" : x.delta >= 0 ? "gain" : "loss"}>
               {x.error
                 ? "Not simulated"
-                : `${x.delta >= 0 ? "+" : ""}${Math.round(x.delta)} DPS (${(x.relative * 100).toFixed(2)}%)`}
+                : x.significant === false
+                  ? `Inconclusive · ±${Math.round(x.uncertainty || 0)} DPS simulation uncertainty`
+                  : `${x.delta >= 0 ? "+" : ""}${Math.round(x.delta)} DPS (${(x.relative * 100).toFixed(2)}%)`}
             </em>
           </div>
         </div>

@@ -11,7 +11,7 @@ export interface GearLine { slot:string; itemId?:number; itemLevel?:number; rawL
 export interface DroptimizerGearset { drop:DroptimizerDrop; slot:string; name:string; gear:GearLine[]; profilesetLines:string[]; warnings:string[]; }
 
 function replaceOption(fragment:string,key:string,value:string){const expression=new RegExp(`(^|,)${key}=[^,]*`);return expression.test(fragment)?fragment.replace(expression,(_,prefix)=>`${prefix}${key}=${value}`):`${fragment},${key}=${value}`;}
-function variantAtTarget(drop:DroptimizerDrop,target?:number):DroptimizerDrop { if(!target)return {...drop}; const itemLevel=drop.track?getCappedUpgradeLevel(drop.track,target)??target:target; return {...drop,itemLevel,simcFragment:replaceOption(drop.simcFragment,'ilevel',String(itemLevel))}; }
+function variantAtTarget(drop:DroptimizerDrop,target?:number):DroptimizerDrop { const itemLevel=target?(drop.track?getCappedUpgradeLevel(drop.track,target)??target:target):drop.itemLevel;let simcFragment=drop.simcFragment;if(drop.bonusIds?.length)simcFragment=replaceOption(simcFragment,'bonus_id',drop.bonusIds.join('/'));if(itemLevel)simcFragment=replaceOption(simcFragment,'ilevel',String(itemLevel));return {...drop,itemLevel,simcFragment}; }
 function lineFor(slot:string, fragment:string){return `${slot}=,${fragment.replace(/^,+/,'')}`;}
 function normalizeLine(slot:string, rawLine:string){return rawLine.replace(/^\s*[a-z_0-9]+=/i,`${slot}=`);}
 function baselineGear(inventory:ParsedInventory):GearLine[]{return inventory.candidates.filter(candidate=>candidate.source==='equipped'&&(DROPTIMIZER_SLOTS as readonly string[]).includes(candidate.slot)).map(candidate=>({slot:candidate.slot,itemId:candidate.itemId,itemLevel:candidate.itemLevel,rawLine:normalizeLine(candidate.slot,candidate.rawLine)}));}
@@ -31,10 +31,12 @@ export function buildDroptimizerGearsets(drops:DroptimizerDrop[], rawProfile:str
     const slots=drop.handedness==='one-hand'&&inventory.dualWieldCapable&&['main_hand','off_hand'].includes(drop.slot)?['main_hand','off_hand']:pairedSlots(drop.slot);
     return slots.flatMap(slot=>{
     const variant=variantAtTarget(drop,upgradeTarget), replaced=baseline.find(line=>line.slot===slot);
+    if(replaced?.itemId===variant.id)return [];
     const warnings:string[]=[];
     if(!replaced)warnings.push(`No equipped item was found for ${slot}.`);
     if(!/(?:^|,)id=\d+(?:,|$)/.test(variant.simcFragment))warnings.push('Candidate SimC fragment has no item id.');
     if(!/(?:^|,)ilevel=\d+(?:,|$)/.test(variant.simcFragment))warnings.push('Candidate SimC fragment has no item level.');
+    if(!/(?:^|,)bonus_id=/.test(variant.simcFragment))warnings.push('No verified bonus IDs were recorded; SimC is using the item base form at this item level.');
     if((slot.startsWith('finger')||slot.startsWith('trinket'))&&baseline.find(line=>line.slot!==slot&&pairedSlots(slot).includes(line.slot))?.itemId===variant.id)warnings.push(`Candidate duplicates the other ${slot.startsWith('finger')?'ring':'trinket'} slot.`);
     let fragment=variant.simcFragment.replace(/^,+/,'');
     const replacedCandidate=inventory.candidates.find(candidate=>candidate.source==='equipped'&&candidate.slot===slot);

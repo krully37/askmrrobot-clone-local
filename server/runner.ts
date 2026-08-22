@@ -6,7 +6,7 @@ import { runtime, ensureReports } from './runtime.js';
 import { parseSimcResult } from './results.js';
 
 const running = new Map<number, ReturnType<typeof spawn>>();
-export interface SimResult { reportPath: string; jsonPath: string; profilesets: { name:string; dps?:number }[]; elapsedMs:number; }
+export interface SimResult { reportPath: string; jsonPath: string; profilesets: { name:string; dps?:number; iterations?:number; error?:number }[]; elapsedMs:number; }
 /**
  * json2 changed profilesets from an array/object of results to an object with a
  * `metric` and `results` property.  Read both layouts because historical runs
