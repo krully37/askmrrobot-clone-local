@@ -1,7 +1,8 @@
-import { StrictMode, useCallback, useEffect, useMemo, useState } from "react";
+import { StrictMode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { GlobalItemTooltip } from "./item-tooltip";
 import consumableSeed from "../data/midnight-consumables.json";
+import enhancementSeed from "../data/midnight-enhancements.json";
 import { OmniumFolioPicker } from "./OmniumFolioPicker";
 import "./styles.css";
 import "./results.css";
@@ -11,6 +12,7 @@ import "./compute.css";
 import "./enhancements.css";
 import "./character-history.css";
 import "./catalog-health.css";
+import "./interaction-controls.css";
 
 type Profile = {
   id: number;
@@ -21,6 +23,98 @@ type Profile = {
   persistence?: "reusable" | "disposable";
   updatedAt?: string;
 };
+
+function displayName(value?: string) {
+  if (!value) return "Unknown";
+  if (value !== value.toLowerCase()) return value;
+  return value
+    .toLowerCase()
+    .replace(/(^|[\s'-])([a-z])/g, (_match, prefix, letter) => `${prefix}${letter.toUpperCase()}`);
+}
+
+function enhancementName(type: "enchant" | "gem", value: string | undefined, enhancements: Enhancement[] = []) {
+  if (!value) return undefined;
+  const id = value.match(/\d+/)?.[0];
+  const knownEnhancements = [
+    ...enhancements,
+    ...((enhancementSeed as { entries?: Enhancement[] }).entries || []),
+  ];
+  const match = id
+    ? knownEnhancements.find((enhancement) => enhancement.simcFragment === `${type}_id=${id}`)
+    : undefined;
+  return match?.name || `${type === "gem" ? "Gem" : "Enchant"} ${id || value}`;
+}
+
+function ProfilePicker({
+  profiles,
+  profileId,
+  onSelect,
+  onManage,
+}: {
+  profiles: Profile[];
+  profileId?: number;
+  onSelect: (id: number) => void;
+  onManage: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  const active = profiles.find((profile) => profile.id === profileId) || profiles[0];
+  useEffect(() => {
+    const close = (event: MouseEvent) => {
+      if (root.current && !root.current.contains(event.target as Node)) setOpen(false);
+    };
+    const escape = (event: KeyboardEvent) => event.key === "Escape" && setOpen(false);
+    document.addEventListener("mousedown", close);
+    document.addEventListener("keydown", escape);
+    return () => {
+      document.removeEventListener("mousedown", close);
+      document.removeEventListener("keydown", escape);
+    };
+  }, []);
+  if (!active) return null;
+  return (
+    <div className="profile-menu" ref={root}>
+      <button
+        className="profile-trigger"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        onClick={() => setOpen((value) => !value)}
+      >
+        <span className="profile-trigger-copy">
+          <b>{displayName(active.name)}</b>
+          <small>{displayName(active.realm)} · {displayName(active.spec)}</small>
+        </span>
+        <span className="profile-trigger-caret" aria-hidden="true">⌄</span>
+      </button>
+      {open && (
+        <div className="profile-popover" role="listbox" aria-label="Saved character profiles">
+          <span className="profile-popover-label">Active character</span>
+          {profiles.map((profile) => {
+            const selected = profile.id === active.id;
+            return (
+              <button
+                key={profile.id}
+                role="option"
+                aria-selected={selected}
+                className={selected ? "active" : ""}
+                onClick={() => {
+                  onSelect(profile.id);
+                  setOpen(false);
+                }}
+              >
+                <b>{displayName(profile.name)}</b>
+                <small>{displayName(profile.realm)} · {displayName(profile.spec)}</small>
+              </button>
+            );
+          })}
+          <button className="profile-manage" onClick={() => { onManage(); setOpen(false); }}>
+            Manage saved characters
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
 type Character = {
   id: number;
   name: string;
@@ -512,17 +606,12 @@ function App() {
               <h1>Saved characters</h1>
             </div>
             {profiles.length > 0 && (
-              <select
-                className="profile-picker"
-                value={profileId || ""}
-                onChange={(e) => setProfileId(+e.target.value)}
-              >
-                {profiles.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name} · {p.realm} · {p.spec}
-                  </option>
-                ))}
-              </select>
+              <ProfilePicker
+                profiles={profiles}
+                profileId={profileId}
+                onSelect={setProfileId}
+                onManage={() => setPage("characters")}
+              />
             )}
           </header>
           {notice && (
@@ -584,17 +673,12 @@ function App() {
             </h1>
           </div>
           {profiles.length > 0 && (
-            <select
-              className="profile-picker"
-              value={profileId || ""}
-              onChange={(e) => setProfileId(+e.target.value)}
-            >
-              {profiles.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name} · {p.spec}
-                </option>
-              ))}
-            </select>
+            <ProfilePicker
+              profiles={profiles}
+              profileId={profileId}
+              onSelect={setProfileId}
+              onManage={() => setPage("characters")}
+            />
           )}
         </header>
         {notice && (
@@ -936,8 +1020,8 @@ function Import({
       {preview ? (
         <div className="import-review">
           <h3>
-            {preview.profile.name} · {preview.profile.realm} ·{" "}
-            {preview.profile.spec}
+            {displayName(preview.profile.name)} · {displayName(preview.profile.realm)} ·{" "}
+            {displayName(preview.profile.spec)}
           </h3>
           <small>
             {preview.inventory.candidateCount} gear candidates ·{" "}
@@ -964,7 +1048,7 @@ function Import({
                 <option value="">Choose a matching character</option>
                 {preview.matches.candidates.map((x: any) => (
                   <option key={x.id} value={x.id}>
-                    {x.name} · {x.realm}
+                    {displayName(x.name)} · {displayName(x.realm)}
                   </option>
                 ))}
               </select>
@@ -1002,6 +1086,7 @@ function formatTime(seconds: number) {
       : `~${(seconds / 3600).toFixed(1)} hr`;
 }
 function TopGear(p: any) {
+  const [quickNavOpen, setQuickNavOpen] = useState(true);
   if (!p.inventory)
     return (
       <section className="panel">
@@ -1012,13 +1097,18 @@ function TopGear(p: any) {
   const availableSets = inventory ? ([...new Set(inventory.candidates.map(c => c.setName).filter(Boolean))] as string[]) : [];
   return (
     <>
-      <nav className="quick-nav">
-        <span style={{color: '#888', fontWeight: 'bold'}}>Quick Nav:</span>
-        <a href="#top" style={{color: '#fff', textDecoration: 'none'}}>Top</a>
-        {availableSets.length > 0 && <a href="#sets" style={{color: '#fff', textDecoration: 'none'}}>Safeguards</a>}
-        <a href="#gear" style={{color: '#fff', textDecoration: 'none'}}>Gear</a>
-        <a href="#enchants" style={{color: '#fff', textDecoration: 'none'}}>Enchants & Gems</a>
-        <a href="#talents" style={{color: '#fff', textDecoration: 'none'}}>Talents</a>
+      <nav className={`quick-nav ${quickNavOpen ? "open" : "collapsed"}`} aria-label="Top Gear quick navigation">
+        <button className="quick-nav-toggle" aria-expanded={quickNavOpen} onClick={() => setQuickNavOpen((open) => !open)}>
+          <span>Quick navigation</span>
+          <span aria-hidden="true">{quickNavOpen ? "−" : "+"}</span>
+        </button>
+        {quickNavOpen && <div className="quick-nav-links">
+          <a href="#top">Top</a>
+          {availableSets.length > 0 && <a href="#sets">Safeguards</a>}
+          <a href="#gear">Gear</a>
+          <a href="#enchants">Enchants & Gems</a>
+          <a href="#talents">Talents</a>
+        </div>}
       </nav>
       <section id="top" className="topgear-intro" style={{ position: "relative" }}>
         <div>
@@ -1246,6 +1336,8 @@ function Slot({
               />
               <span
                 className="item-icon"
+                data-enchant={c.enchant}
+                data-gems={c.gems?.join("/")}
                 style={{ position: "relative", overflow: "hidden" }}
               >
                 {c.itemId ? (
@@ -1266,7 +1358,7 @@ function Slot({
                 {slotIcons[slot]}
               </span>
               <span className="item-copy">
-                <b>{c.name}</b>
+                <b>{displayName(c.name)}</b>
                 <small>
                   <em>{c.source === "vault" ? "Vault" : c.source}</em>
                   {c.itemLevel ? ` · ilvl ${c.itemLevel}` : ""}
@@ -1277,8 +1369,8 @@ function Slot({
                 </small>
                 {c.enchant || c.gems?.length ? (
                   <i>
-                    {c.enchant && `✦ enchant ${c.enchant}`}
-                    {c.gems?.map((g) => ` ◇ gem ${g}`).join("")}
+                    {c.enchant && `✦ ${enhancementName("enchant", c.enchant, p.inventory?.enhancements)}`}
+                    {c.gems?.map((gem) => ` ◇ ${enhancementName("gem", gem, p.inventory?.enhancements)}`).join("")}
                   </i>
                 ) : null}
               </span>
@@ -2073,7 +2165,7 @@ function Result({ runId, back }: { runId?: number; back: () => void }) {
                   : "QUICK SIM"}
             </p>
             <h2>
-              {result.character?.name || run.title}
+              {result.character?.name ? displayName(result.character.name) : run.title}
               <strong>{Math.round(result.dps).toLocaleString()} DPS</strong>
             </h2>
             <p>
@@ -2469,7 +2561,7 @@ function Runs({
               <div>
                 <b>
                   {r.character
-                    ? `${r.character.name} · ${r.character.realm} · ${r.character.spec}`
+                    ? `${displayName(r.character.name)} · ${displayName(r.character.realm)} · ${displayName(r.character.spec)}`
                     : r.title}
                 </b>
                 <small>{r.title}</small>
@@ -2589,8 +2681,8 @@ function CharacterManager({
           {characters.map((c) => (
             <article className="character-card" key={c.id}>
               <div>
-                <h3>{c.name}</h3>
-                <p>{c.realm}</p>
+                <h3>{displayName(c.name)}</h3>
+                <p>{displayName(c.realm)}</p>
               </div>
               <small>
                 {c.runCount} historical run{c.runCount === 1 ? "" : "s"}
@@ -2601,7 +2693,7 @@ function CharacterManager({
               <div className="spec-list">
                 {c.specs.map((s) => (
                   <button key={s.id} onClick={() => activate(s.id)}>
-                    <b>{s.spec}</b>
+                    <b>{displayName(s.spec)}</b>
                     <small>
                       Updated {new Date(s.updatedAt).toLocaleDateString()}
                     </small>

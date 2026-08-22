@@ -1,9 +1,11 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { paths } from './db.js';
+import { enhancementSeed } from './enhancements.js';
 import Database from 'better-sqlite3';
 
 export interface TooltipLine { left?:string; right?:string; kind?:string; leftColor?:string; rightColor?:string; }
+export interface TooltipGem { id:string; name:string; iconUrl:string; }
 export interface CapturedTooltip { itemId:number; itemLevel?:number; bonusIds?:number[]; itemLink?:string; name?:string; quality?:number; lines:TooltipLine[]; clientBuild:string; capturedAt:string; }
 const file=join(paths.root,'catalog','tooltip-captures.json');
 const read=():CapturedTooltip[]=>existsSync(file)?JSON.parse(readFileSync(file,'utf8')):[];
@@ -32,25 +34,43 @@ export function resolveTooltip(query:{itemId:number;itemLevel?:number;bonusIds?:
   const found=exact||sameItem;
   const fallback=query.fallback||{};
   let dbName = fallback.name;
+  let enchantName:string|undefined;
+  const gemNames=new Map<string,string>();
+  const seedName=(fragment:string)=>enhancementSeed().entries.find(entry=>entry.simcFragment===fragment)?.name;
   let db;
   try {
     db = new Database(join(paths.root, 'catalog', 'catalog.db'), {readonly: true});
     const meta = db.prepare('SELECT name FROM derived_item_metadata WHERE item_id=?').get(query.itemId) as any;
     if (meta && meta.name) dbName = meta.name;
+    const enchantId=Number(fallback.enchant?.match(/\d+/)?.[0]);
+    if(Number.isInteger(enchantId)&&enchantId>0){
+      const enhancement=db.prepare('SELECT name FROM enhancements WHERE simc_fragment=? LIMIT 1').get(`enchant_id=${enchantId}`) as {name?:string}|undefined;
+      enchantName=enhancement?.name || seedName(`enchant_id=${enchantId}`);
+    }
+    for(const gem of fallback.gems||[]){
+      const gemId=Number(gem);
+      if(!Number.isInteger(gemId)||gemId<=0)continue;
+      const enhancement=db.prepare('SELECT name FROM enhancements WHERE simc_fragment=? LIMIT 1').get(`gem_id=${gemId}`) as {name?:string}|undefined;
+      gemNames.set(String(gemId),enhancement?.name||seedName(`gem_id=${gemId}`)||`Gem ${gemId}`);
+    }
   } catch (e) {} finally {
     if (db) db.close();
   }
+  const gems:TooltipGem[]=(fallback.gems||[]).map(value=>{
+    const id=value.match(/\d+/)?.[0]||value;
+    return {id,name:gemNames.get(id)||seedName(`gem_id=${id}`)||`Gem ${id}`,iconUrl:`/api/catalog/items/${encodeURIComponent(id)}/icon`};
+  });
 
-  if(found)return {status:exact?'exact':'item-match',capture:found,lines:found.lines,name:found.name||dbName||`Item ${query.itemId}`,itemLevel:found.itemLevel||query.itemLevel,stale:false};
+  if(found)return {status:exact?'exact':'item-match',capture:found,lines:found.lines,gems,name:found.name||dbName||`Item ${query.itemId}`,itemLevel:found.itemLevel||query.itemLevel,stale:false};
   const lines:TooltipLine[]=[
     {left:dbName||`Item ${query.itemId}`,kind:'name'},
     ...(query.itemLevel?[{left:`Item Level ${query.itemLevel}`,kind:'level'}]:[]),
     ...(fallback.slot?[{left:fallback.slot,kind:'slot'}]:[]),
-    ...(fallback.enchant?[{left:`Enchantment: ${fallback.enchant}`,kind:'enchant'}]:[]),
-    ...(fallback.gems?.map(gem=>({left:`Socketed: ${gem}`,kind:'gem'}))||[]),
+    ...(fallback.enchant?[{left:`Enchanted: ${enchantName||`Enchant ${fallback.enchant.match(/\d+/)?.[0]||fallback.enchant}`}`,kind:'enchant'}]:[]),
+    ...gems.map(gem=>({left:`Socketed: ${gem.name}`,kind:'gem'})),
     {left:'Item data is verified and ready for simulations.',kind:'missing'},
     {left:'(However, its live tooltip display has not been captured)',kind:'missing'},
     {left:'Use /lsdtooltips in WoW to capture it.',kind:'missing'},
   ];
-  return {status:'missing',lines,name:dbName||`Item ${query.itemId}`,itemLevel:query.itemLevel,stale:false};
+  return {status:'missing',lines,gems,name:dbName||`Item ${query.itemId}`,itemLevel:query.itemLevel,stale:false};
 }

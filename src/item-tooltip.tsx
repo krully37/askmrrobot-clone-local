@@ -18,6 +18,12 @@ const endpoint=(item:TooltipItem)=>{
   return `/api/catalog/items/${item.itemId}/tooltip?${params}`;
 };
 const quality=['#9d9d9d','#ffffff','#1eff00','#0070dd','#a335ee','#ff8000','#e6cc80','#00ccff'];
+const cleanTooltipText=(text:string|undefined)=>text?.replace(/\|A:[^|]*\|a/gi,'').replace(/\|T[^|]*\|t/gi,'').replace(/[ \t]+/g,' ').trim();
+
+function TooltipGemMedia({gems}:{gems?:{id:string;name:string;iconUrl:string}[]}){
+  if(!gems?.length)return null;
+  return <div className="wow-tooltip-gems" aria-label="Socketed gems">{gems.map(gem=><span className="wow-tooltip-gem" key={gem.id}><img src={gem.iconUrl} alt={gem.name} onError={event=>event.currentTarget.parentElement?.classList.add('missing')}/><span>{gem.name}</span></span>)}</div>;
+}
 
 export function renderWowText(text: string | undefined) {
   if (!text) return text;
@@ -54,7 +60,7 @@ export function GameItemIcon({item,children,className='item-icon'}:Props){
   useEffect(()=>{const escape=(event:KeyboardEvent)=>{if(event.key==='Escape'){setPinned(false);setVisible(false);}};window.addEventListener('keydown',escape);return()=>window.removeEventListener('keydown',escape);},[]);
   const schedule=()=>{window.clearTimeout(timer.current);timer.current=window.setTimeout(open,160);};
   const lines=data?.lines||[{left:item.name||'Unknown item',kind:'name'},...(item.itemLevel?[{left:`Item Level ${item.itemLevel}`,kind:'level'}]:[]),{left:'Live tooltip has not been captured locally.',kind:'missing'}];
-  return <><span ref={target} className={className} tabIndex={0} role="img" aria-label={item.name||item.slot||'Item'} onPointerEnter={schedule} onPointerLeave={()=>{window.clearTimeout(timer.current);close();}} onFocus={open} onBlur={close} onClick={()=>{setPinned(value=>!value);open();}}>{children}</span>{visible&&createPortal(<div className="wow-tooltip" role="tooltip" style={{left:position.left,top:position.top}} onPointerEnter={()=>setPinned(true)} onPointerLeave={()=>{setPinned(false);setVisible(false)}}><div className="wow-tooltip-inner">{lines.map((line:any,index:number)=><div key={`${index}-${line.left||''}`} className={`wow-tooltip-line ${line.kind||''}`}><span style={line.leftColor?{color:line.leftColor}:index===0?{color:quality[data?.capture?.quality||2]}:undefined}>{renderWowText(line.left)}</span>{line.right&&<span style={line.rightColor?{color:line.rightColor}:undefined}>{renderWowText(line.right)}</span>}</div>)}{data?.status==='item-match'&&<div className="wow-tooltip-note">Nearest local variant capture</div>}{data?.status==='missing'&&<div className="wow-tooltip-note">Use /lsdtooltips in WoW, then /reload.</div>}</div></div>,document.body)}</>;
+  return <><span ref={target} className={className} tabIndex={0} role="img" aria-label={item.name||item.slot||'Item'} onPointerEnter={schedule} onPointerLeave={()=>{window.clearTimeout(timer.current);close();}} onFocus={open} onBlur={close} onClick={()=>{setPinned(value=>!value);open();}}>{children}</span>{visible&&createPortal(<div className="wow-tooltip" role="tooltip" style={{left:position.left,top:position.top}} onPointerEnter={()=>setPinned(true)} onPointerLeave={()=>{setPinned(false);setVisible(false)}}><div className="wow-tooltip-inner">{lines.map((line:any,index:number)=><div key={`${index}-${line.left||''}`} className={`wow-tooltip-line ${line.kind||''} ${line.right?'paired':''}`}><span style={line.leftColor?{color:line.leftColor}:index===0?{color:quality[data?.capture?.quality||2]}:undefined}>{renderWowText(cleanTooltipText(line.left))}</span>{line.right&&<span style={line.rightColor?{color:line.rightColor}:undefined}>{renderWowText(cleanTooltipText(line.right))}</span>}</div>)}<TooltipGemMedia gems={data?.gems}/>{data?.status==='item-match'&&<div className="wow-tooltip-note">Nearest local variant capture</div>}{data?.status==='missing'&&<div className="wow-tooltip-note">Use /lsdtooltips in WoW, then /reload.</div>}</div></div>,document.body)}</>;
 }
 
 /**
@@ -77,7 +83,7 @@ export function GlobalItemTooltip(){
        effect = smallText.split(' · ')[0];
     }
     
-    return {itemId:itemId||undefined,name,slot:icon.getAttribute('aria-label')||undefined, effect};
+    return {itemId:itemId||undefined,name,slot:icon.getAttribute('aria-label')||undefined,enchant:icon.dataset.enchant,gems:icon.dataset.gems?.split('/').filter(Boolean), effect};
   };
   const show=(icon:HTMLElement)=>{const rect=icon.getBoundingClientRect(),width=Math.min(350,window.innerWidth-20);setPosition({left:Math.max(10,Math.min(window.innerWidth-width-10,rect.right+12)),top:Math.max(10,Math.min(window.innerHeight-20,rect.top))});setTarget(icon);const item=itemFor(icon),url=endpoint(item);if(!url){if(item.effect){setData({status:'exact',lines:[{left:item.name,kind:'name'},{left:item.effect,kind:'enchant'}]});}else{setData({status:'missing',lines:[{left:item.name||'Item information unavailable',kind:'name'},{left:'This icon has no captured item link.',kind:'missing'}]});}return;}const key=`${item.itemId}|${item.itemLevel||''}`;const prior=cache.get(key);if(prior){setData(prior);return;}setData(undefined);fetch(url,{cache:'no-store'}).then(r=>r.ok?r.json():undefined).then(value=>{if(value){cache.set(key,value);setData(value);}}).catch(()=>undefined);};
   useEffect(()=>{
@@ -92,5 +98,5 @@ export function GlobalItemTooltip(){
   },[]);
   if(!target)return null;
   const lines=data?.lines||[{left:'Loading local tooltip…',kind:'missing'}];
-  return createPortal(<div className="wow-tooltip" role="tooltip" style={{left:position.left,top:position.top}}><div className="wow-tooltip-inner">{lines.map((line:any,index:number)=><div key={`${index}-${line.left||''}`} className={`wow-tooltip-line ${line.kind||''}`}><span style={line.leftColor?{color:line.leftColor}:index===0?{color:quality[data?.capture?.quality||2]}:undefined}>{renderWowText(line.left)}</span>{line.right&&<span style={line.rightColor?{color:line.rightColor}:undefined}>{renderWowText(line.right)}</span>}</div>)}{data?.status==='item-match'&&<div className="wow-tooltip-note">Nearest local variant capture</div>}{data?.status==='missing'&&<div className="wow-tooltip-note">Use /lsdtooltips in WoW, then /reload.</div>}</div></div>,document.body);
+  return createPortal(<div className="wow-tooltip" role="tooltip" style={{left:position.left,top:position.top}}><div className="wow-tooltip-inner">{lines.map((line:any,index:number)=><div key={`${index}-${line.left||''}`} className={`wow-tooltip-line ${line.kind||''} ${line.right?'paired':''}`}><span style={line.leftColor?{color:line.leftColor}:index===0?{color:quality[data?.capture?.quality||2]}:undefined}>{renderWowText(cleanTooltipText(line.left))}</span>{line.right&&<span style={line.rightColor?{color:line.rightColor}:undefined}>{renderWowText(cleanTooltipText(line.right))}</span>}</div>)}<TooltipGemMedia gems={data?.gems}/>{data?.status==='item-match'&&<div className="wow-tooltip-note">Nearest local variant capture</div>}{data?.status==='missing'&&<div className="wow-tooltip-note">Use /lsdtooltips in WoW, then /reload.</div>}</div></div>,document.body);
 }
