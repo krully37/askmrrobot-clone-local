@@ -11,10 +11,11 @@ export interface CharacterSnapshot { name:string; realm:string; className:string
 export interface Run { id: number; mode: string; title: string; status: string; scenario: Scenario; input: string; reportPath?: string; summary?: string; simcVersion: string; createdAt: string; completedAt?: string; result?: unknown; profileId?:number; characterId?:number; character?:CharacterSnapshot; }
 export type CandidateSource = 'equipped' | 'bags' | 'vault' | 'catalog' | 'custom';
 export type WeaponHandedness = 'one-hand' | 'two-hand' | 'main-hand-only' | 'off-hand-only' | 'unknown';
+export type WeaponFamily = 'dagger' | 'axe' | 'sword' | 'mace' | 'fist' | 'other' | 'unknown';
 export interface GearCandidate {
   id: string; slot: string; rawLine: string; itemId?: number; name: string; itemLevel?: number;
   source: CandidateSource; selected: boolean; locked: boolean; uniqueKey?: string;
-  gems?: string[]; enchant?: string; icon?: string; quality?: string; handedness?: WeaponHandedness;
+  gems?: string[]; enchant?: string; icon?: string; quality?: string; handedness?: WeaponHandedness; weaponFamily?: WeaponFamily;
   track?: string; simcLine?: string; setId?: number; setName?: string;
 }
 export interface Enhancement { id:string; type:'gem'|'enchant'|'weapon'; name:string; effect?:string; slots:string[]; simcFragment:string; icon?:string; provenance?:string; clientBuild?:string; currentSeason?:boolean; weaponHands?:WeaponHandedness[]; reviewStatus?:'reviewed'|'unreviewed'; db2Status?:'matched'|'unavailable'; simcValidation?:'syntax-valid'|'unvalidated'; iconFileDataId?:number; }

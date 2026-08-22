@@ -1,4 +1,6 @@
-import { getRun, saveDroptimizerJob, saveDroptimizerProgress, saveDroptimizerResults, saveRunResult, updateRun } from './db.js';
+import { getRun, paths, saveDroptimizerDiagnostics, saveDroptimizerJob, saveDroptimizerProgress, saveDroptimizerResults, saveRunResult, updateRun } from './db.js';
+import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { buildInput, parseInventory } from './profile.js';
 import { execute } from './runner.js';
 import { parseSimcResult } from './results.js';
@@ -14,10 +16,11 @@ type Entry = DroptimizerGearset;
 interface DropProgress {stage:'queued'|'baseline'|'simulating'|'completed'|'cancelled'|'failed';totalProfiles:number;completedProfiles:number;currentBatch:number;totalBatches:number;elapsedMs:number;estimatedRemainingMs?:number;partialResults:{name:string;dps?:number;boss?:string;delta?:number}[];reports:string[];failedProfiles:number;threads:number;error?:string}
 
 export async function runDroptimizer(runId:number, rawProfile:string, drops:Drop[], scenario:Scenario, threads:number, upgradeTarget?: number, upgradeEquipped?: boolean, minSetBonuses?: Record<string, number>) {
-  let entries:Entry[]=buildDroptimizerGearsets(drops, upgradeTarget);
-  const displayedItemLevels = new Map(entries.map(entry => [entry.drop.id, entry.drop.itemLevel]));
-
+  const dbForMetadata=openCatalog();
+  const dropsWithMetadata=(()=>{try { const lookup=dbForMetadata.prepare('SELECT unique_key as uniqueKey, handedness FROM items WHERE id=?'); return drops.map(drop=>({...drop,...(lookup.get(drop.id) as {uniqueKey?:string;handedness?:Drop['handedness']}|undefined)})); } finally { dbForMetadata.close(); }})();
   const inventory = parseInventory(rawProfile);
+  let entries:Entry[]=buildDroptimizerGearsets(dropsWithMetadata, rawProfile, upgradeTarget, inventory);
+  let displayedItemLevels = new Map(entries.map(entry => [entry.drop.id, entry.drop.itemLevel]));
 
   if (minSetBonuses && Object.keys(minSetBonuses).length > 0) {
     enrichInventory(inventory);
@@ -47,9 +50,10 @@ export async function runDroptimizer(runId:number, rawProfile:string, drops:Drop
     } finally { db.close(); }
   }
 
-  saveDroptimizerJob(runId,{scenario,threads,drops,upgradeTarget,upgradeEquipped},entries);
-
   let finalRawProfile = rawProfile;
+  saveDroptimizerJob(runId,{scenario,threads,drops,upgradeTarget,upgradeEquipped},entries);
+  const diagnosticsPath=join(paths.reports,`run-${runId}-droptimizer-diagnostics.json`);
+  const writeDiagnostics=(reports:string[]=[])=>{writeFileSync(diagnosticsPath,JSON.stringify({version:1,runId,createdAt:new Date().toISOString(),baseline:parseInventory(finalRawProfile).candidates.filter(candidate=>candidate.source==='equipped').map(candidate=>({slot:candidate.slot,itemId:candidate.itemId,itemLevel:candidate.itemLevel,rawLine:candidate.rawLine})),candidates:entries.map(entry=>({name:entry.name,drop:entry.drop,replacementSlot:entry.slot,gear:entry.gear,profilesetLines:entry.profilesetLines,warnings:entry.warnings})),artifacts:{diagnosticsPath,reports:reports.map(reportPath=>({htmlPath:reportPath,simcPath:reportPath.replace(/\.html$/,'.simc'),jsonPath:reportPath.replace(/\.html$/,'.json')}))}},null,2));saveDroptimizerDiagnostics(runId,diagnosticsPath);};
   if (upgradeEquipped && upgradeTarget) {
     const db = openCatalog();
     try {
@@ -70,6 +74,13 @@ export async function runDroptimizer(runId:number, rawProfile:string, drops:Drop
       finalRawProfile = upgradedLines.join('\n');
     } finally { db.close(); }
   }
+  if (finalRawProfile !== rawProfile) {
+    const allowedNames = new Set(entries.map(entry => entry.name));
+    entries = buildDroptimizerGearsets(dropsWithMetadata, finalRawProfile, upgradeTarget).filter(entry => allowedNames.has(entry.name));
+    displayedItemLevels = new Map(entries.map(entry => [entry.drop.id, entry.drop.itemLevel]));
+  }
+  saveDroptimizerJob(runId,{scenario,threads,drops,upgradeTarget,upgradeEquipped},entries);
+  writeDiagnostics();
 
   updateRun(runId,{status:'running'}); const started=Date.now(); let baseline=0; let currentBatch=0; let batchSize=10;
   const scores=new Map<string,number>(), failures=new Map<string,string>(); const reports:string[]=[];
@@ -87,8 +98,9 @@ export async function runDroptimizer(runId:number, rawProfile:string, drops:Drop
     if(!batch.length||cancelled())return;
     const batchStarted=Date.now();
     try {
-      const result=await execute(runId,buildInput(buildDroptimizerGearsetInput(finalRawProfile,batch,inventory),scenario,threads),{suffix:`batch-${currentBatch}-${Date.now()}`,finalize:false,onProgress:c=>save({completedProfiles:scores.size+failures.size+c})});
+      const result=await execute(runId,buildInput(buildDroptimizerGearsetInput(finalRawProfile,batch),scenario,threads),{suffix:`batch-${currentBatch}-${Date.now()}`,finalize:false,onProgress:c=>save({completedProfiles:scores.size+failures.size+c})});
       reports.push(result.reportPath);
+      writeDiagnostics(reports);
       const resultScores=new Map(result.profilesets.map(x=>[x.name,x.dps||0]));
       for(const entry of batch){const score=resultScores.get(entry.name);if(score)scores.set(entry.name,score);else failures.set(entry.name,'Simulation returned no DPS result.');}
       const perProfile=(Date.now()-batchStarted)/Math.max(1,batch.length);
@@ -102,14 +114,14 @@ export async function runDroptimizer(runId:number, rawProfile:string, drops:Drop
   save({stage:'queued',currentBatch:0,totalBatches:Math.ceil(entries.length/batchSize)});
   try {
     save({stage:'baseline'});
-    const base=await execute(runId,buildInput(finalRawProfile,scenario,threads),{suffix:'baseline',finalize:false}); baseline=parseSimcResult(base.jsonPath)?.dps||0; reports.push(base.reportPath);
+    const base=await execute(runId,buildInput(finalRawProfile,scenario,threads),{suffix:'baseline',finalize:false}); baseline=parseSimcResult(base.jsonPath)?.dps||0; reports.push(base.reportPath); writeDiagnostics(reports);
     if(!baseline)throw new Error('Baseline simulation returned no DPS result.');
     save({stage:'simulating'});
     let cursor=0;
     while(cursor<entries.length&&!cancelled()) { currentBatch++; const batch=entries.slice(cursor,cursor+batchSize); await runBatch(batch); cursor+=batch.length; save(); }
     const finalRows=rows(); const state=cancelled()?'cancelled':'completed';
     save({stage:state,currentBatch,estimatedRemainingMs:state==='completed'?0:undefined,totalBatches:currentBatch});
-    saveRunResult(runId,{version:1,kind:'droptimizer',dps:finalRows[0]?.dps||baseline,error:0,iterations:0,elapsedSeconds:(Date.now()-started)/1000,warnings:[],gear:[],damage:[],buffs:[],comparisons:finalRows,baselineDps:baseline});
+    saveRunResult(runId,{version:1,kind:'droptimizer',dps:finalRows[0]?.dps||baseline,error:0,iterations:0,elapsedSeconds:(Date.now()-started)/1000,warnings:[],gear:[],damage:[],buffs:[],comparisons:finalRows,baselineDps:baseline,diagnosticsPath});
     updateRun(runId,{status:state,reportPath:reports[0],summary:`${finalRows.filter(x=>x.dps).length}/${finalRows.length} drops ranked against equipped gear${state==='cancelled'?' (partial)':''}`,completedAt:new Date().toISOString()});
     return finalRows;
   } catch(error) {
