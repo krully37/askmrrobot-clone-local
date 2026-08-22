@@ -5,7 +5,7 @@ const list=(value:any)=>Array.isArray(value)?value:value&&typeof value==='object
 const number=(value:any)=>Number.isFinite(Number(value))?Number(value):0;
 const label=(value:any)=>String(value?.spell_name||value?.name||value?.id||'Unknown').replace(/_/g,' ');
 
-export interface LocalResult { version:1; kind:'quick'|'topgear'|'droptimizer'; dps:number; error:number; iterations:number; elapsedSeconds:number; warnings:string[]; character?:any; scenario?:any; gear:any[]; damage:any[]; buffs:any[]; comparisons?:any[]; diagnosticsPath?:string; }
+export interface LocalResult { version:1; kind:'quick'|'topgear'|'droptimizer'|'droptimizer-verify'; dps:number; error:number; iterations:number; elapsedSeconds:number; warnings:string[]; character?:any; scenario?:any; gear:any[]; damage:any[]; buffs:any[]; comparisons?:any[]; diagnosticsPath?:string; }
 
 export function parseSimcResult(jsonPath:string, kind:LocalResult['kind']='quick'):LocalResult|undefined {
   if(!existsSync(jsonPath)) return;

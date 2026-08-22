@@ -6,6 +6,7 @@ import { OmniumFolioPicker } from "./OmniumFolioPicker";
 import "./styles.css";
 import "./results.css";
 import "./droptimizer-results.css";
+import "./raid-dashboard.css";
 import "./compute.css";
 import "./enhancements.css";
 import "./character-history.css";
@@ -1011,7 +1012,7 @@ function TopGear(p: any) {
   const availableSets = inventory ? ([...new Set(inventory.candidates.map(c => c.setName).filter(Boolean))] as string[]) : [];
   return (
     <>
-      <nav className="quick-nav" style={{ position: "sticky", top: 0, zIndex: 100, background: "#111", padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,0.1)", display: "flex", gap: "16px", marginBottom: "16px", borderRadius: "0 0 8px 8px" }}>
+      <nav className="quick-nav">
         <span style={{color: '#888', fontWeight: 'bold'}}>Quick Nav:</span>
         <a href="#top" style={{color: '#fff', textDecoration: 'none'}}>Top</a>
         {availableSets.length > 0 && <a href="#sets" style={{color: '#fff', textDecoration: 'none'}}>Safeguards</a>}
@@ -2204,6 +2205,7 @@ function Result({ runId, back }: { runId?: number; back: () => void }) {
             <DroptimizerResults
               rows={result.comparisons || []}
               baseline={result.baselineDps}
+              runId={run.id}
             />
           ) : (
             <>
@@ -2252,14 +2254,31 @@ function Result({ runId, back }: { runId?: number; back: () => void }) {
 function DroptimizerResults({
   rows,
   baseline,
+  runId,
 }: {
   rows: any[];
   baseline?: number;
+  runId: number;
 }) {
   const [showUnavailable, setShowUnavailable] = useState(false);
-  const visible = rows
-    .filter((x) => showUnavailable || !x.error)
-    .sort((a, b) => b.delta - a.delta);
+  const [verified, setVerified] = useState<Record<string, any>>({});
+  const [verifying, setVerifying] = useState<Record<string, boolean>>({});
+  const visible = rows.map((row) => verified[`${row.itemId}-${row.slot}`] ? {...row,...verified[`${row.itemId}-${row.slot}`],targeted:true} : row).filter((x) => showUnavailable || !x.error);
+  const verify = async (row:any) => {
+    const key=`${row.itemId}-${row.slot}`;
+    if(!confirm('This item seems to have a potentially erroneous sim value. Run a targeted verification to check its value?'))return;
+    setVerifying(value=>({...value,[key]:true}));
+    try {
+      const created=await api(`/droptimizer/runs/${runId}/verify-item`,post({itemId:row.itemId,slot:row.slot}));
+      const until=Date.now()+10*60*1000;
+      while(Date.now()<until){
+        await new Promise(resolve=>setTimeout(resolve,1200));
+        try { const value=await api(`/runs/${created.id}/result`); const comparison=value.result.comparisons?.[0]; if(comparison){setVerified(value=>({...value,[key]:comparison}));return;} } catch { const status=await api(`/runs/${created.id}`); if(status.status==='failed')throw new Error(status.summary||'Verification failed.'); }
+      }
+      throw new Error('Verification timed out.');
+    } catch(error) { alert(error instanceof Error?error.message:'Verification failed.'); }
+    finally { setVerifying(value=>({...value,[key]:false})); }
+  };
   return (
     <section className="result-table drop-results">
       <div className="drop-result-header">
@@ -2298,6 +2317,7 @@ function DroptimizerResults({
           </span>
           <div>
             <strong>{x.name}</strong>
+            {x.verificationEligible && !x.targeted && <button className="verify-item" title={`This item seems to have a potentially erroneous sim value. Would you like to run a targeted sim for it to ensure its ranking is accurate?${x.verificationReasons?.length ? ` ${x.verificationReasons.join(' ')}` : ''}`} onClick={() => verify(x)} disabled={verifying[`${x.itemId}-${x.slot}`]}>{verifying[`${x.itemId}-${x.slot}`] ? '…' : '⚠'}</button>}
             <small>
               {x.itemLevel ? `ilvl ${x.itemLevel} · ` : ""}
               {x.slot} · {x.boss} · {x.difficulty}
@@ -2313,6 +2333,8 @@ function DroptimizerResults({
             <em className={x.significant === false ? "neutral" : x.delta >= 0 ? "gain" : "loss"}>
               {x.error
                 ? "Not simulated"
+                : x.targeted
+                  ? `Targeted verification · ±${Math.round(x.uncertainty || 0)} DPS`
                 : x.significant === false
                   ? `Inconclusive · ±${Math.round(x.uncertainty || 0)} DPS simulation uncertainty`
                   : `${x.delta >= 0 ? "+" : ""}${Math.round(x.delta)} DPS (${(x.relative * 100).toFixed(2)}%)`}
@@ -2458,13 +2480,10 @@ function Runs({
               </div>
               <strong>{r.status}</strong>
               {["queued", "running"].includes(r.status) ? (
-                <button
-                  onClick={() =>
-                    api(`/runs/${r.id}/cancel`, post({})).then(refreshRuns)
-                  }
-                >
-                  Cancel
-                </button>
+                <div className="run-actions">
+                  <button aria-label={`Track simulation progress for ${r.title}`} onClick={() => openResult(r.id)}>Track</button>
+                  <button onClick={() => api(`/runs/${r.id}/cancel`, post({})).then(refreshRuns)}>Cancel</button>
+                </div>
               ) : (
                 <div className="run-actions">
                   <button onClick={() => openResult(r.id)}>View</button>
