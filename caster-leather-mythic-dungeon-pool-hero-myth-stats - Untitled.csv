@@ -1,0 +1,3848 @@
+Caster Leather Mythic+ Dungeon Pool — Hero & Myth Upgrade Stats,,,,,,,,
+,,,,,,,,
+Track rank,Item level,,Methodology,,,,,
+Hero 1/6,305,,"Item IDs were matched against SimulationCraft’s current Midnight item database. Displayed stats and scaled item effects were then captured from Wowhead at each Season 2 item level. Values preserve Wowhead’s in-game display rounding. Overlapping Hero/Myth item levels intentionally repeat the same values.
+
+Sources:
+https://github.com/simulationcraft/simc
+https://www.wowhead.com/guide/midnight/item-level-gear-upgrades-dawncrests
+Individual Wowhead item links are included on each data sheet.",,,,,
+Hero 2/6,308,,,,,,,
+Hero 3/6,311,,,,,,,
+Hero 4/6,315,,,,,,,
+Hero 5/6,318,,,,,,,
+Hero 6/6,321,,,,,,,
+Myth 1/6,318,,,,,,,
+Myth 2/6,321,,,,,,,
+Myth 3/6,324,,,,,,,
+Myth 4/6,328,,,,,,,
+Myth 5/6,331,,,,,,,
+Myth 6/6,334,,,,,,,
+Hero Track — Season 2 Upgrade Stats,,,,,,,,
+Each cell contains the complete displayed stat/effect line at that upgrade rank.,,,,,,,,
+Item Name,Item ID,"Hero 1/6
+(ilvl 305)","Hero 2/6
+(ilvl 308)","Hero 3/6
+(ilvl 311)","Hero 4/6
+(ilvl 315)","Hero 5/6
+(ilvl 318)","Hero 6/6
+(ilvl 321)",Wowhead Source
+Arctic Explorer's Legwraps,251153,"101 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++49 Critical Strike
++84 Haste","103 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++50 Critical Strike
++85 Haste","105 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++51 Critical Strike
++86 Haste","108 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++52 Critical Strike
++87 Haste","110 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++52 Critical Strike
++89 Haste","112 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++53 Critical Strike
++90 Haste",https://www.wowhead.com/item=251153
+Band of the Amani Warlord,273792,"+1,572 Stamina
++123 Critical Strike
++216 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""","+1,629 Stamina
++126 Critical Strike
++221 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""","+1,689 Stamina
++128 Critical Strike
++225 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""","+1,768 Stamina
++131 Critical Strike
++231 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""","+1,830 Stamina
++134 Critical Strike
++235 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""","+1,895 Stamina
++136 Critical Strike
++239 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""",https://www.wowhead.com/item=273792
+Bloodthorn Burnous,251190,"65 Armor
++81 [Agility or Strength or Intellect]
++1,572 Stamina
++65 Haste
++35 Mastery","66 Armor
++83 [Agility or Strength or Intellect]
++1,629 Stamina
++66 Haste
++35 Mastery","67 Armor
++86 [Agility or Strength or Intellect]
++1,689 Stamina
++67 Haste
++36 Mastery","69 Armor
++89 [Agility or Strength or Intellect]
++1,768 Stamina
++68 Haste
++37 Mastery","70 Armor
++91 [Agility or Strength or Intellect]
++1,830 Stamina
++69 Haste
++37 Mastery","72 Armor
++94 [Agility or Strength or Intellect]
++1,895 Stamina
++70 Haste
++37 Mastery",https://www.wowhead.com/item=251190
+Branch of Pride,251196,"124 - 186 Damage
+Speed 3.60
+(43.1 damage per second)
++838 [Agility or Intellect]
++2,794 Stamina
++112 Versatility
++66 Mastery","128 - 192 Damage
+Speed 3.60
+(44.3 damage per second)
++862 [Agility or Intellect]
++2,896 Stamina
++113 Versatility
++67 Mastery","131 - 197 Damage
+Speed 3.60
+(45.6 damage per second)
++886 [Agility or Intellect]
++3,002 Stamina
++115 Versatility
++68 Mastery","136 - 205 Damage
+Speed 3.60
+(47.4 damage per second)
++920 [Agility or Intellect]
++3,143 Stamina
++117 Versatility
++69 Mastery","140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 [Agility or Intellect]
++3,254 Stamina
++118 Versatility
++70 Mastery","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 [Agility or Intellect]
++3,369 Stamina
++120 Versatility
++71 Mastery",https://www.wowhead.com/item=251196
+Breeches of Deft Deals,251130,"142 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++104 Critical Strike
++74 Mastery","144 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++105 Critical Strike
++75 Mastery","147 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++107 Critical Strike
++76 Mastery","151 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++109 Critical Strike
++77 Mastery","154 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++110 Critical Strike
++78 Mastery","157 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++112 Critical Strike
++79 Mastery",https://www.wowhead.com/item=251130
+Breeches of the Sacred Hall,159313,"142 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++74 Haste
++104 Versatility","144 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++75 Haste
++105 Versatility","147 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++76 Haste
++107 Versatility","151 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++77 Haste
++109 Versatility","154 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++78 Haste
++110 Versatility","157 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++79 Haste
++112 Versatility",https://www.wowhead.com/item=159313
+Charged Sandstone Band,158366,"+1,572 Stamina
++194 Critical Strike
++145 Mastery
+Prismatic Socket","+1,629 Stamina
++198 Critical Strike
++148 Mastery
+Prismatic Socket","+1,689 Stamina
++202 Critical Strike
++151 Mastery
+Prismatic Socket","+1,768 Stamina
++207 Critical Strike
++155 Mastery
+Prismatic Socket","+1,830 Stamina
++211 Critical Strike
++158 Mastery
+Prismatic Socket","+1,895 Stamina
++215 Critical Strike
++161 Mastery
+Prismatic Socket",https://www.wowhead.com/item=158366
+Charonic Crescent,251232,"248 - 372 Damage
+Speed 3.60
+(86.1 damage per second)
++144 [Agility or Strength]
++2,794 Stamina
++104 Critical Strike
++74 Haste","255 - 383 Damage
+Speed 3.60
+(88.6 damage per second)
++148 [Agility or Strength]
++2,896 Stamina
++105 Critical Strike
++75 Haste","262 - 394 Damage
+Speed 3.60
+(91.1 damage per second)
++152 [Agility or Strength]
++3,002 Stamina
++107 Critical Strike
++76 Haste","273 - 409 Damage
+Speed 3.60
+(94.7 damage per second)
++158 [Agility or Strength]
++3,143 Stamina
++109 Critical Strike
++77 Haste","280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++110 Critical Strike
++78 Haste","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++112 Critical Strike
++79 Haste",https://www.wowhead.com/item=251232
+Chillworn's Infusion Staff,193769,"124 - 186 Damage
+Speed 3.60
+(43.1 damage per second)
++838 Intellect
++2,794 Stamina
++100 Critical Strike
++77 Versatility","128 - 192 Damage
+Speed 3.60
+(44.3 damage per second)
++862 Intellect
++2,896 Stamina
++102 Critical Strike
++78 Versatility","131 - 197 Damage
+Speed 3.60
+(45.6 damage per second)
++886 Intellect
++3,002 Stamina
++103 Critical Strike
++79 Versatility","136 - 205 Damage
+Speed 3.60
+(47.4 damage per second)
++920 Intellect
++3,143 Stamina
++105 Critical Strike
++81 Versatility","140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 Intellect
++3,254 Stamina
++106 Critical Strike
++82 Versatility","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 Intellect
++3,369 Stamina
++107 Critical Strike
++83 Versatility",https://www.wowhead.com/item=193769
+Cloak of the Restless Tribes,159288,"65 Armor
++81 [Agility or Strength or Intellect]
++1,572 Stamina
++54 Versatility
++46 Mastery
+Equip: Standing still for 4 sec increases your Speed by 89. Lasts for 4 sec once you start moving.","66 Armor
++83 [Agility or Strength or Intellect]
++1,629 Stamina
++55 Versatility
++46 Mastery
+Equip: Standing still for 4 sec increases your Speed by 90. Lasts for 4 sec once you start moving.","67 Armor
++86 [Agility or Strength or Intellect]
++1,689 Stamina
++56 Versatility
++47 Mastery
+Equip: Standing still for 4 sec increases your Speed by 91. Lasts for 4 sec once you start moving.","69 Armor
++89 [Agility or Strength or Intellect]
++1,768 Stamina
++57 Versatility
++48 Mastery
+Equip: Standing still for 4 sec increases your Speed by 93. Lasts for 4 sec once you start moving.","70 Armor
++91 [Agility or Strength or Intellect]
++1,830 Stamina
++57 Versatility
++48 Mastery
+Equip: Standing still for 4 sec increases your Speed by 94. Lasts for 4 sec once you start moving.","72 Armor
++94 [Agility or Strength or Intellect]
++1,895 Stamina
++58 Versatility
++49 Mastery
+Equip: Standing still for 4 sec increases your Speed by 96. Lasts for 4 sec once you start moving.",https://www.wowhead.com/item=159288
+Crackling Jade Kilij,160216,"79 - 133 Damage
+Speed 2.60
+(40.8 damage per second)
++419 Intellect
++1,397 Stamina
++52 Critical Strike
++37 Mastery","82 - 137 Damage
+Speed 2.60
+(42.1 damage per second)
++431 Intellect
++1,448 Stamina
++53 Critical Strike
++37 Mastery","84 - 141 Damage
+Speed 2.60
+(43.3 damage per second)
++443 Intellect
++1,501 Stamina
++53 Critical Strike
++38 Mastery","87 - 146 Damage
+Speed 2.60
+(44.8 damage per second)
++460 Intellect
++1,572 Stamina
++54 Critical Strike
++38 Mastery","90 - 150 Damage
+Speed 2.60
+(46.2 damage per second)
++473 Intellect
++1,627 Stamina
++55 Critical Strike
++39 Mastery","92 - 154 Damage
+Speed 2.60
+(47.3 damage per second)
++486 Intellect
++1,684 Stamina
++56 Critical Strike
++39 Mastery",https://www.wowhead.com/item=160216
+Crown of Roaring Storms,193751,"121 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++66 Critical Strike
++112 Versatility","124 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++67 Critical Strike
++113 Versatility","126 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++68 Critical Strike
++115 Versatility","129 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++69 Critical Strike
++117 Versatility","132 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++70 Critical Strike
++118 Versatility","135 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++71 Critical Strike
++120 Versatility",https://www.wowhead.com/item=193751
+Desiccator's Blessed Gloves,159312,"91 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++81 Critical Strike
++52 Mastery","93 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++82 Critical Strike
++53 Mastery","95 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++83 Critical Strike
++54 Mastery","97 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++84 Critical Strike
++55 Mastery","99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++86 Critical Strike
++55 Mastery","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++87 Critical Strike
++56 Mastery",https://www.wowhead.com/item=159312
+Fallen Speaker's Staff,251160,"124 - 186 Damage
+Speed 3.60
+(43.1 damage per second)
++838 Intellect
++2,794 Stamina
++104 Haste
++74 Versatility","128 - 192 Damage
+Speed 3.60
+(44.3 damage per second)
++862 Intellect
++2,896 Stamina
++105 Haste
++75 Versatility","131 - 197 Damage
+Speed 3.60
+(45.6 damage per second)
++886 Intellect
++3,002 Stamina
++107 Haste
++76 Versatility","136 - 205 Damage
+Speed 3.60
+(47.4 damage per second)
++920 Intellect
++3,143 Stamina
++109 Haste
++77 Versatility","140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 Intellect
++3,254 Stamina
++110 Haste
++78 Versatility","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 Intellect
++3,369 Stamina
++112 Haste
++79 Versatility",https://www.wowhead.com/item=251160
+Fang of Contagion,251225,"55 - 92 Damage
+Speed 1.80
+(40.8 damage per second)
++419 Intellect
++1,397 Stamina
++37 Versatility
++52 Mastery","56 - 95 Damage
+Speed 1.80
+(41.9 damage per second)
++431 Intellect
++1,448 Stamina
++37 Versatility
++53 Mastery","58 - 97 Damage
+Speed 1.80
+(43.1 damage per second)
++443 Intellect
++1,501 Stamina
++38 Versatility
++53 Mastery","60 - 101 Damage
+Speed 1.80
+(44.7 damage per second)
++460 Intellect
++1,572 Stamina
++38 Versatility
++54 Mastery","62 - 104 Damage
+Speed 1.80
+(46.1 damage per second)
++473 Intellect
++1,627 Stamina
++39 Versatility
++55 Mastery","64 - 107 Damage
+Speed 1.80
+(47.5 damage per second)
++486 Intellect
++1,684 Stamina
++39 Versatility
++56 Mastery",https://www.wowhead.com/item=251225
+Fireproof Drape,193763,"65 Armor
++81 [Agility or Strength or Intellect]
++1,572 Stamina
++37 Critical Strike
++63 Haste","66 Armor
++83 [Agility or Strength or Intellect]
++1,629 Stamina
++38 Critical Strike
++64 Haste","67 Armor
++86 [Agility or Strength or Intellect]
++1,689 Stamina
++38 Critical Strike
++64 Haste","69 Armor
++89 [Agility or Strength or Intellect]
++1,768 Stamina
++39 Critical Strike
++66 Haste","70 Armor
++91 [Agility or Strength or Intellect]
++1,830 Stamina
++39 Critical Strike
++66 Haste","72 Armor
++94 [Agility or Strength or Intellect]
++1,895 Stamina
++40 Critical Strike
++67 Haste",https://www.wowhead.com/item=193763
+Freightrunner's Flask,250215,"+137 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 609 for 15 sec. (1 Min, 30 Sec Cooldown)","+141 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 617 for 15 sec. (1 Min, 30 Sec Cooldown)","+145 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 625 for 15 sec. (1 Min, 30 Sec Cooldown)","+150 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 636 for 15 sec. (1 Min, 30 Sec Cooldown)","+154 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 645 for 15 sec. (1 Min, 30 Sec Cooldown)","+159 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 653 for 15 sec. (1 Min, 30 Sec Cooldown)",https://www.wowhead.com/item=250215
+Fury-fletched Armlets,251135,"81 Armor
++81 [Agility or Intellect]
++1,572 Stamina
++37 Critical Strike
++63 Haste","83 Armor
++83 [Agility or Intellect]
++1,629 Stamina
++38 Critical Strike
++64 Haste","84 Armor
++86 [Agility or Intellect]
++1,689 Stamina
++38 Critical Strike
++64 Haste","86 Armor
++89 [Agility or Intellect]
++1,768 Stamina
++39 Critical Strike
++66 Haste","88 Armor
++91 [Agility or Intellect]
++1,830 Stamina
++39 Critical Strike
++66 Haste","90 Armor
++94 [Agility or Intellect]
++1,895 Stamina
++40 Critical Strike
++67 Haste",https://www.wowhead.com/item=251135
+Galvanized Stormcrusher,215730,"186 - 239 Damage
+Speed 2.60
+(81.7 damage per second)
++721 Strength
++721 Agility
++969 Intellect
++2,656 Stamina
+Dropped by: GaralonDrop Chance: 0.02%","191 - 246 Damage
+Speed 2.60
+(84.0 damage per second)
++742 Strength
++742 Agility
++997 Intellect
++2,753 Stamina
+Dropped by: GaralonDrop Chance: 0.02%","196 - 253 Damage
+Speed 2.60
+(86.3 damage per second)
++763 Strength
++763 Agility
++1025 Intellect
++2,854 Stamina
+Dropped by: GaralonDrop Chance: 0.02%","204 - 263 Damage
+Speed 2.60
+(89.8 damage per second)
++792 Strength
++792 Agility
++1064 Intellect
++2,988 Stamina
+Dropped by: GaralonDrop Chance: 0.02%","210 - 270 Damage
+Speed 2.60
+(92.3 damage per second)
++814 Strength
++814 Agility
++1094 Intellect
++3,093 Stamina
+Dropped by: GaralonDrop Chance: 0.02%","215 - 278 Damage
+Speed 2.60
+(94.8 damage per second)
++837 Strength
++837 Agility
++1125 Intellect
++3,203 Stamina
+Dropped by: GaralonDrop Chance: 0.02%",https://www.wowhead.com/item=215730
+Gauntlets of Fevered Defense,251124,"91 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++87 Critical Strike
++47 Haste","93 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++88 Critical Strike
++47 Haste","95 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++89 Critical Strike
++48 Haste","97 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++90 Critical Strike
++49 Haste","99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++92 Critical Strike
++49 Haste","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++93 Critical Strike
++50 Haste",https://www.wowhead.com/item=251124
+Gilded Serpent's Tooth,159137,"55 - 92 Damage
+Speed 1.80
+(40.8 damage per second)
++419 Intellect
++1,397 Stamina
++39 Haste
++50 Versatility","56 - 95 Damage
+Speed 1.80
+(41.9 damage per second)
++431 Intellect
++1,448 Stamina
++39 Haste
++51 Versatility","58 - 97 Damage
+Speed 1.80
+(43.1 damage per second)
++443 Intellect
++1,501 Stamina
++40 Haste
++51 Versatility","60 - 101 Damage
+Speed 1.80
+(44.7 damage per second)
++460 Intellect
++1,572 Stamina
++40 Haste
++52 Versatility","62 - 104 Damage
+Speed 1.80
+(46.1 damage per second)
++473 Intellect
++1,627 Stamina
++41 Haste
++53 Versatility","64 - 107 Damage
+Speed 1.80
+(47.5 damage per second)
++486 Intellect
++1,684 Stamina
++41 Haste
++54 Versatility",https://www.wowhead.com/item=159137
+Goldfeather Boots,159304,"101 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++75 Versatility
++58 Mastery","103 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++76 Versatility
++59 Mastery","105 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++77 Versatility
++60 Mastery","108 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++79 Versatility
++61 Mastery","110 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++80 Versatility
++61 Mastery","112 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++81 Versatility
++62 Mastery",https://www.wowhead.com/item=159304
+Graft of the Domanaar,251234,"+1,572 Stamina
++218 Critical Strike
++121 Mastery","+1,629 Stamina
++223 Critical Strike
++124 Mastery","+1,689 Stamina
++227 Critical Strike
++126 Mastery","+1,768 Stamina
++233 Critical Strike
++129 Mastery","+1,830 Stamina
++237 Critical Strike
++132 Mastery","+1,895 Stamina
++242 Critical Strike
++134 Mastery",https://www.wowhead.com/item=251234
+Gravitic Girdle,251235,"91 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++87 Versatility
++47 Mastery","93 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++88 Versatility
++47 Mastery","95 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++89 Versatility
++48 Mastery","97 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++90 Versatility
++49 Mastery","99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++92 Versatility
++49 Mastery","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++93 Versatility
++50 Mastery",https://www.wowhead.com/item=251235
+Grips of Electrified Defense,159337,"91 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++61 Versatility
++72 Mastery","93 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++62 Versatility
++73 Mastery","95 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++63 Versatility
++74 Mastery","97 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++64 Versatility
++76 Mastery","99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++64 Versatility
++77 Mastery","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++65 Versatility
++78 Mastery",https://www.wowhead.com/item=159337
+Hide of Pestilence,251226,"162 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++104 Critical Strike
++74 Versatility","165 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++105 Critical Strike
++75 Versatility","168 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++107 Critical Strike
++76 Versatility","173 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++109 Critical Strike
++77 Versatility","176 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++110 Critical Strike
++78 Versatility","180 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++112 Critical Strike
++79 Versatility",https://www.wowhead.com/item=251226
+Hood of the Slithering Loa,239033,"121 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++104 Critical Strike
++74 Haste","124 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++105 Critical Strike
++75 Haste","126 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++107 Critical Strike
++76 Haste","129 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++109 Critical Strike
++77 Haste","132 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++110 Critical Strike
++78 Haste","135 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++112 Critical Strike
++79 Haste",https://www.wowhead.com/item=239033
+Invader's Firestorm Chestguard,193764,"162 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++70 Versatility
++108 Mastery","165 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++71 Versatility
++109 Mastery","168 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++72 Versatility
++111 Mastery","173 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++73 Versatility
++113 Mastery","176 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++74 Versatility
++114 Mastery","180 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++75 Versatility
++116 Mastery",https://www.wowhead.com/item=193764
+Jade Ophidian Band,162544,"+1,572 Stamina
++126 Versatility
++213 Mastery
+Prismatic Socket","+1,629 Stamina
++129 Versatility
++218 Mastery
+Prismatic Socket","+1,689 Stamina
++131 Versatility
++222 Mastery
+Prismatic Socket","+1,768 Stamina
++135 Versatility
++228 Mastery
+Prismatic Socket","+1,830 Stamina
++137 Versatility
++232 Mastery
+Prismatic Socket","+1,895 Stamina
++140 Versatility
++236 Mastery
+Prismatic Socket",https://www.wowhead.com/item=162544
+Knot of Writhing Serpents,273794,"+137 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (12139 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (12139 * 1) Nature damage over 15 sec.","+141 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (12684 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (12684 * 1) Nature damage over 15 sec.","+145 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (13250 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (13250 * 1) Nature damage over 15 sec.","+150 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (14039 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (14039 * 1) Nature damage over 15 sec.","+154 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (14657 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (14657 * 1) Nature damage over 15 sec.","+159 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (15299 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (15299 * 1) Nature damage over 15 sec.",https://www.wowhead.com/item=273794
+Kokia's Burnout Rod,193771,"+419 Intellect
++1,397 Stamina
++50 Critical Strike
++39 Haste","+431 Intellect
++1,448 Stamina
++51 Critical Strike
++39 Haste","+443 Intellect
++1,501 Stamina
++51 Critical Strike
++40 Haste","+460 Intellect
++1,572 Stamina
++52 Critical Strike
++40 Haste","+473 Intellect
++1,627 Stamina
++53 Critical Strike
++41 Haste","+486 Intellect
++1,684 Stamina
++54 Critical Strike
++41 Haste",https://www.wowhead.com/item=193771
+Kula's Butchering Wristwraps,159300,"81 Armor
++81 [Agility or Intellect]
++1,572 Stamina
++63 Critical Strike
++37 Versatility","83 Armor
++83 [Agility or Intellect]
++1,629 Stamina
++64 Critical Strike
++38 Versatility","84 Armor
++86 [Agility or Intellect]
++1,689 Stamina
++64 Critical Strike
++38 Versatility","86 Armor
++89 [Agility or Intellect]
++1,768 Stamina
++66 Critical Strike
++39 Versatility","88 Armor
++91 [Agility or Intellect]
++1,830 Stamina
++66 Critical Strike
++39 Versatility","90 Armor
++94 [Agility or Intellect]
++1,895 Stamina
++67 Critical Strike
++40 Versatility",https://www.wowhead.com/item=159300
+Kyrakka's Searing Embers,193748,"+127 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 25493 and expelling 8086 Fire damage split between nearby enemies. (1s cooldown)","+128 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 26279 and expelling 8335 Fire damage split between nearby enemies. (1s cooldown)","+130 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 27089 and expelling 8592 Fire damage split between nearby enemies. (1s cooldown)","+133 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 28208 and expelling 8947 Fire damage split between nearby enemies. (1s cooldown)","+134 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 29078 and expelling 9223 Fire damage split between nearby enemies. (1s cooldown)","+136 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 29973 and expelling 9507 Fire damage split between nearby enemies. (1s cooldown)",https://www.wowhead.com/item=193748
+Leggings of the Galeforce Viper,159329,"142 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++81 Versatility
++96 Mastery","144 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++82 Versatility
++98 Mastery","147 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++83 Versatility
++99 Mastery","151 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++85 Versatility
++101 Mastery","154 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++86 Versatility
++102 Mastery","157 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++87 Versatility
++103 Mastery",https://www.wowhead.com/item=159329
+Lightspire Core,250214,"+137 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 101.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 177 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""","+141 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 103.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 179 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""","+145 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 104.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 182 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""","+150 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 106.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 185 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""","+154 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 107.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 188 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""","+159 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 109.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 190 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""",https://www.wowhead.com/item=250214
+Lightspore Leggings,251198,"142 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++112 Versatility
++66 Mastery","144 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++113 Versatility
++67 Mastery","147 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++115 Versatility
++68 Mastery","151 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++117 Versatility
++69 Mastery","154 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++118 Versatility
++70 Mastery","157 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++120 Versatility
++71 Mastery",https://www.wowhead.com/item=251198
+Lightwarden's Bind,251194,"+1,572 Stamina
++112 Versatility
++228 Mastery","+1,629 Stamina
++114 Versatility
++232 Mastery","+1,689 Stamina
++116 Versatility
++237 Mastery","+1,768 Stamina
++119 Versatility
++243 Mastery","+1,830 Stamina
++121 Versatility
++248 Mastery","+1,895 Stamina
++123 Versatility
++252 Mastery",https://www.wowhead.com/item=251194
+Luminescent Sprout,251200,"+419 Intellect
++1,397 Stamina
++54 Versatility
++35 Mastery","+431 Intellect
++1,448 Stamina
++55 Versatility
++35 Mastery","+443 Intellect
++1,501 Stamina
++55 Versatility
++36 Mastery","+460 Intellect
++1,572 Stamina
++56 Versatility
++36 Mastery","+473 Intellect
++1,627 Stamina
++57 Versatility
++37 Mastery","+486 Intellect
++1,684 Stamina
++58 Versatility
++37 Mastery",https://www.wowhead.com/item=251200
+Mindpiercer's Sigil,250224,"Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 48745 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 428 Intellect for 10 sec.","Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 50933 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 440 Intellect for 10 sec.","Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 53206 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 453 Intellect for 10 sec.","Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 56374 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 470 Intellect for 10 sec.","Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 58857 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 483 Intellect for 10 sec.","Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 61435 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 497 Intellect for 10 sec.",https://www.wowhead.com/item=250224
+Mycolic Medicine,250248,"+137 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 35629 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 20360.
+""""A draught from a species long lost everywhere but in dreams.""""","+141 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 37229 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 21274.
+""""A draught from a species long lost everywhere but in dreams.""""","+145 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 38890 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 22223.
+""""A draught from a species long lost everywhere but in dreams.""""","+150 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 41205 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 23546.
+""""A draught from a species long lost everywhere but in dreams.""""","+154 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 43020 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 24583.
+""""A draught from a species long lost everywhere but in dreams.""""","+159 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 44905 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 25660.
+""""A draught from a species long lost everywhere but in dreams.""""",https://www.wowhead.com/item=250248
+Nibbles' Training Rod,251141,"124 - 186 Damage
+Speed 3.60
+(43.1 damage per second)
++838 Intellect
++2,794 Stamina
++104 Critical Strike
++74 Haste","128 - 192 Damage
+Speed 3.60
+(44.3 damage per second)
++862 Intellect
++2,896 Stamina
++105 Critical Strike
++75 Haste","131 - 197 Damage
+Speed 3.60
+(45.6 damage per second)
++886 Intellect
++3,002 Stamina
++107 Critical Strike
++76 Haste","136 - 205 Damage
+Speed 3.60
+(47.4 damage per second)
++920 Intellect
++3,143 Stamina
++109 Critical Strike
++77 Haste","140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 Intellect
++3,254 Stamina
++110 Critical Strike
++78 Haste","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 Intellect
++3,369 Stamina
++112 Critical Strike
++79 Haste",https://www.wowhead.com/item=251141
+Nocuous Focal Fang,273790,"+419 Intellect
++1,397 Stamina
++52 Haste
++37 Mastery","+431 Intellect
++1,448 Stamina
++53 Haste
++37 Mastery","+443 Intellect
++1,501 Stamina
++53 Haste
++38 Mastery","+460 Intellect
++1,572 Stamina
++54 Haste
++38 Mastery","+473 Intellect
++1,627 Stamina
++55 Haste
++39 Mastery","+486 Intellect
++1,684 Stamina
++56 Haste
++39 Mastery",https://www.wowhead.com/item=273790
+Pendant of Malefic Fury,251142,"+1,572 Stamina
++107 Haste
++233 Mastery","+1,629 Stamina
++109 Haste
++237 Mastery","+1,689 Stamina
++111 Haste
++242 Mastery","+1,768 Stamina
++114 Haste
++248 Mastery","+1,830 Stamina
++116 Haste
++253 Mastery","+1,895 Stamina
++118 Haste
++258 Mastery",https://www.wowhead.com/item=251142
+Perennial Frostbound Charm,251161,"+419 Intellect
++1,397 Stamina
++52 Critical Strike
++37 Versatility","+431 Intellect
++1,448 Stamina
++53 Critical Strike
++37 Versatility","+443 Intellect
++1,501 Stamina
++53 Critical Strike
++38 Versatility","+460 Intellect
++1,572 Stamina
++54 Critical Strike
++38 Versatility","+473 Intellect
++1,627 Stamina
++55 Critical Strike
++39 Versatility","+486 Intellect
++1,684 Stamina
++56 Critical Strike
++39 Versatility",https://www.wowhead.com/item=251161
+Permafrost Essence,250244,"Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 75 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 55014 damage per mark for 10 sec.","Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 76 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 56711 damage per mark for 10 sec.","Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 78 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 58459 damage per mark for 10 sec.","Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 79 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 60874 damage per mark for 10 sec.","Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 80 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 62749 damage per mark for 10 sec.","Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 81 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 64683 damage per mark for 10 sec.",https://www.wowhead.com/item=250244
+Pilfered Precious Band,251148,"+1,572 Stamina
++136 Critical Strike
++204 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""","+1,629 Stamina
++138 Critical Strike
++208 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""","+1,689 Stamina
++141 Critical Strike
++212 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""","+1,768 Stamina
++145 Critical Strike
++217 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""","+1,830 Stamina
++148 Critical Strike
++221 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""","+1,895 Stamina
++150 Critical Strike
++225 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""",https://www.wowhead.com/item=251148
+Polished Lightwood Channeler,273778,"55 - 92 Damage
+Speed 1.80
+(40.8 damage per second)
++419 Intellect
++1,397 Stamina
++49 Haste
++39 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (9474 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.","56 - 95 Damage
+Speed 1.80
+(41.9 damage per second)
++431 Intellect
++1,448 Stamina
++50 Haste
++40 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (9899 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.","58 - 97 Damage
+Speed 1.80
+(43.1 damage per second)
++443 Intellect
++1,501 Stamina
++51 Haste
++40 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (10341 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.","60 - 101 Damage
+Speed 1.80
+(44.7 damage per second)
++460 Intellect
++1,572 Stamina
++52 Haste
++41 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (10956 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.","62 - 104 Damage
+Speed 1.80
+(46.1 damage per second)
++473 Intellect
++1,627 Stamina
++52 Haste
++42 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (11439 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.","64 - 107 Damage
+Speed 1.80
+(47.5 damage per second)
++486 Intellect
++1,684 Stamina
++53 Haste
++42 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (11940 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.",https://www.wowhead.com/item=273778
+Primal Dinomancer's Belt,159301,"91 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++75 Critical Strike
++58 Haste","93 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++76 Critical Strike
++59 Haste","95 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++77 Critical Strike
++60 Haste","97 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++79 Critical Strike
++61 Haste","99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++80 Critical Strike
++61 Haste","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++81 Critical Strike
++62 Haste",https://www.wowhead.com/item=159301
+Pruning Lance,251193,"248 - 372 Damage
+Speed 3.60
+(86.1 damage per second)
++144 [Agility or Strength]
++2,794 Stamina
++112 Haste
++66 Mastery","255 - 383 Damage
+Speed 3.60
+(88.6 damage per second)
++148 [Agility or Strength]
++2,896 Stamina
++113 Haste
++67 Mastery","262 - 394 Damage
+Speed 3.60
+(91.1 damage per second)
++152 [Agility or Strength]
++3,002 Stamina
++115 Haste
++68 Mastery","273 - 409 Damage
+Speed 3.60
+(94.7 damage per second)
++158 [Agility or Strength]
++3,143 Stamina
++117 Haste
++69 Mastery","280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++118 Haste
++70 Mastery","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++120 Haste
++71 Mastery",https://www.wowhead.com/item=251193
+Ritual Binder's Ring,159459,"+1,572 Stamina
++223 Haste
++116 Versatility","+1,629 Stamina
++228 Haste
++119 Versatility","+1,689 Stamina
++232 Haste
++121 Versatility","+1,768 Stamina
++238 Haste
++124 Versatility","+1,830 Stamina
++242 Haste
++126 Versatility","+1,895 Stamina
++247 Haste
++129 Versatility",https://www.wowhead.com/item=159459
+Rootwalker Harness,251189,"91 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++49 Critical Strike
++84 Versatility","93 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++50 Critical Strike
++85 Versatility","95 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++51 Critical Strike
++86 Versatility","97 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++52 Critical Strike
++87 Versatility","99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++52 Critical Strike
++89 Versatility","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++53 Critical Strike
++90 Versatility",https://www.wowhead.com/item=251189
+Rootwarden Wraps,251183,"81 Armor
++81 [Agility or Intellect]
++1,572 Stamina
++65 Critical Strike
++35 Mastery","83 Armor
++83 [Agility or Intellect]
++1,629 Stamina
++66 Critical Strike
++35 Mastery","84 Armor
++86 [Agility or Intellect]
++1,689 Stamina
++67 Critical Strike
++36 Mastery","86 Armor
++89 [Agility or Intellect]
++1,768 Stamina
++68 Critical Strike
++37 Mastery","88 Armor
++91 [Agility or Intellect]
++1,830 Stamina
++69 Critical Strike
++37 Mastery","90 Armor
++94 [Agility or Intellect]
++1,895 Stamina
++70 Critical Strike
++37 Mastery",https://www.wowhead.com/item=251183
+Royal Purifier's Spade,159646,"248 - 372 Damage
+Speed 3.60
+(86.1 damage per second)
++144 [Agility or Strength]
++2,794 Stamina
++100 Critical Strike
++77 Mastery","255 - 383 Damage
+Speed 3.60
+(88.6 damage per second)
++148 [Agility or Strength]
++2,896 Stamina
++102 Critical Strike
++78 Mastery","262 - 394 Damage
+Speed 3.60
+(91.1 damage per second)
++152 [Agility or Strength]
++3,002 Stamina
++103 Critical Strike
++79 Mastery","273 - 409 Damage
+Speed 3.60
+(94.7 damage per second)
++158 [Agility or Strength]
++3,143 Stamina
++105 Critical Strike
++81 Mastery","280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++106 Critical Strike
++82 Mastery","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++107 Critical Strike
++83 Mastery",https://www.wowhead.com/item=159646
+Ruby Whelp Shell,193757,"+137 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)","+141 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)","+145 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)","+150 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)","+154 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)","+159 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)",https://www.wowhead.com/item=193757
+Sand-Shined Snakeskin Sandals,159327,"101 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++78 Critical Strike
++55 Mastery","103 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++79 Critical Strike
++56 Mastery","105 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++80 Critical Strike
++57 Mastery","108 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++82 Critical Strike
++58 Mastery","110 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++83 Critical Strike
++58 Mastery","112 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++84 Critical Strike
++59 Mastery",https://www.wowhead.com/item=159327
+Sapling of the Dawnroot,250259,"+137 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (4069 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 10596) Holy damage split among nearby enemies.","+141 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (4251 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 11072) Holy damage split among nearby enemies.","+145 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (4441 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 11566) Holy damage split among nearby enemies.","+150 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (4706 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 12255) Holy damage split among nearby enemies.","+154 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (4913 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 12794) Holy damage split among nearby enemies.","+159 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (5128 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 13355) Holy damage split among nearby enemies.",https://www.wowhead.com/item=250259
+Scavenger's Spaulders,251146,"111 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++55 Critical Strike
++78 Versatility","113 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++56 Critical Strike
++79 Versatility","116 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++57 Critical Strike
++80 Versatility","119 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++58 Critical Strike
++82 Versatility","121 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++58 Critical Strike
++83 Versatility","123 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++59 Critical Strike
++84 Versatility",https://www.wowhead.com/item=251146
+Seed of Radiant Hope,250254,"+137 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [17031 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 153300. (1 Min, 30 Sec Cooldown)","+141 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [17796 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 160181. (1 Min, 30 Sec Cooldown)","+145 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [18590 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 167329. (1 Min, 30 Sec Cooldown)","+150 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [19697 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 177293. (1 Min, 30 Sec Cooldown)","+154 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [20564 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 185102. (1 Min, 30 Sec Cooldown)","+159 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [21465 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 193211. (1 Min, 30 Sec Cooldown)",https://www.wowhead.com/item=250254
+Sethraliss' Defiled Relic,158368,"+137 Intellect
+Use: Curse the target with a Rotten Wound, dealing (105288 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (6581 * 1) Nature damage. (2 Min Cooldown)","+141 Intellect
+Use: Curse the target with a Rotten Wound, dealing (110014 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (6876 * 1) Nature damage. (2 Min Cooldown)","+145 Intellect
+Use: Curse the target with a Rotten Wound, dealing (114924 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (7183 * 1) Nature damage. (2 Min Cooldown)","+150 Intellect
+Use: Curse the target with a Rotten Wound, dealing (121767 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (7611 * 1) Nature damage. (2 Min Cooldown)","+154 Intellect
+Use: Curse the target with a Rotten Wound, dealing (127130 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (7946 * 1) Nature damage. (2 Min Cooldown)","+159 Intellect
+Use: Curse the target with a Rotten Wound, dealing (132699 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (8294 * 1) Nature damage. (2 Min Cooldown)",https://www.wowhead.com/item=158368
+Sickening Signet of Atroxus,252258,"+1,572 Stamina
++233 Haste
++107 Mastery","+1,629 Stamina
++237 Haste
++109 Mastery","+1,689 Stamina
++242 Haste
++111 Mastery","+1,768 Stamina
++248 Haste
++114 Mastery","+1,830 Stamina
++253 Haste
++116 Mastery","+1,895 Stamina
++258 Haste
++118 Mastery",https://www.wowhead.com/item=252258
+Signet of Snarling Servitude,251136,"+1,572 Stamina
++208 Critical Strike
++131 Mastery","+1,629 Stamina
++213 Critical Strike
++134 Mastery","+1,689 Stamina
++217 Critical Strike
++136 Mastery","+1,768 Stamina
++222 Critical Strike
++140 Mastery","+1,830 Stamina
++227 Critical Strike
++142 Mastery","+1,895 Stamina
++231 Critical Strike
++145 Mastery",https://www.wowhead.com/item=251136
+Snakeskin Spaulders,273774,"111 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++78 Critical Strike
++55 Versatility","113 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++79 Critical Strike
++56 Versatility","116 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++80 Critical Strike
++57 Versatility","119 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++82 Critical Strike
++58 Versatility","121 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++83 Critical Strike
++58 Versatility","123 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++84 Critical Strike
++59 Versatility",https://www.wowhead.com/item=273774
+Somber Spaulders,251223,"111 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++84 Critical Strike
++49 Haste","113 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++85 Critical Strike
++50 Haste","116 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++86 Critical Strike
++51 Haste","119 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++87 Critical Strike
++52 Haste","121 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++89 Critical Strike
++52 Haste","123 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++90 Critical Strike
++53 Haste",https://www.wowhead.com/item=251223
+Spare Speaker's Hood,273791,"121 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++76 Critical Strike
++101 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""","124 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++77 Critical Strike
++103 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""","126 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++78 Critical Strike
++104 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""","129 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++80 Critical Strike
++106 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""","132 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++81 Critical Strike
++107 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""","135 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++82 Critical Strike
++109 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""",https://www.wowhead.com/item=273791
+Speakeasy Shroud,251132,"65 Armor
++81 [Agility or Strength or Intellect]
++1,572 Stamina
++58 Critical Strike
++41 Mastery","66 Armor
++83 [Agility or Strength or Intellect]
++1,629 Stamina
++59 Critical Strike
++42 Mastery","67 Armor
++86 [Agility or Strength or Intellect]
++1,689 Stamina
++60 Critical Strike
++42 Mastery","69 Armor
++89 [Agility or Strength or Intellect]
++1,768 Stamina
++61 Critical Strike
++43 Mastery","70 Armor
++91 [Agility or Strength or Intellect]
++1,830 Stamina
++62 Critical Strike
++44 Mastery","72 Armor
++94 [Agility or Strength or Intellect]
++1,895 Stamina
++63 Critical Strike
++44 Mastery",https://www.wowhead.com/item=251132
+Staff of the Lightning Serpent,158372,"124 - 186 Damage
+Speed 3.60
+(43.1 damage per second)
++838 Intellect
++2,794 Stamina
++100 Critical Strike
++77 Mastery","128 - 192 Damage
+Speed 3.60
+(44.3 damage per second)
++862 Intellect
++2,896 Stamina
++102 Critical Strike
++78 Mastery","131 - 197 Damage
+Speed 3.60
+(45.6 damage per second)
++886 Intellect
++3,002 Stamina
++103 Critical Strike
++79 Mastery","136 - 205 Damage
+Speed 3.60
+(47.4 damage per second)
++920 Intellect
++3,143 Stamina
++105 Critical Strike
++81 Mastery","140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 Intellect
++3,254 Stamina
++106 Critical Strike
++82 Mastery","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 Intellect
++3,369 Stamina
++107 Critical Strike
++83 Mastery",https://www.wowhead.com/item=158372
+Stormbound Emblem of Dazar,273649,"+137 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 929 up to 20 sec. (2 Min Cooldown)","+141 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 942 up to 20 sec. (2 Min Cooldown)","+145 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 955 up to 20 sec. (2 Min Cooldown)","+150 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 972 up to 20 sec. (2 Min Cooldown)","+154 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 984 up to 20 sec. (2 Min Cooldown)","+159 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 997 up to 20 sec. (2 Min Cooldown)",https://www.wowhead.com/item=273649
+Strand of Warding Fangs,273781,"+1,572 Stamina
++193 Critical Strike
++146 Haste","+1,629 Stamina
++197 Critical Strike
++149 Haste","+1,689 Stamina
++201 Critical Strike
++152 Haste","+1,768 Stamina
++206 Critical Strike
++156 Haste","+1,830 Stamina
++210 Critical Strike
++159 Haste","+1,895 Stamina
++214 Critical Strike
++162 Haste",https://www.wowhead.com/item=273781
+Subjugator's Chilling Grips,193758,"91 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++78 Critical Strike
++55 Versatility","93 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++79 Critical Strike
++56 Versatility","95 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++80 Critical Strike
++57 Versatility","97 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++82 Critical Strike
++58 Versatility","99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++83 Critical Strike
++58 Versatility","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++84 Critical Strike
++59 Versatility",https://www.wowhead.com/item=193758
+Toxin-Coated Warstaff,273788,"124 - 186 Damage
+Speed 3.60
+(43.1 damage per second)
++838 [Agility or Intellect]
++2,794 Stamina
++104 Haste
++74 Mastery","128 - 192 Damage
+Speed 3.60
+(44.3 damage per second)
++862 [Agility or Intellect]
++2,896 Stamina
++105 Haste
++75 Mastery","131 - 197 Damage
+Speed 3.60
+(45.6 damage per second)
++886 [Agility or Intellect]
++3,002 Stamina
++107 Haste
++76 Mastery","136 - 205 Damage
+Speed 3.60
+(47.4 damage per second)
++920 [Agility or Intellect]
++3,143 Stamina
++109 Haste
++77 Mastery","140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 [Agility or Intellect]
++3,254 Stamina
++110 Haste
++78 Mastery","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 [Agility or Intellect]
++3,369 Stamina
++112 Haste
++79 Mastery",https://www.wowhead.com/item=273788
+Twin-Strike Polearm,158371,"248 - 372 Damage
+Speed 3.60
+(86.1 damage per second)
++144 [Agility or Strength]
++2,794 Stamina
++104 Critical Strike
++74 Versatility","255 - 383 Damage
+Speed 3.60
+(88.6 damage per second)
++148 [Agility or Strength]
++2,896 Stamina
++105 Critical Strike
++75 Versatility","262 - 394 Damage
+Speed 3.60
+(91.1 damage per second)
++152 [Agility or Strength]
++3,002 Stamina
++107 Critical Strike
++76 Versatility","273 - 409 Damage
+Speed 3.60
+(94.7 damage per second)
++158 [Agility or Strength]
++3,143 Stamina
++109 Critical Strike
++77 Versatility","280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++110 Critical Strike
++78 Versatility","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++112 Critical Strike
++79 Versatility",https://www.wowhead.com/item=158371
+Unstable Felheart Crystal,250255,"+137 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 16125 of your health to infuse a target ally for 10 sec, absorbing 272535 damage. (2 Min Cooldown)","+141 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 16849 of your health to infuse a target ally for 10 sec, absorbing 284769 damage. (2 Min Cooldown)","+145 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 17601 of your health to infuse a target ally for 10 sec, absorbing 297477 damage. (2 Min Cooldown)","+150 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 18649 of your health to infuse a target ally for 10 sec, absorbing 315189 damage. (2 Min Cooldown)","+154 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 19470 of your health to infuse a target ally for 10 sec, absorbing 329072 damage. (2 Min Cooldown)","+159 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 20323 of your health to infuse a target ally for 10 sec, absorbing 343488 damage. (2 Min Cooldown)",https://www.wowhead.com/item=250255
+Vessel of Last Rites,159648,"+419 Intellect
++1,397 Stamina
++52 Critical Strike
++37 Mastery","+431 Intellect
++1,448 Stamina
++53 Critical Strike
++37 Mastery","+443 Intellect
++1,501 Stamina
++53 Critical Strike
++38 Mastery","+460 Intellect
++1,572 Stamina
++54 Critical Strike
++38 Mastery","+473 Intellect
++1,627 Stamina
++55 Critical Strike
++39 Mastery","+486 Intellect
++1,684 Stamina
++56 Critical Strike
++39 Mastery",https://www.wowhead.com/item=159648
+Vest of Reverent Adoration,239048,"162 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++100 Critical Strike
++77 Mastery","165 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++102 Critical Strike
++78 Mastery","168 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++103 Critical Strike
++79 Mastery","173 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++105 Critical Strike
++81 Mastery","176 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++106 Critical Strike
++82 Mastery","180 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++107 Critical Strike
++83 Mastery",https://www.wowhead.com/item=239048
+Victor's Flashfrozen Blade,251158,"248 - 372 Damage
+Speed 3.60
+(86.1 damage per second)
++144 [Agility or Strength]
++2,794 Stamina
++108 Mastery
++70 Versatility","255 - 383 Damage
+Speed 3.60
+(88.6 damage per second)
++148 [Agility or Strength]
++2,896 Stamina
++109 Mastery
++71 Versatility","262 - 394 Damage
+Speed 3.60
+(91.1 damage per second)
++152 [Agility or Strength]
++3,002 Stamina
++111 Mastery
++72 Versatility","273 - 409 Damage
+Speed 3.60
+(94.7 damage per second)
++158 [Agility or Strength]
++3,143 Stamina
++113 Mastery
++73 Versatility","280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++114 Mastery
++74 Versatility","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++116 Mastery
++75 Versatility",https://www.wowhead.com/item=251158
+Vile Vial of Volatile Venom,273796,"+137 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 852 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 122 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""","+141 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 863 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 123 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""","+145 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 875 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 125 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""","+150 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 891 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 127 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""","+154 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 902 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 129 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""","+159 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 914 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 131 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""",https://www.wowhead.com/item=273796
+Vile Writhefang Glaive,273787,"248 - 372 Damage
+Speed 3.60
+(86.1 damage per second)
++144 [Agility or Strength]
++2,794 Stamina
++104 Critical Strike
++74 Versatility","255 - 383 Damage
+Speed 3.60
+(88.6 damage per second)
++148 [Agility or Strength]
++2,896 Stamina
++105 Critical Strike
++75 Versatility","262 - 394 Damage
+Speed 3.60
+(91.1 damage per second)
++152 [Agility or Strength]
++3,002 Stamina
++107 Critical Strike
++76 Versatility","273 - 409 Damage
+Speed 3.60
+(94.7 damage per second)
++158 [Agility or Strength]
++3,143 Stamina
++109 Critical Strike
++77 Versatility","280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++110 Critical Strike
++78 Versatility","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++112 Critical Strike
++79 Versatility",https://www.wowhead.com/item=273787
+Vilefiend's Guise,251140,"121 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++104 Haste
++74 Mastery","124 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++105 Haste
++75 Mastery","126 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++107 Haste
++76 Mastery","129 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++109 Haste
++77 Mastery","132 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++110 Haste
++78 Mastery","135 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++112 Haste
++79 Mastery",https://www.wowhead.com/item=251140
+War Trial Vestments,251159,"162 Armor
++144 [Agility or Intellect]
++2,794 Stamina
++66 Haste
++112 Mastery","165 Armor
++148 [Agility or Intellect]
++2,896 Stamina
++67 Haste
++113 Mastery","168 Armor
++152 [Agility or Intellect]
++3,002 Stamina
++68 Haste
++115 Mastery","173 Armor
++158 [Agility or Intellect]
++3,143 Stamina
++69 Haste
++117 Mastery","176 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++70 Haste
++118 Mastery","180 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++71 Haste
++120 Mastery",https://www.wowhead.com/item=251159
+Whirling Dervish Sash,159317,"91 Armor
++108 [Agility or Intellect]
++2,096 Stamina
++52 Haste
++81 Mastery","93 Armor
++111 [Agility or Intellect]
++2,172 Stamina
++53 Haste
++82 Mastery","95 Armor
++114 [Agility or Intellect]
++2,252 Stamina
++54 Haste
++83 Mastery","97 Armor
++118 [Agility or Intellect]
++2,358 Stamina
++55 Haste
++84 Mastery","99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++55 Haste
++86 Mastery","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++56 Haste
++87 Mastery",https://www.wowhead.com/item=159317
+Yoke of the Charging Bear,251173,"+1,572 Stamina
++116 Critical Strike
++223 Haste","+1,629 Stamina
++119 Critical Strike
++228 Haste","+1,689 Stamina
++121 Critical Strike
++232 Haste","+1,768 Stamina
++124 Critical Strike
++238 Haste","+1,830 Stamina
++126 Critical Strike
++242 Haste","+1,895 Stamina
++129 Critical Strike
++247 Haste",https://www.wowhead.com/item=251173
+Myth Track — Season 2 Upgrade Stats,,,,,,,,
+Each cell contains the complete displayed stat/effect line at that upgrade rank.,,,,,,,,
+Item Name,Item ID,"Myth 1/6
+(ilvl 318)","Myth 2/6
+(ilvl 321)","Myth 3/6
+(ilvl 324)","Myth 4/6
+(ilvl 328)","Myth 5/6
+(ilvl 331)","Myth 6/6
+(ilvl 334)",Wowhead Source
+Arctic Explorer's Legwraps,251153,"110 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++52 Critical Strike
++89 Haste","112 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++53 Critical Strike
++90 Haste","114 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++54 Critical Strike
++91 Haste","118 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++55 Critical Strike
++92 Haste","120 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++55 Critical Strike
++94 Haste","122 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++56 Critical Strike
++95 Haste",https://www.wowhead.com/item=251153
+Band of the Amani Warlord,273792,"+1,830 Stamina
++134 Critical Strike
++235 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""","+1,895 Stamina
++136 Critical Strike
++239 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""","+1,962 Stamina
++139 Critical Strike
++244 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""","+2,053 Stamina
++142 Critical Strike
++250 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""","+2,124 Stamina
++145 Critical Strike
++254 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""","+2,199 Stamina
++147 Critical Strike
++258 Haste
+""""A simple but durable ring, once worn by the Warlord Zul'jin himself.""""",https://www.wowhead.com/item=273792
+Bloodthorn Burnous,251190,"70 Armor
++91 [Agility or Strength or Intellect]
++1,830 Stamina
++69 Haste
++37 Mastery","72 Armor
++94 [Agility or Strength or Intellect]
++1,895 Stamina
++70 Haste
++37 Mastery","73 Armor
++97 [Agility or Strength or Intellect]
++1,962 Stamina
++70 Haste
++38 Mastery","75 Armor
++100 [Agility or Strength or Intellect]
++2,053 Stamina
++72 Haste
++39 Mastery","77 Armor
++103 [Agility or Strength or Intellect]
++2,124 Stamina
++73 Haste
++39 Mastery","78 Armor
++106 [Agility or Strength or Intellect]
++2,199 Stamina
++73 Haste
++40 Mastery",https://www.wowhead.com/item=251190
+Branch of Pride,251196,"140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 [Agility or Intellect]
++3,254 Stamina
++118 Versatility
++70 Mastery","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 [Agility or Intellect]
++3,369 Stamina
++120 Versatility
++71 Mastery","148 - 222 Damage
+Speed 3.60
+(51.4 damage per second)
++1000 [Agility or Intellect]
++3,487 Stamina
++121 Versatility
++72 Mastery","154 - 231 Damage
+Speed 3.60
+(53.4 damage per second)
++1038 [Agility or Intellect]
++3,649 Stamina
++123 Versatility
++73 Mastery","158 - 237 Damage
+Speed 3.60
+(54.9 damage per second)
++1068 [Agility or Intellect]
++3,777 Stamina
++125 Versatility
++74 Mastery","163 - 244 Damage
+Speed 3.60
+(56.4 damage per second)
++1098 [Agility or Intellect]
++3,910 Stamina
++126 Versatility
++75 Mastery",https://www.wowhead.com/item=251196
+Breeches of Deft Deals,251130,"154 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++110 Critical Strike
++78 Mastery","157 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++112 Critical Strike
++79 Mastery","160 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++113 Critical Strike
++80 Mastery","165 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++115 Critical Strike
++81 Mastery","168 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++116 Critical Strike
++82 Mastery","171 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++118 Critical Strike
++83 Mastery",https://www.wowhead.com/item=251130
+Breeches of the Sacred Hall,159313,"154 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++78 Haste
++110 Versatility","157 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++79 Haste
++112 Versatility","160 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++80 Haste
++113 Versatility","165 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++81 Haste
++115 Versatility","168 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++82 Haste
++116 Versatility","171 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++83 Haste
++118 Versatility",https://www.wowhead.com/item=159313
+Charged Sandstone Band,158366,"+1,830 Stamina
++211 Critical Strike
++158 Mastery
+Prismatic Socket","+1,895 Stamina
++215 Critical Strike
++161 Mastery
+Prismatic Socket","+1,962 Stamina
++219 Critical Strike
++164 Mastery
+Prismatic Socket","+2,053 Stamina
++224 Critical Strike
++168 Mastery
+Prismatic Socket","+2,124 Stamina
++228 Critical Strike
++171 Mastery
+Prismatic Socket","+2,199 Stamina
++232 Critical Strike
++174 Mastery
+Prismatic Socket",https://www.wowhead.com/item=158366
+Charonic Crescent,251232,"280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++110 Critical Strike
++78 Haste","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++112 Critical Strike
++79 Haste","296 - 444 Damage
+Speed 3.60
+(102.8 damage per second)
++172 [Agility or Strength]
++3,487 Stamina
++113 Critical Strike
++80 Haste","307 - 461 Damage
+Speed 3.60
+(106.7 damage per second)
++178 [Agility or Strength]
++3,649 Stamina
++115 Critical Strike
++81 Haste","316 - 474 Damage
+Speed 3.60
+(109.7 damage per second)
++183 [Agility or Strength]
++3,777 Stamina
++116 Critical Strike
++82 Haste","325 - 487 Damage
+Speed 3.60
+(112.8 damage per second)
++189 [Agility or Strength]
++3,910 Stamina
++118 Critical Strike
++83 Haste",https://www.wowhead.com/item=251232
+Chillworn's Infusion Staff,193769,"140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 Intellect
++3,254 Stamina
++106 Critical Strike
++82 Versatility","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 Intellect
++3,369 Stamina
++107 Critical Strike
++83 Versatility","148 - 222 Damage
+Speed 3.60
+(51.4 damage per second)
++1000 Intellect
++3,487 Stamina
++109 Critical Strike
++84 Versatility","154 - 231 Damage
+Speed 3.60
+(53.4 damage per second)
++1038 Intellect
++3,649 Stamina
++111 Critical Strike
++85 Versatility","158 - 237 Damage
+Speed 3.60
+(54.9 damage per second)
++1068 Intellect
++3,777 Stamina
++112 Critical Strike
++86 Versatility","163 - 244 Damage
+Speed 3.60
+(56.4 damage per second)
++1098 Intellect
++3,910 Stamina
++113 Critical Strike
++88 Versatility",https://www.wowhead.com/item=193769
+Cloak of the Restless Tribes,159288,"70 Armor
++91 [Agility or Strength or Intellect]
++1,830 Stamina
++57 Versatility
++48 Mastery
+Equip: Standing still for 4 sec increases your Speed by 94. Lasts for 4 sec once you start moving.","72 Armor
++94 [Agility or Strength or Intellect]
++1,895 Stamina
++58 Versatility
++49 Mastery
+Equip: Standing still for 4 sec increases your Speed by 96. Lasts for 4 sec once you start moving.","73 Armor
++97 [Agility or Strength or Intellect]
++1,962 Stamina
++59 Versatility
++50 Mastery
+Equip: Standing still for 4 sec increases your Speed by 97. Lasts for 4 sec once you start moving.","75 Armor
++100 [Agility or Strength or Intellect]
++2,053 Stamina
++60 Versatility
++50 Mastery
+Equip: Standing still for 4 sec increases your Speed by 98. Lasts for 4 sec once you start moving.","77 Armor
++103 [Agility or Strength or Intellect]
++2,124 Stamina
++61 Versatility
++51 Mastery
+Equip: Standing still for 4 sec increases your Speed by 100. Lasts for 4 sec once you start moving.","78 Armor
++106 [Agility or Strength or Intellect]
++2,199 Stamina
++61 Versatility
++52 Mastery
+Equip: Standing still for 4 sec increases your Speed by 101. Lasts for 4 sec once you start moving.",https://www.wowhead.com/item=159288
+Crackling Jade Kilij,160216,"90 - 150 Damage
+Speed 2.60
+(46.2 damage per second)
++473 Intellect
++1,627 Stamina
++55 Critical Strike
++39 Mastery","92 - 154 Damage
+Speed 2.60
+(47.3 damage per second)
++486 Intellect
++1,684 Stamina
++56 Critical Strike
++39 Mastery","95 - 159 Damage
+Speed 2.60
+(48.8 damage per second)
++500 Intellect
++1,744 Stamina
++56 Critical Strike
++40 Mastery","98 - 165 Damage
+Speed 2.60
+(50.6 damage per second)
++519 Intellect
++1,824 Stamina
++57 Critical Strike
++41 Mastery","101 - 169 Damage
+Speed 2.60
+(51.9 damage per second)
++534 Intellect
++1,888 Stamina
++58 Critical Strike
++41 Mastery","104 - 174 Damage
+Speed 2.60
+(53.5 damage per second)
++549 Intellect
++1,955 Stamina
++59 Critical Strike
++42 Mastery",https://www.wowhead.com/item=160216
+Crown of Roaring Storms,193751,"132 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++70 Critical Strike
++118 Versatility","135 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++71 Critical Strike
++120 Versatility","137 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++72 Critical Strike
++121 Versatility","141 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++73 Critical Strike
++123 Versatility","144 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++74 Critical Strike
++125 Versatility","147 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++75 Critical Strike
++126 Versatility",https://www.wowhead.com/item=193751
+Desiccator's Blessed Gloves,159312,"99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++86 Critical Strike
++55 Mastery","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++87 Critical Strike
++56 Mastery","103 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++88 Critical Strike
++57 Mastery","106 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++89 Critical Strike
++58 Mastery","108 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++90 Critical Strike
++58 Mastery","110 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++91 Critical Strike
++59 Mastery",https://www.wowhead.com/item=159312
+Fallen Speaker's Staff,251160,"140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 Intellect
++3,254 Stamina
++110 Haste
++78 Versatility","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 Intellect
++3,369 Stamina
++112 Haste
++79 Versatility","148 - 222 Damage
+Speed 3.60
+(51.4 damage per second)
++1000 Intellect
++3,487 Stamina
++113 Haste
++80 Versatility","154 - 231 Damage
+Speed 3.60
+(53.4 damage per second)
++1038 Intellect
++3,649 Stamina
++115 Haste
++81 Versatility","158 - 237 Damage
+Speed 3.60
+(54.9 damage per second)
++1068 Intellect
++3,777 Stamina
++116 Haste
++82 Versatility","163 - 244 Damage
+Speed 3.60
+(56.4 damage per second)
++1098 Intellect
++3,910 Stamina
++118 Haste
++83 Versatility",https://www.wowhead.com/item=251160
+Fang of Contagion,251225,"62 - 104 Damage
+Speed 1.80
+(46.1 damage per second)
++473 Intellect
++1,627 Stamina
++39 Versatility
++55 Mastery","64 - 107 Damage
+Speed 1.80
+(47.5 damage per second)
++486 Intellect
++1,684 Stamina
++39 Versatility
++56 Mastery","65 - 110 Damage
+Speed 1.80
+(48.6 damage per second)
++500 Intellect
++1,744 Stamina
++40 Versatility
++56 Mastery","68 - 114 Damage
+Speed 1.80
+(50.6 damage per second)
++519 Intellect
++1,824 Stamina
++41 Versatility
++57 Mastery","70 - 117 Damage
+Speed 1.80
+(51.9 damage per second)
++534 Intellect
++1,888 Stamina
++41 Versatility
++58 Mastery","72 - 121 Damage
+Speed 1.80
+(53.6 damage per second)
++549 Intellect
++1,955 Stamina
++42 Versatility
++59 Mastery",https://www.wowhead.com/item=251225
+Fireproof Drape,193763,"70 Armor
++91 [Agility or Strength or Intellect]
++1,830 Stamina
++39 Critical Strike
++66 Haste","72 Armor
++94 [Agility or Strength or Intellect]
++1,895 Stamina
++40 Critical Strike
++67 Haste","73 Armor
++97 [Agility or Strength or Intellect]
++1,962 Stamina
++40 Critical Strike
++68 Haste","75 Armor
++100 [Agility or Strength or Intellect]
++2,053 Stamina
++41 Critical Strike
++69 Haste","77 Armor
++103 [Agility or Strength or Intellect]
++2,124 Stamina
++41 Critical Strike
++70 Haste","78 Armor
++106 [Agility or Strength or Intellect]
++2,199 Stamina
++42 Critical Strike
++71 Haste",https://www.wowhead.com/item=193763
+Freightrunner's Flask,250215,"+154 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 645 for 15 sec. (1 Min, 30 Sec Cooldown)","+159 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 653 for 15 sec. (1 Min, 30 Sec Cooldown)","+163 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 661 for 15 sec. (1 Min, 30 Sec Cooldown)","+170 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 673 for 15 sec. (1 Min, 30 Sec Cooldown)","+174 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 681 for 15 sec. (1 Min, 30 Sec Cooldown)","+179 [Agility or Intellect]
+Use: Take a sip of the drink you swiped from the freight, increasing your Critical Strike by 689 for 15 sec. (1 Min, 30 Sec Cooldown)",https://www.wowhead.com/item=250215
+Fury-fletched Armlets,251135,"88 Armor
++91 [Agility or Intellect]
++1,830 Stamina
++39 Critical Strike
++66 Haste","90 Armor
++94 [Agility or Intellect]
++1,895 Stamina
++40 Critical Strike
++67 Haste","92 Armor
++97 [Agility or Intellect]
++1,962 Stamina
++40 Critical Strike
++68 Haste","94 Armor
++100 [Agility or Intellect]
++2,053 Stamina
++41 Critical Strike
++69 Haste","96 Armor
++103 [Agility or Intellect]
++2,124 Stamina
++41 Critical Strike
++70 Haste","98 Armor
++106 [Agility or Intellect]
++2,199 Stamina
++42 Critical Strike
++71 Haste",https://www.wowhead.com/item=251135
+Galvanized Stormcrusher,215730,"210 - 270 Damage
+Speed 2.60
+(92.3 damage per second)
++814 Strength
++814 Agility
++1094 Intellect
++3,093 Stamina
+Dropped by: GaralonDrop Chance: 0.02%","215 - 278 Damage
+Speed 2.60
+(94.8 damage per second)
++837 Strength
++837 Agility
++1125 Intellect
++3,203 Stamina
+Dropped by: GaralonDrop Chance: 0.02%","222 - 286 Damage
+Speed 2.60
+(97.7 damage per second)
++861 Strength
++861 Agility
++1157 Intellect
++3,315 Stamina
+Dropped by: GaralonDrop Chance: 0.02%","230 - 296 Damage
+Speed 2.60
+(101.2 damage per second)
++894 Strength
++894 Agility
++1201 Intellect
++3,469 Stamina
+Dropped by: GaralonDrop Chance: 0.02%","237 - 305 Damage
+Speed 2.60
+(104.2 damage per second)
++919 Strength
++919 Agility
++1235 Intellect
++3,590 Stamina
+Dropped by: GaralonDrop Chance: 0.02%","243 - 313 Damage
+Speed 2.60
+(106.9 damage per second)
++945 Strength
++945 Agility
++1270 Intellect
++3,717 Stamina
+Dropped by: GaralonDrop Chance: 0.02%",https://www.wowhead.com/item=215730
+Gauntlets of Fevered Defense,251124,"99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++92 Critical Strike
++49 Haste","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++93 Critical Strike
++50 Haste","103 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++94 Critical Strike
++51 Haste","106 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++96 Critical Strike
++51 Haste","108 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++97 Critical Strike
++52 Haste","110 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++98 Critical Strike
++53 Haste",https://www.wowhead.com/item=251124
+Gilded Serpent's Tooth,159137,"62 - 104 Damage
+Speed 1.80
+(46.1 damage per second)
++473 Intellect
++1,627 Stamina
++41 Haste
++53 Versatility","64 - 107 Damage
+Speed 1.80
+(47.5 damage per second)
++486 Intellect
++1,684 Stamina
++41 Haste
++54 Versatility","65 - 110 Damage
+Speed 1.80
+(48.6 damage per second)
++500 Intellect
++1,744 Stamina
++42 Haste
++54 Versatility","68 - 114 Damage
+Speed 1.80
+(50.6 damage per second)
++519 Intellect
++1,824 Stamina
++43 Haste
++55 Versatility","70 - 117 Damage
+Speed 1.80
+(51.9 damage per second)
++534 Intellect
++1,888 Stamina
++43 Haste
++56 Versatility","72 - 121 Damage
+Speed 1.80
+(53.6 damage per second)
++549 Intellect
++1,955 Stamina
++44 Haste
++57 Versatility",https://www.wowhead.com/item=159137
+Goldfeather Boots,159304,"110 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++80 Versatility
++61 Mastery","112 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++81 Versatility
++62 Mastery","114 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++82 Versatility
++63 Mastery","118 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++83 Versatility
++64 Mastery","120 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++84 Versatility
++65 Mastery","122 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++85 Versatility
++66 Mastery",https://www.wowhead.com/item=159304
+Graft of the Domanaar,251234,"+1,830 Stamina
++237 Critical Strike
++132 Mastery","+1,895 Stamina
++242 Critical Strike
++134 Mastery","+1,962 Stamina
++246 Critical Strike
++137 Mastery","+2,053 Stamina
++252 Critical Strike
++140 Mastery","+2,124 Stamina
++256 Critical Strike
++142 Mastery","+2,199 Stamina
++261 Critical Strike
++145 Mastery",https://www.wowhead.com/item=251234
+Gravitic Girdle,251235,"99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++92 Versatility
++49 Mastery","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++93 Versatility
++50 Mastery","103 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++94 Versatility
++51 Mastery","106 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++96 Versatility
++51 Mastery","108 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++97 Versatility
++52 Mastery","110 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++98 Versatility
++53 Mastery",https://www.wowhead.com/item=251235
+Grips of Electrified Defense,159337,"99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++64 Versatility
++77 Mastery","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++65 Versatility
++78 Mastery","103 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++66 Versatility
++79 Mastery","106 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++67 Versatility
++80 Mastery","108 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++68 Versatility
++81 Mastery","110 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++69 Versatility
++82 Mastery",https://www.wowhead.com/item=159337
+Hide of Pestilence,251226,"176 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++110 Critical Strike
++78 Versatility","180 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++112 Critical Strike
++79 Versatility","183 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++113 Critical Strike
++80 Versatility","188 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++115 Critical Strike
++81 Versatility","192 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++116 Critical Strike
++82 Versatility","196 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++118 Critical Strike
++83 Versatility",https://www.wowhead.com/item=251226
+Hood of the Slithering Loa,239033,"132 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++110 Critical Strike
++78 Haste","135 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++112 Critical Strike
++79 Haste","137 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++113 Critical Strike
++80 Haste","141 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++115 Critical Strike
++81 Haste","144 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++116 Critical Strike
++82 Haste","147 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++118 Critical Strike
++83 Haste",https://www.wowhead.com/item=239033
+Invader's Firestorm Chestguard,193764,"176 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++74 Versatility
++114 Mastery","180 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++75 Versatility
++116 Mastery","183 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++76 Versatility
++117 Mastery","188 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++77 Versatility
++119 Mastery","192 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++78 Versatility
++121 Mastery","196 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++79 Versatility
++122 Mastery",https://www.wowhead.com/item=193764
+Jade Ophidian Band,162544,"+1,830 Stamina
++137 Versatility
++232 Mastery
+Prismatic Socket","+1,895 Stamina
++140 Versatility
++236 Mastery
+Prismatic Socket","+1,962 Stamina
++142 Versatility
++240 Mastery
+Prismatic Socket","+2,053 Stamina
++145 Versatility
++246 Mastery
+Prismatic Socket","+2,124 Stamina
++148 Versatility
++250 Mastery
+Prismatic Socket","+2,199 Stamina
++151 Versatility
++255 Mastery
+Prismatic Socket",https://www.wowhead.com/item=162544
+Knot of Writhing Serpents,273794,"+154 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (14657 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (14657 * 1) Nature damage over 15 sec.","+159 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (15299 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (15299 * 1) Nature damage over 15 sec.","+163 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (15966 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (15966 * 1) Nature damage over 15 sec.","+170 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (16895 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (16895 * 1) Nature damage over 15 sec.","+174 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (17623 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (17623 * 1) Nature damage over 15 sec.","+179 Intellect
+Equip: Your harmful spells have a chance to ensorcell a serpent into spewing venom at your target, inflicting (18378 * 1) Nature damage split between nearby enemies. Damage increased by 30% per additional enemy, up to 150%.
+The primary target also suffers an additional (18378 * 1) Nature damage over 15 sec.",https://www.wowhead.com/item=273794
+Kokia's Burnout Rod,193771,"+473 Intellect
++1,627 Stamina
++53 Critical Strike
++41 Haste","+486 Intellect
++1,684 Stamina
++54 Critical Strike
++41 Haste","+500 Intellect
++1,744 Stamina
++54 Critical Strike
++42 Haste","+519 Intellect
++1,824 Stamina
++55 Critical Strike
++43 Haste","+534 Intellect
++1,888 Stamina
++56 Critical Strike
++43 Haste","+549 Intellect
++1,955 Stamina
++57 Critical Strike
++44 Haste",https://www.wowhead.com/item=193771
+Kula's Butchering Wristwraps,159300,"88 Armor
++91 [Agility or Intellect]
++1,830 Stamina
++66 Critical Strike
++39 Versatility","90 Armor
++94 [Agility or Intellect]
++1,895 Stamina
++67 Critical Strike
++40 Versatility","92 Armor
++97 [Agility or Intellect]
++1,962 Stamina
++68 Critical Strike
++40 Versatility","94 Armor
++100 [Agility or Intellect]
++2,053 Stamina
++69 Critical Strike
++41 Versatility","96 Armor
++103 [Agility or Intellect]
++2,124 Stamina
++70 Critical Strike
++41 Versatility","98 Armor
++106 [Agility or Intellect]
++2,199 Stamina
++71 Critical Strike
++42 Versatility",https://www.wowhead.com/item=159300
+Kyrakka's Searing Embers,193748,"+134 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 29078 and expelling 9223 Fire damage split between nearby enemies. (1s cooldown)","+136 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 29973 and expelling 9507 Fire damage split between nearby enemies. (1s cooldown)","+138 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 30897 and expelling 9800 Fire damage split between nearby enemies. (1s cooldown)","+140 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 32172 and expelling 10204 Fire damage split between nearby enemies. (1s cooldown)","+142 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 33162 and expelling 10518 Fire damage split between nearby enemies. (1s cooldown)","+143 Critical Strike
+Equip: Your helpful spells and abilities have a high chance to create a Burning Ember on an ally. The ember flares up after 1 sec, cauterizing wounds to heal for 34183 and expelling 10842 Fire damage split between nearby enemies. (1s cooldown)",https://www.wowhead.com/item=193748
+Leggings of the Galeforce Viper,159329,"154 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++86 Versatility
++102 Mastery","157 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++87 Versatility
++103 Mastery","160 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++88 Versatility
++105 Mastery","165 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++90 Versatility
++106 Mastery","168 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++91 Versatility
++108 Mastery","171 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++92 Versatility
++109 Mastery",https://www.wowhead.com/item=159329
+Lightspire Core,250214,"+154 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 107.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 188 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""","+159 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 109.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 190 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""","+163 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 110.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 192 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""","+170 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 112.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 196 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""","+174 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 113.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 198 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""","+179 [Agility or Intellect]
+Equip: You are embraced by the Light, increasing Mastery by 115.
+Your damaging spells and abilities can call a beam of radiant light nearby. Standing in the light blesses you with 200 Mastery while you stand in it.
+""""Stand in the Light, and be made whole.""""",https://www.wowhead.com/item=250214
+Lightspore Leggings,251198,"154 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++118 Versatility
++70 Mastery","157 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++120 Versatility
++71 Mastery","160 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++121 Versatility
++72 Mastery","165 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++123 Versatility
++73 Mastery","168 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++125 Versatility
++74 Mastery","171 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++126 Versatility
++75 Mastery",https://www.wowhead.com/item=251198
+Lightwarden's Bind,251194,"+1,830 Stamina
++121 Versatility
++248 Mastery","+1,895 Stamina
++123 Versatility
++252 Mastery","+1,962 Stamina
++126 Versatility
++257 Mastery","+2,053 Stamina
++129 Versatility
++263 Mastery","+2,124 Stamina
++131 Versatility
++268 Mastery","+2,199 Stamina
++133 Versatility
++272 Mastery",https://www.wowhead.com/item=251194
+Luminescent Sprout,251200,"+473 Intellect
++1,627 Stamina
++57 Versatility
++37 Mastery","+486 Intellect
++1,684 Stamina
++58 Versatility
++37 Mastery","+500 Intellect
++1,744 Stamina
++58 Versatility
++38 Mastery","+519 Intellect
++1,824 Stamina
++59 Versatility
++39 Mastery","+534 Intellect
++1,888 Stamina
++60 Versatility
++39 Mastery","+549 Intellect
++1,955 Stamina
++61 Versatility
++39 Mastery",https://www.wowhead.com/item=251200
+Mindpiercer's Sigil,250224,"Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 58857 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 483 Intellect for 10 sec.","Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 61435 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 497 Intellect for 10 sec.","Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 64113 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 511 Intellect for 10 sec.","Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 67842 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 531 Intellect for 10 sec.","Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 70764 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 546 Intellect for 10 sec.","Equip: Your damaging spells have a chance to stir the Void near your target, erupting for 73798 Shadow damage split among nearby enemies. You siphon energy from the Void, gaining 561 Intellect for 10 sec.",https://www.wowhead.com/item=250224
+Mycolic Medicine,250248,"+154 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 43020 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 24583.
+""""A draught from a species long lost everywhere but in dreams.""""","+159 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 44905 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 25660.
+""""A draught from a species long lost everywhere but in dreams.""""","+163 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 46862 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 26779.
+""""A draught from a species long lost everywhere but in dreams.""""","+170 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 49588 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 28337.
+""""A draught from a species long lost everywhere but in dreams.""""","+174 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 51724 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 29557.
+""""A draught from a species long lost everywhere but in dreams.""""","+179 Intellect
+Equip: You gain Nalorakk's Favor of Growth. Your healing spells and abilities have a chance to instantly heal your target for 53941 and spawn a glowing mushroom near them that lasts for 10 sec.
+If an ally steps on and consumes the mushroom, they are healed for an additional 30824.
+""""A draught from a species long lost everywhere but in dreams.""""",https://www.wowhead.com/item=250248
+Nibbles' Training Rod,251141,"140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 Intellect
++3,254 Stamina
++110 Critical Strike
++78 Haste","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 Intellect
++3,369 Stamina
++112 Critical Strike
++79 Haste","148 - 222 Damage
+Speed 3.60
+(51.4 damage per second)
++1000 Intellect
++3,487 Stamina
++113 Critical Strike
++80 Haste","154 - 231 Damage
+Speed 3.60
+(53.4 damage per second)
++1038 Intellect
++3,649 Stamina
++115 Critical Strike
++81 Haste","158 - 237 Damage
+Speed 3.60
+(54.9 damage per second)
++1068 Intellect
++3,777 Stamina
++116 Critical Strike
++82 Haste","163 - 244 Damage
+Speed 3.60
+(56.4 damage per second)
++1098 Intellect
++3,910 Stamina
++118 Critical Strike
++83 Haste",https://www.wowhead.com/item=251141
+Nocuous Focal Fang,273790,"+473 Intellect
++1,627 Stamina
++55 Haste
++39 Mastery","+486 Intellect
++1,684 Stamina
++56 Haste
++39 Mastery","+500 Intellect
++1,744 Stamina
++56 Haste
++40 Mastery","+519 Intellect
++1,824 Stamina
++57 Haste
++41 Mastery","+534 Intellect
++1,888 Stamina
++58 Haste
++41 Mastery","+549 Intellect
++1,955 Stamina
++59 Haste
++42 Mastery",https://www.wowhead.com/item=273790
+Pendant of Malefic Fury,251142,"+1,830 Stamina
++116 Haste
++253 Mastery","+1,895 Stamina
++118 Haste
++258 Mastery","+1,962 Stamina
++120 Haste
++262 Mastery","+2,053 Stamina
++123 Haste
++269 Mastery","+2,124 Stamina
++125 Haste
++273 Mastery","+2,199 Stamina
++127 Haste
++278 Mastery",https://www.wowhead.com/item=251142
+Perennial Frostbound Charm,251161,"+473 Intellect
++1,627 Stamina
++55 Critical Strike
++39 Versatility","+486 Intellect
++1,684 Stamina
++56 Critical Strike
++39 Versatility","+500 Intellect
++1,744 Stamina
++56 Critical Strike
++40 Versatility","+519 Intellect
++1,824 Stamina
++57 Critical Strike
++41 Versatility","+534 Intellect
++1,888 Stamina
++58 Critical Strike
++41 Versatility","+549 Intellect
++1,955 Stamina
++59 Critical Strike
++42 Versatility",https://www.wowhead.com/item=251161
+Permafrost Essence,250244,"Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 80 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 62749 damage per mark for 10 sec.","Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 81 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 64683 damage per mark for 10 sec.","Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 82 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 66675 damage per mark for 10 sec.","Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 83 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 69427 damage per mark for 10 sec.","Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 84 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 71564 damage per mark for 10 sec.","Equip: You gain Nalorakk's Favor of Enduring. Taking damage has a chance to grant a Mark of Frost, increasing your Critical Strike by 85 for 15 sec. Stacks up to 10 times.
+If your health falls below 25%, the reservoir ruptures, consuming all marks to form a Frost Barrier that absorbs 73767 damage per mark for 10 sec.",https://www.wowhead.com/item=250244
+Pilfered Precious Band,251148,"+1,830 Stamina
++148 Critical Strike
++221 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""","+1,895 Stamina
++150 Critical Strike
++225 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""","+1,962 Stamina
++153 Critical Strike
++230 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""","+2,053 Stamina
++157 Critical Strike
++235 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""","+2,124 Stamina
++159 Critical Strike
++239 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""","+2,199 Stamina
++162 Critical Strike
++243 Versatility
+""""The Hoardmonger was strangely attached to this 'precious' ring.""""",https://www.wowhead.com/item=251148
+Polished Lightwood Channeler,273778,"62 - 104 Damage
+Speed 1.80
+(46.1 damage per second)
++473 Intellect
++1,627 Stamina
++52 Haste
++42 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (11439 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.","64 - 107 Damage
+Speed 1.80
+(47.5 damage per second)
++486 Intellect
++1,684 Stamina
++53 Haste
++42 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (11940 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.","65 - 110 Damage
+Speed 1.80
+(48.6 damage per second)
++500 Intellect
++1,744 Stamina
++54 Haste
++43 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (12460 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.","68 - 114 Damage
+Speed 1.80
+(50.6 damage per second)
++519 Intellect
++1,824 Stamina
++55 Haste
++43 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (13185 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.","70 - 117 Damage
+Speed 1.80
+(51.9 damage per second)
++534 Intellect
++1,888 Stamina
++55 Haste
++44 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (13753 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.","72 - 121 Damage
+Speed 1.80
+(53.6 damage per second)
++549 Intellect
++1,955 Stamina
++56 Haste
++44 Mastery
+Equip: Your damaging spells have a chance to launch a mote of light towards your target, inflicting (14343 * 1) Holy damage split among nearby enemies. Damage increased by 30% per additional enemy, up to 150%.",https://www.wowhead.com/item=273778
+Primal Dinomancer's Belt,159301,"99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++80 Critical Strike
++61 Haste","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++81 Critical Strike
++62 Haste","103 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++82 Critical Strike
++63 Haste","106 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++83 Critical Strike
++64 Haste","108 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++84 Critical Strike
++65 Haste","110 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++85 Critical Strike
++66 Haste",https://www.wowhead.com/item=159301
+Pruning Lance,251193,"280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++118 Haste
++70 Mastery","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++120 Haste
++71 Mastery","296 - 444 Damage
+Speed 3.60
+(102.8 damage per second)
++172 [Agility or Strength]
++3,487 Stamina
++121 Haste
++72 Mastery","307 - 461 Damage
+Speed 3.60
+(106.7 damage per second)
++178 [Agility or Strength]
++3,649 Stamina
++123 Haste
++73 Mastery","316 - 474 Damage
+Speed 3.60
+(109.7 damage per second)
++183 [Agility or Strength]
++3,777 Stamina
++125 Haste
++74 Mastery","325 - 487 Damage
+Speed 3.60
+(112.8 damage per second)
++189 [Agility or Strength]
++3,910 Stamina
++126 Haste
++75 Mastery",https://www.wowhead.com/item=251193
+Ritual Binder's Ring,159459,"+1,830 Stamina
++242 Haste
++126 Versatility","+1,895 Stamina
++247 Haste
++129 Versatility","+1,962 Stamina
++251 Haste
++131 Versatility","+2,053 Stamina
++257 Haste
++134 Versatility","+2,124 Stamina
++262 Haste
++137 Versatility","+2,199 Stamina
++266 Haste
++139 Versatility",https://www.wowhead.com/item=159459
+Rootwalker Harness,251189,"99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++52 Critical Strike
++89 Versatility","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++53 Critical Strike
++90 Versatility","103 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++54 Critical Strike
++91 Versatility","106 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++55 Critical Strike
++92 Versatility","108 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++55 Critical Strike
++94 Versatility","110 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++56 Critical Strike
++95 Versatility",https://www.wowhead.com/item=251189
+Rootwarden Wraps,251183,"88 Armor
++91 [Agility or Intellect]
++1,830 Stamina
++69 Critical Strike
++37 Mastery","90 Armor
++94 [Agility or Intellect]
++1,895 Stamina
++70 Critical Strike
++37 Mastery","92 Armor
++97 [Agility or Intellect]
++1,962 Stamina
++70 Critical Strike
++38 Mastery","94 Armor
++100 [Agility or Intellect]
++2,053 Stamina
++72 Critical Strike
++39 Mastery","96 Armor
++103 [Agility or Intellect]
++2,124 Stamina
++73 Critical Strike
++39 Mastery","98 Armor
++106 [Agility or Intellect]
++2,199 Stamina
++73 Critical Strike
++40 Mastery",https://www.wowhead.com/item=251183
+Royal Purifier's Spade,159646,"280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++106 Critical Strike
++82 Mastery","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++107 Critical Strike
++83 Mastery","296 - 444 Damage
+Speed 3.60
+(102.8 damage per second)
++172 [Agility or Strength]
++3,487 Stamina
++109 Critical Strike
++84 Mastery","307 - 461 Damage
+Speed 3.60
+(106.7 damage per second)
++178 [Agility or Strength]
++3,649 Stamina
++111 Critical Strike
++85 Mastery","316 - 474 Damage
+Speed 3.60
+(109.7 damage per second)
++183 [Agility or Strength]
++3,777 Stamina
++112 Critical Strike
++86 Mastery","325 - 487 Damage
+Speed 3.60
+(112.8 damage per second)
++189 [Agility or Strength]
++3,910 Stamina
++113 Critical Strike
++88 Mastery",https://www.wowhead.com/item=159646
+Ruby Whelp Shell,193757,"+154 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)","+159 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)","+163 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)","+170 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)","+174 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)","+179 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to call a Ruby Whelpling, which will try to be helpful and assist you in combat.
+Use: Call your Ruby Whelpling to inspect your target's situation, teaching them how to be helpful. (1 Day Cooldown)",https://www.wowhead.com/item=193757
+Sand-Shined Snakeskin Sandals,159327,"110 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++83 Critical Strike
++58 Mastery","112 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++84 Critical Strike
++59 Mastery","114 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++85 Critical Strike
++60 Mastery","118 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++86 Critical Strike
++61 Mastery","120 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++87 Critical Strike
++62 Mastery","122 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++88 Critical Strike
++62 Mastery",https://www.wowhead.com/item=159327
+Sapling of the Dawnroot,250259,"+154 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (4913 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 12794) Holy damage split among nearby enemies.","+159 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (5128 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 13355) Holy damage split among nearby enemies.","+163 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (5351 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 13937) Holy damage split among nearby enemies.","+170 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (5663 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 14748) Holy damage split among nearby enemies.","+174 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (5907 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 15383) Holy damage split among nearby enemies.","+179 [Agility or Strength or Intellect]
+Equip: Your spells and abilities have a chance to uproot a Lightspawn Lasher to aid you in combat for 15 sec, dealing up to [1 * (6160 * 10)] Physical damage.
+The Lightspawn Lasher then withers, bursting into light-infused sap and inflicting (1 * 16042) Holy damage split among nearby enemies.",https://www.wowhead.com/item=250259
+Scavenger's Spaulders,251146,"121 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++58 Critical Strike
++83 Versatility","123 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++59 Critical Strike
++84 Versatility","126 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++60 Critical Strike
++85 Versatility","129 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++61 Critical Strike
++86 Versatility","132 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++62 Critical Strike
++87 Versatility","135 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++62 Critical Strike
++88 Versatility",https://www.wowhead.com/item=251146
+Seed of Radiant Hope,250254,"+154 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [20564 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 185102. (1 Min, 30 Sec Cooldown)","+159 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [21465 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 193211. (1 Min, 30 Sec Cooldown)","+163 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [22401 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 201631. (1 Min, 30 Sec Cooldown)","+170 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [23704 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 213362. (1 Min, 30 Sec Cooldown)","+174 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [24725 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 222552. (1 Min, 30 Sec Cooldown)","+179 Intellect
+Use: Surround your target ally with Lightblossoms, healing them for [25785 * (8)] over 12 sec.
+If their health falls below 50%, the Lightblossoms fully bloom in radiant light, instantly healing them for 232091. (1 Min, 30 Sec Cooldown)",https://www.wowhead.com/item=250254
+Sethraliss' Defiled Relic,158368,"+154 Intellect
+Use: Curse the target with a Rotten Wound, dealing (127130 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (7946 * 1) Nature damage. (2 Min Cooldown)","+159 Intellect
+Use: Curse the target with a Rotten Wound, dealing (132699 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (8294 * 1) Nature damage. (2 Min Cooldown)","+163 Intellect
+Use: Curse the target with a Rotten Wound, dealing (138483 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (8656 * 1) Nature damage. (2 Min Cooldown)","+170 Intellect
+Use: Curse the target with a Rotten Wound, dealing (146539 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (9159 * 1) Nature damage. (2 Min Cooldown)","+174 Intellect
+Use: Curse the target with a Rotten Wound, dealing (152851 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (9554 * 1) Nature damage. (2 Min Cooldown)","+179 Intellect
+Use: Curse the target with a Rotten Wound, dealing (159403 * 1) Nature damage over 15 sec.
+While the wound persists, your damaging spells have a high chance to deepen the wound, inflicting an additional (9963 * 1) Nature damage. (2 Min Cooldown)",https://www.wowhead.com/item=158368
+Sickening Signet of Atroxus,252258,"+1,830 Stamina
++253 Haste
++116 Mastery","+1,895 Stamina
++258 Haste
++118 Mastery","+1,962 Stamina
++262 Haste
++120 Mastery","+2,053 Stamina
++269 Haste
++123 Mastery","+2,124 Stamina
++273 Haste
++125 Mastery","+2,199 Stamina
++278 Haste
++127 Mastery",https://www.wowhead.com/item=252258
+Signet of Snarling Servitude,251136,"+1,830 Stamina
++227 Critical Strike
++142 Mastery","+1,895 Stamina
++231 Critical Strike
++145 Mastery","+1,962 Stamina
++235 Critical Strike
++148 Mastery","+2,053 Stamina
++241 Critical Strike
++151 Mastery","+2,124 Stamina
++245 Critical Strike
++154 Mastery","+2,199 Stamina
++249 Critical Strike
++156 Mastery",https://www.wowhead.com/item=251136
+Snakeskin Spaulders,273774,"121 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++83 Critical Strike
++58 Versatility","123 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++84 Critical Strike
++59 Versatility","126 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++85 Critical Strike
++60 Versatility","129 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++86 Critical Strike
++61 Versatility","132 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++87 Critical Strike
++62 Versatility","135 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++88 Critical Strike
++62 Versatility",https://www.wowhead.com/item=273774
+Somber Spaulders,251223,"121 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++89 Critical Strike
++52 Haste","123 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++90 Critical Strike
++53 Haste","126 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++91 Critical Strike
++54 Haste","129 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++92 Critical Strike
++55 Haste","132 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++94 Critical Strike
++55 Haste","135 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++95 Critical Strike
++56 Haste",https://www.wowhead.com/item=251223
+Spare Speaker's Hood,273791,"132 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++81 Critical Strike
++107 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""","135 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++82 Critical Strike
++109 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""","137 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++83 Critical Strike
++110 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""","141 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++84 Critical Strike
++112 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""","144 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++85 Critical Strike
++113 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""","147 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++86 Critical Strike
++115 Haste
+""One of the few familial keepsakes Zul'jan took with him when he set out.""",https://www.wowhead.com/item=273791
+Speakeasy Shroud,251132,"70 Armor
++91 [Agility or Strength or Intellect]
++1,830 Stamina
++62 Critical Strike
++44 Mastery","72 Armor
++94 [Agility or Strength or Intellect]
++1,895 Stamina
++63 Critical Strike
++44 Mastery","73 Armor
++97 [Agility or Strength or Intellect]
++1,962 Stamina
++64 Critical Strike
++45 Mastery","75 Armor
++100 [Agility or Strength or Intellect]
++2,053 Stamina
++65 Critical Strike
++46 Mastery","77 Armor
++103 [Agility or Strength or Intellect]
++2,124 Stamina
++65 Critical Strike
++46 Mastery","78 Armor
++106 [Agility or Strength or Intellect]
++2,199 Stamina
++66 Critical Strike
++47 Mastery",https://www.wowhead.com/item=251132
+Staff of the Lightning Serpent,158372,"140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 Intellect
++3,254 Stamina
++106 Critical Strike
++82 Mastery","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 Intellect
++3,369 Stamina
++107 Critical Strike
++83 Mastery","148 - 222 Damage
+Speed 3.60
+(51.4 damage per second)
++1000 Intellect
++3,487 Stamina
++109 Critical Strike
++84 Mastery","154 - 231 Damage
+Speed 3.60
+(53.4 damage per second)
++1038 Intellect
++3,649 Stamina
++111 Critical Strike
++85 Mastery","158 - 237 Damage
+Speed 3.60
+(54.9 damage per second)
++1068 Intellect
++3,777 Stamina
++112 Critical Strike
++86 Mastery","163 - 244 Damage
+Speed 3.60
+(56.4 damage per second)
++1098 Intellect
++3,910 Stamina
++113 Critical Strike
++88 Mastery",https://www.wowhead.com/item=158372
+Stormbound Emblem of Dazar,273649,"+154 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 984 up to 20 sec. (2 Min Cooldown)","+159 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 997 up to 20 sec. (2 Min Cooldown)","+163 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 1010 up to 20 sec. (2 Min Cooldown)","+170 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 1027 up to 20 sec. (2 Min Cooldown)","+174 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 1039 up to 20 sec. (2 Min Cooldown)","+179 Intellect
+Use: Channel for 2 sec as the wind answers Dazar's command, increasing your Haste by 1052 up to 20 sec. (2 Min Cooldown)",https://www.wowhead.com/item=273649
+Strand of Warding Fangs,273781,"+1,830 Stamina
++210 Critical Strike
++159 Haste","+1,895 Stamina
++214 Critical Strike
++162 Haste","+1,962 Stamina
++218 Critical Strike
++165 Haste","+2,053 Stamina
++223 Critical Strike
++169 Haste","+2,124 Stamina
++227 Critical Strike
++172 Haste","+2,199 Stamina
++230 Critical Strike
++175 Haste",https://www.wowhead.com/item=273781
+Subjugator's Chilling Grips,193758,"99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++83 Critical Strike
++58 Versatility","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++84 Critical Strike
++59 Versatility","103 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++85 Critical Strike
++60 Versatility","106 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++86 Critical Strike
++61 Versatility","108 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++87 Critical Strike
++62 Versatility","110 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++88 Critical Strike
++62 Versatility",https://www.wowhead.com/item=193758
+Toxin-Coated Warstaff,273788,"140 - 211 Damage
+Speed 3.60
+(48.7 damage per second)
++946 [Agility or Intellect]
++3,254 Stamina
++110 Haste
++78 Mastery","144 - 217 Damage
+Speed 3.60
+(50.1 damage per second)
++972 [Agility or Intellect]
++3,369 Stamina
++112 Haste
++79 Mastery","148 - 222 Damage
+Speed 3.60
+(51.4 damage per second)
++1000 [Agility or Intellect]
++3,487 Stamina
++113 Haste
++80 Mastery","154 - 231 Damage
+Speed 3.60
+(53.4 damage per second)
++1038 [Agility or Intellect]
++3,649 Stamina
++115 Haste
++81 Mastery","158 - 237 Damage
+Speed 3.60
+(54.9 damage per second)
++1068 [Agility or Intellect]
++3,777 Stamina
++116 Haste
++82 Mastery","163 - 244 Damage
+Speed 3.60
+(56.4 damage per second)
++1098 [Agility or Intellect]
++3,910 Stamina
++118 Haste
++83 Mastery",https://www.wowhead.com/item=273788
+Twin-Strike Polearm,158371,"280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++110 Critical Strike
++78 Versatility","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++112 Critical Strike
++79 Versatility","296 - 444 Damage
+Speed 3.60
+(102.8 damage per second)
++172 [Agility or Strength]
++3,487 Stamina
++113 Critical Strike
++80 Versatility","307 - 461 Damage
+Speed 3.60
+(106.7 damage per second)
++178 [Agility or Strength]
++3,649 Stamina
++115 Critical Strike
++81 Versatility","316 - 474 Damage
+Speed 3.60
+(109.7 damage per second)
++183 [Agility or Strength]
++3,777 Stamina
++116 Critical Strike
++82 Versatility","325 - 487 Damage
+Speed 3.60
+(112.8 damage per second)
++189 [Agility or Strength]
++3,910 Stamina
++118 Critical Strike
++83 Versatility",https://www.wowhead.com/item=158371
+Unstable Felheart Crystal,250255,"+154 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 19470 of your health to infuse a target ally for 10 sec, absorbing 329072 damage. (2 Min Cooldown)","+159 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 20323 of your health to infuse a target ally for 10 sec, absorbing 343488 damage. (2 Min Cooldown)","+163 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 21209 of your health to infuse a target ally for 10 sec, absorbing 358458 damage. (2 Min Cooldown)","+170 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 22443 of your health to infuse a target ally for 10 sec, absorbing 379312 damage. (2 Min Cooldown)","+174 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 23410 of your health to infuse a target ally for 10 sec, absorbing 395650 damage. (2 Min Cooldown)","+179 Intellect
+Use: Unleash the fel energy stored within the crystal, sacrificing 24413 of your health to infuse a target ally for 10 sec, absorbing 412609 damage. (2 Min Cooldown)",https://www.wowhead.com/item=250255
+Vessel of Last Rites,159648,"+473 Intellect
++1,627 Stamina
++55 Critical Strike
++39 Mastery","+486 Intellect
++1,684 Stamina
++56 Critical Strike
++39 Mastery","+500 Intellect
++1,744 Stamina
++56 Critical Strike
++40 Mastery","+519 Intellect
++1,824 Stamina
++57 Critical Strike
++41 Mastery","+534 Intellect
++1,888 Stamina
++58 Critical Strike
++41 Mastery","+549 Intellect
++1,955 Stamina
++59 Critical Strike
++42 Mastery",https://www.wowhead.com/item=159648
+Vest of Reverent Adoration,239048,"176 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++106 Critical Strike
++82 Mastery","180 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++107 Critical Strike
++83 Mastery","183 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++109 Critical Strike
++84 Mastery","188 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++111 Critical Strike
++85 Mastery","192 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++112 Critical Strike
++86 Mastery","196 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++113 Critical Strike
++88 Mastery",https://www.wowhead.com/item=239048
+Victor's Flashfrozen Blade,251158,"280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++114 Mastery
++74 Versatility","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++116 Mastery
++75 Versatility","296 - 444 Damage
+Speed 3.60
+(102.8 damage per second)
++172 [Agility or Strength]
++3,487 Stamina
++117 Mastery
++76 Versatility","307 - 461 Damage
+Speed 3.60
+(106.7 damage per second)
++178 [Agility or Strength]
++3,649 Stamina
++119 Mastery
++77 Versatility","316 - 474 Damage
+Speed 3.60
+(109.7 damage per second)
++183 [Agility or Strength]
++3,777 Stamina
++121 Mastery
++78 Versatility","325 - 487 Damage
+Speed 3.60
+(112.8 damage per second)
++189 [Agility or Strength]
++3,910 Stamina
++122 Mastery
++79 Versatility",https://www.wowhead.com/item=251158
+Vile Vial of Volatile Venom,273796,"+154 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 902 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 129 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""","+159 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 914 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 131 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""","+163 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 926 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 132 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""","+170 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 941 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 134 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""","+174 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 953 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 136 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""","+179 [Agility or Strength or Intellect]
+Use: Take a small sip of venom, gaining 964 of a random secondary stat for 15 sec. Afterwards, a random secondary stat is reduced by 138 for 15 sec. (2 Min Cooldown)
+""""Questionable? Yes. Potable?... Technically yes.""""",https://www.wowhead.com/item=273796
+Vile Writhefang Glaive,273787,"280 - 421 Damage
+Speed 3.60
+(97.4 damage per second)
++162 [Agility or Strength]
++3,254 Stamina
++110 Critical Strike
++78 Versatility","288 - 433 Damage
+Speed 3.60
+(100.1 damage per second)
++167 [Agility or Strength]
++3,369 Stamina
++112 Critical Strike
++79 Versatility","296 - 444 Damage
+Speed 3.60
+(102.8 damage per second)
++172 [Agility or Strength]
++3,487 Stamina
++113 Critical Strike
++80 Versatility","307 - 461 Damage
+Speed 3.60
+(106.7 damage per second)
++178 [Agility or Strength]
++3,649 Stamina
++115 Critical Strike
++81 Versatility","316 - 474 Damage
+Speed 3.60
+(109.7 damage per second)
++183 [Agility or Strength]
++3,777 Stamina
++116 Critical Strike
++82 Versatility","325 - 487 Damage
+Speed 3.60
+(112.8 damage per second)
++189 [Agility or Strength]
++3,910 Stamina
++118 Critical Strike
++83 Versatility",https://www.wowhead.com/item=273787
+Vilefiend's Guise,251140,"132 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++110 Haste
++78 Mastery","135 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++112 Haste
++79 Mastery","137 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++113 Haste
++80 Mastery","141 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++115 Haste
++81 Mastery","144 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++116 Haste
++82 Mastery","147 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++118 Haste
++83 Mastery",https://www.wowhead.com/item=251140
+War Trial Vestments,251159,"176 Armor
++162 [Agility or Intellect]
++3,254 Stamina
++70 Haste
++118 Mastery","180 Armor
++167 [Agility or Intellect]
++3,369 Stamina
++71 Haste
++120 Mastery","183 Armor
++172 [Agility or Intellect]
++3,487 Stamina
++72 Haste
++121 Mastery","188 Armor
++178 [Agility or Intellect]
++3,649 Stamina
++73 Haste
++123 Mastery","192 Armor
++183 [Agility or Intellect]
++3,777 Stamina
++74 Haste
++125 Mastery","196 Armor
++189 [Agility or Intellect]
++3,910 Stamina
++75 Haste
++126 Mastery",https://www.wowhead.com/item=251159
+Whirling Dervish Sash,159317,"99 Armor
++122 [Agility or Intellect]
++2,440 Stamina
++55 Haste
++86 Mastery","101 Armor
++125 [Agility or Intellect]
++2,527 Stamina
++56 Haste
++87 Mastery","103 Armor
++129 [Agility or Intellect]
++2,615 Stamina
++57 Haste
++88 Mastery","106 Armor
++134 [Agility or Intellect]
++2,737 Stamina
++58 Haste
++89 Mastery","108 Armor
++138 [Agility or Intellect]
++2,832 Stamina
++58 Haste
++90 Mastery","110 Armor
++141 [Agility or Intellect]
++2,932 Stamina
++59 Haste
++91 Mastery",https://www.wowhead.com/item=159317
+Yoke of the Charging Bear,251173,"+1,830 Stamina
++126 Critical Strike
++242 Haste","+1,895 Stamina
++129 Critical Strike
++247 Haste","+1,962 Stamina
++131 Critical Strike
++251 Haste","+2,053 Stamina
++134 Critical Strike
++257 Haste","+2,124 Stamina
++137 Critical Strike
++262 Haste","+2,199 Stamina
++139 Critical Strike
++266 Haste",https://www.wowhead.com/item=251173

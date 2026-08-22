@@ -1,0 +1,221 @@
+import express from 'express';
+import { existsSync, readFileSync } from 'node:fs';
+import { calibration, characters, cleanupStaleDisposables, createDisposableProfile, createRun, deleteCharacter, deleteRuns, getDroptimizerJob, getProfile, getRun, getTopGearJob, importCandidates, paths, profiles, runResult, runs, saveCalibration, saveProfile, saveTopGearJob, updateProfileRaw, updateRun } from './db.js';
+import { computeCapacity, safeThreads } from './compute.js';
+import { buildInput, parseInventory, parseProfile } from './profile.js';
+import { cancel, execute } from './runner.js';
+import { RESTART_AFTER_RUNTIME_UPDATE, ensureCurrentRuntime, runtime, runtimeStatus, smokeTest } from './runtime.js';
+import { catalogDrops, catalogEnhancements, catalogSourceCategories, catalogSources, catalogStatus, enrichInventory, searchCatalog, upsertCatalogItem, upsertEnhancement, catalogOmniumSpells } from './catalog.js';
+import { installEnhancementSeed } from './enhancements.js';
+import { derivedCatalogHealth, installDerivedCatalog } from './derived-catalog.js';
+import { refreshCatalog, refreshStatus } from './catalog-refresh.js';
+import { calibratePreview, planOptimization, previewOptimization } from './optimizer.js';
+import { recoverTopGearRun, runTopGearBatches } from './topgear-batches.js';
+import { runDroptimizer } from './droptimizer.js';
+import { localItemIcon, readLocalItemIcon } from './item-media.js';
+import { captureStatus, configureCaptureImport, importCapturePayload, startCaptureWatch } from './captures.js';
+import { resolveTooltip, tooltipStatus } from './tooltips.js';
+cleanupStaleDisposables();
+const app = express();
+app.use('/api', (_req, res, next) => { res.set('Cache-Control', 'no-store, max-age=0'); next(); });
+app.use(express.json({ limit: '5mb' }));
+const defaults = { name: 'Patchwerk - 1 target', fightStyle: 'Patchwerk', duration: 300, variation: 20, targets: 1, bloodlust: 'pull', raidBuffs: true, consumables: true, powerInfusion: false, rawOverride: '' };
+const calibrationKey = (p, s, n) => [p.className, p.spec, runtime().version, n, s.fightStyle, s.targets, s.duration].join('|');
+const quickPreview = (p, s, n) => { const throughput = calibration(calibrationKey(p, s, n))?.throughput || 250000; const iterations = 10000, estimatedSeconds = Math.max(3, Math.ceil(iterations / throughput)); const intensity = estimatedSeconds <= 30 ? 'green' : estimatedSeconds <= 300 ? 'amber' : estimatedSeconds <= 1800 ? 'orange' : 'red'; return { combinations: 1, profilesets: 1, iterations, totalIterations: iterations, enhancementVariants: 0, enhancementCombinations: 1, replaceExistingEnhancements: false, estimatedSeconds, intensity, calibration: throughput === 250000 ? 'estimated' : 'learned', warnings: [] }; };
+function indexEnhancements(candidates) { for (const c of candidates) {
+    for (const gem of c.gems || [])
+        upsertEnhancement({ id: `imported-gem-${gem}`, type: 'gem', name: `Imported gem #${gem}`, slots: ['head', 'neck', 'shoulder', 'back', 'chest', 'wrist', 'hands', 'waist', 'legs', 'feet', 'finger1', 'trinket1', 'main_hand', 'off_hand'], simcFragment: `gem_id=${gem}` });
+    if (c.enchant)
+        upsertEnhancement({ id: `imported-enchant-${c.enchant}`, type: 'enchant', name: `Imported enchant #${c.enchant}`, slots: [c.slot], simcFragment: `enchant_id=${c.enchant}` });
+} }
+app.get('/api/health', (_, res) => res.json({ ok: true, runtime: runtimeStatus() }));
+app.get('/api/runtime/status', (_, res) => res.json(runtimeStatus()));
+app.get('/api/profiles', (_, res) => res.json(profiles()));
+app.get('/api/characters', (_, res) => res.json(characters()));
+app.delete('/api/characters/:id', (req, res) => { try {
+    deleteCharacter(+req.params.id);
+    res.sendStatus(204);
+}
+catch (e) {
+    res.status(422).json({ error: e.message });
+} });
+app.get('/api/compute/capacity', async (_, res) => res.json(await computeCapacity()));
+app.get('/api/catalog/db2/status', (_, res) => res.json(derivedCatalogHealth()));
+app.post('/api/catalog/db2/install', (_, res) => { try {
+    res.json(installDerivedCatalog());
+}
+catch (error) {
+    res.status(422).json({ error: error.message });
+} });
+app.get('/api/catalog/source-categories', (_, res) => res.json(catalogSourceCategories()));
+app.post('/api/runs/preview', async (req, res) => { const p = getProfile(+req.body.profileId); if (!p)
+    return res.sendStatus(404); const scenario = { ...defaults, ...req.body.scenario }; const compute = await safeThreads(req.body.threads); res.json({ ...quickPreview(p, scenario, compute.threads), appliedThreads: compute.threads, capacity: compute.capacity, clamped: compute.clamped }); });
+app.post('/api/profiles/preview', (req, res) => { try {
+    const p = parseProfile(req.body.rawProfile), matches = importCandidates(p.name, p.realm);
+    res.json({ profile: { name: p.name, realm: p.realm, className: p.className, spec: p.spec }, matches, inventory: { candidateCount: p.inventory.candidates.length, vaultDetected: p.inventory.vaultDetected, talentCount: p.inventory.talents.length } });
+}
+catch (e) {
+    res.status(422).json({ error: e.message });
+} });
+app.post('/api/profiles', (req, res) => { try {
+    const p = parseProfile(req.body.rawProfile), mode = req.body.persistence === 'reusable' ? 'reusable' : 'disposable', characterId = req.body.characterId ? Number(req.body.characterId) : undefined, matches = importCandidates(p.name, p.realm);
+    if (mode === 'reusable' && matches.ambiguous && !characterId)
+        return res.status(409).json({ error: 'Review the possible character matches and choose the saved character to update.' });
+    p.inventory.candidates.forEach(c => { if (c.itemId)
+        upsertCatalogItem({ id: c.itemId, name: c.name, slot: c.slot, itemLevel: c.itemLevel, source: 'Imported SimC addon', uniqueKey: c.uniqueKey, simcLine: c.rawLine }); });
+    indexEnhancements(p.inventory.candidates);
+    const saved = mode === 'reusable' ? saveProfile({ name: p.name, realm: p.realm, className: p.className, spec: p.spec, rawProfile: p.raw, persistence: 'reusable', characterId }) : createDisposableProfile({ name: p.name, realm: p.realm, className: p.className, spec: p.spec, rawProfile: p.raw });
+    res.status(201).json({ ...saved, inventory: enrichInventory(p.inventory) });
+}
+catch (e) {
+    res.status(422).json({ error: e.message });
+} });
+app.get('/api/profiles/:id/inventory', (req, res) => { const p = getProfile(+req.params.id); if (!p)
+    return res.sendStatus(404); res.json({ ...enrichInventory(parseInventory(p.rawProfile)), enhancements: catalogEnhancements() }); });
+app.post('/api/profiles/:id/candidates', (req, res) => { const p = getProfile(+req.params.id); if (!p)
+    return res.sendStatus(404); const line = String(req.body.line || '').trim().replace(/^#\s*/, ''); if (!/^[a-z_0-9]+=.+$/i.test(line))
+    return res.status(422).json({ error: 'Enter a complete SimC item line, such as finger1=item_name,id=123.' }); const updated = updateProfileRaw(p.id, `${p.rawProfile}\n\n# Custom Candidates\n# ${line}\n`); res.status(201).json({ profile: updated, inventory: parseInventory(updated.rawProfile) }); });
+app.get('/api/runs', (_, res) => res.json(runs()));
+app.delete('/api/runs', (req, res) => { try {
+    res.json({ deleted: deleteRuns((req.body?.ids || []).map(Number)) });
+}
+catch (e) {
+    res.status(422).json({ error: e.message });
+} });
+app.delete('/api/runs/:id', (req, res) => { try {
+    res.json({ deleted: deleteRuns([+req.params.id]) });
+}
+catch (e) {
+    res.status(422).json({ error: e.message });
+} });
+app.get('/api/runs/:id', (req, res) => { const r = getRun(+req.params.id); if (!r)
+    return res.sendStatus(404); res.json(r); });
+app.get('/api/runs/:id/result', (req, res) => { const run = getRun(+req.params.id); if (!run)
+    return res.sendStatus(404); let result = runResult(run.id); if (run.mode === 'topgear' && (!Array.isArray(result?.comparisons) || result.comparisons.length === 0)) {
+    recoverTopGearRun(run.id);
+    result = runResult(run.id);
+} if (!result)
+    return res.status(409).json({ error: 'This run has not produced an in-app result yet.', run }); res.json({ run: getRun(run.id), result }); });
+app.get('/api/runs/:id/input', (req, res) => { const r = getRun(+req.params.id); if (!r)
+    return res.sendStatus(404); res.type('text/plain').send(r.input); });
+app.get('/api/runs/:id/report', (req, res) => { const r = getRun(+req.params.id); if (!r?.reportPath || !existsSync(r.reportPath))
+    return res.status(404).json({ error: 'Report unavailable' }); res.type('text/html').send(readFileSync(r.reportPath)); });
+app.post('/api/runs', async (req, res) => { const p = getProfile(+req.body.profileId); if (!p)
+    return res.sendStatus(404); if (p.persistence === 'disposable' && runs().some(r => r.profileId === p.id))
+    return res.status(422).json({ error: 'A disposable import can run only once. Import again to start another simulation.' }); const scenario = { ...defaults, ...req.body.scenario }; const compute = await safeThreads(req.body.threads); const input = buildInput(p.rawProfile, scenario, compute.threads); const id = createRun({ mode: req.body.mode || 'quick', title: `${p.name} · ${p.realm} · ${p.spec} — ${req.body.title || scenario.name}`, status: 'queued', scenario, input, simcVersion: runtime().version, profileId: p.id, characterId: p.characterId, character: { name: p.name, realm: p.realm, className: p.className, spec: p.spec, profileId: p.id, characterId: p.characterId, persistence: p.persistence } }); const run = getRun(id); execute(id, input).catch(() => undefined); res.status(202).json({ id, input, run, appliedThreads: compute.threads, capacity: compute.capacity, clamped: compute.clamped }); });
+app.post('/api/runs/:id/cancel', (req, res) => { const id = +req.params.id, run = getRun(id); const wasActive = cancel(id); if (!wasActive && run && ['queued', 'running'].includes(run.status))
+    updateRun(id, { status: 'cancelled', completedAt: new Date().toISOString() }); res.json({ cancelled: wasActive || Boolean(run && ['queued', 'running'].includes(run.status)) }); });
+app.get('/api/runs/:id/progress', (req, res) => { const r = getRun(+req.params.id); if (!r)
+    return res.sendStatus(404); const job = getTopGearJob(r.id) || getDroptimizerJob(r.id); if (job?.progress)
+    return res.json({ ...job.progress, status: r.status, cancelAvailable: ['queued', 'running'].includes(r.status) }); res.json({ stage: r.status === 'running' ? 'simulating' : r.status, elapsedMs: Date.now() - new Date(r.createdAt).getTime(), status: r.status, cancelAvailable: ['queued', 'running'].includes(r.status) }); });
+app.get('/api/catalog/status', (_, res) => res.json(catalogStatus()));
+app.get('/api/catalog/items', (req, res) => res.json(searchCatalog(String(req.query.q || ''), String(req.query.slot || ''))));
+app.get('/api/catalog/items/:id/icon', async (req, res) => { const id = Number(req.params.id); try {
+    let bytes = readLocalItemIcon(id);
+    let mime = 'image/png';
+    if (!bytes) {
+        const cached = await localItemIcon(id);
+        bytes = readLocalItemIcon(id);
+        mime = cached.mime;
+    }
+    if (!bytes)
+        return res.sendStatus(404);
+    res.type(mime).send(bytes);
+}
+catch (e) {
+    res.status(404).json({ error: e instanceof Error ? e.message : String(e) });
+} });
+app.get('/api/catalog/enhancements', (_, res) => res.json(catalogEnhancements()));
+app.get('/api/catalog/refresh-status', (_, res) => res.json(refreshStatus()));
+app.post('/api/catalog/refresh', (_, res) => { try {
+    res.status(202).json(refreshCatalog());
+}
+catch (e) {
+    res.status(409).json({ error: e instanceof Error ? e.message : String(e) });
+} });
+app.get('/api/catalog/sources', (_, res) => res.json(catalogSources()));
+app.get('/api/catalog/drops', (req, res) => res.json(catalogDrops(String(req.query.instance || ''))));
+app.get('/api/catalog/captures/status', (_, res) => res.json(captureStatus()));
+app.put('/api/catalog/captures/config', (req, res) => { try {
+    res.json(configureCaptureImport(String(req.body.wowPath || ''), req.body.account ? String(req.body.account) : undefined));
+}
+catch (e) {
+    res.status(422).json({ error: e instanceof Error ? e.message : String(e) });
+} });
+app.post('/api/catalog/captures/import', (req, res) => { try {
+    res.json(importCapturePayload(String(req.body.payload || '')));
+}
+catch (e) {
+    res.status(422).json({ error: e instanceof Error ? e.message : String(e) });
+} });
+app.get('/api/catalog/spells', async (_, res) => { try {
+    res.json(await catalogOmniumSpells());
+}
+catch (e) {
+    res.status(500).json({ error: String(e) });
+} });
+app.get('/api/catalog/tooltips/status', (_, res) => res.json(tooltipStatus()));
+app.get('/api/catalog/items/:id/tooltip', (req, res) => { const itemId = Number(req.params.id), itemLevel = Number(req.query.itemLevel) || undefined, bonusIds = String(req.query.bonusIds || '').split('/').map(Number).filter(Number.isFinite), fallback = { name: req.query.name ? String(req.query.name) : undefined, slot: req.query.slot ? String(req.query.slot) : undefined, source: req.query.source ? String(req.query.source) : undefined, enchant: req.query.enchant ? String(req.query.enchant) : undefined, gems: req.query.gems ? String(req.query.gems).split('/').filter(Boolean) : undefined }; if (!Number.isInteger(itemId) || itemId <= 0)
+    return res.status(422).json({ error: 'An item ID is required.' }); res.json(resolveTooltip({ itemId, itemLevel, bonusIds, fallback })); });
+app.post('/api/topgear/preview', async (req, res) => { const p = getProfile(+req.body.profileId); if (!p)
+    return res.sendStatus(404); try {
+    const s = { ...defaults, ...req.body.scenario };
+    const compute = await safeThreads(req.body.threads);
+    res.json({ ...calibratePreview(previewOptimization(enrichInventory(parseInventory(p.rawProfile)), req.body, catalogEnhancements()), calibration(calibrationKey(p, s, compute.threads))?.throughput), appliedThreads: compute.threads, capacity: compute.capacity, clamped: compute.clamped });
+}
+catch (e) {
+    res.status(422).json({ error: e.message });
+} });
+app.post('/api/topgear/run', async (req, res) => { const p = getProfile(+req.body.profileId); if (!p)
+    return res.sendStatus(404); if (p.persistence === 'disposable' && runs().some(r => r.profileId === p.id))
+    return res.status(422).json({ error: 'A disposable import can run only once.' }); try {
+    let rawOverride = '';
+    if (req.body.omniumFolio?.length > 0) {
+        const spells = await catalogOmniumSpells();
+        const spellIds = req.body.omniumFolio.map((n) => spells.find(s => s.name === n)?.id).filter(Boolean);
+        if (spellIds.length > 0)
+            rawOverride += `omnium_folio=${spellIds.join('/')}\n`;
+    }
+    const request = { ...req.body, scenario: { ...defaults, ...req.body.scenario, rawOverride } };
+    const optimized = planOptimization(enrichInventory(parseInventory(p.rawProfile)), request, catalogEnhancements());
+    const compute = await safeThreads(request.threads);
+    const id = createRun({ mode: 'topgear', title: `${p.name} · ${p.realm} · ${p.spec} — Top Gear`, status: 'queued', scenario: request.scenario, input: '', simcVersion: runtime().version, profileId: p.id, characterId: p.characterId, character: { name: p.name, realm: p.realm, className: p.className, spec: p.spec, profileId: p.id, characterId: p.characterId, persistence: p.persistence } });
+    const run = getRun(id);
+    saveTopGearJob(id, catalogStatus().version, optimized.preview, optimized.plans, { ...request, threads: compute.threads });
+    runTopGearBatches(id, p.rawProfile, optimized.plans, request.scenario, compute.threads, (_results, elapsedMs) => saveCalibration(calibrationKey(p, request.scenario, compute.threads), Math.max(1, optimized.preview.profilesets * optimized.preview.iterations) / (elapsedMs / 1000))).catch(() => undefined);
+    res.status(202).json({ id, run, preview: optimized.preview, planned: optimized.plans.length, appliedThreads: compute.threads, capacity: compute.capacity, clamped: compute.clamped });
+}
+catch (e) {
+    res.status(422).json({ error: e.message });
+} });
+import { getAllUpgradeTargets } from './tracks.js';
+app.get('/api/droptimizer/targets', (_, res) => res.json(getAllUpgradeTargets()));
+app.post('/api/droptimizer/run', async (req, res) => { const p = getProfile(+req.body.profileId); if (!p)
+    return res.sendStatus(404); if (p.persistence === 'disposable' && runs().some(r => r.profileId === p.id))
+    return res.status(422).json({ error: 'A disposable import can run only once.' }); const source = String(req.body.source || ''), difficulty = String(req.body.difficulty || ''); const allDrops = catalogDrops(source).filter((x) => !difficulty || x.difficulty === difficulty); if (!allDrops.length)
+    return res.status(422).json({ error: 'Choose a source and difficulty with catalog drops first.' }); const drops = allDrops.filter((x) => x.status === 'verified' && x.simcFragment); if (!drops.length)
+    return res.status(422).json({ error: `${source} · ${difficulty} has no verified difficulty variants yet. Import captured Encounter Journal variants before simming it.` }); const scenario = { ...defaults, ...req.body.scenario }; const compute = await safeThreads(req.body.threads); const id = createRun({ mode: 'droptimizer', title: `${p.name} · ${p.realm} · ${p.spec} — Droptimizer`, status: 'queued', scenario, input: '', simcVersion: runtime().version, profileId: p.id, characterId: p.characterId, character: { name: p.name, realm: p.realm, className: p.className, spec: p.spec, profileId: p.id, characterId: p.characterId, persistence: p.persistence } }); const run = getRun(id); runDroptimizer(id, p.rawProfile, drops, scenario, compute.threads, req.body.upgradeTarget, req.body.upgradeEquipped).catch(() => undefined); res.status(202).json({ id, run, planned: drops.length, blocked: allDrops.length - drops.length, appliedThreads: compute.threads, capacity: compute.capacity, clamped: compute.clamped }); });
+app.get('/api/topgear/:runId', (req, res) => { const j = getTopGearJob(+req.params.runId); if (!j)
+    return res.sendStatus(404); res.json({ ...j, run: getRun(+req.params.runId) }); });
+app.post('/api/runtime/smoke-test', async (_, res) => { const rt = runtime(); if (!rt.path)
+    return res.status(409).json({ error: 'No SimC executable configured' }); try {
+    res.json({ ok: true, version: await smokeTest(rt.path) });
+}
+catch (e) {
+    res.status(422).json({ error: e.message });
+} });
+app.get('/api/config', async (_, res) => res.json({ defaults, compute: await computeCapacity(), dataDir: paths.root }));
+async function start() { try {
+    installDerivedCatalog();
+}
+catch (error) {
+    console.warn(`DB2 derived catalog was not installed: ${error.message}`);
+} installEnhancementSeed(); const outcome = await ensureCurrentRuntime(); if (outcome.updated && process.env.SIMC_RUNTIME_SUPERVISED === '1') {
+    console.log(`Activated SimC ${outcome.status.version}; restart required.`);
+    process.exitCode = RESTART_AFTER_RUNTIME_UPDATE;
+    return;
+} if (outcome.updated)
+    console.log(`Activated SimC ${outcome.status.version}.`); for (const run of runs())
+    if (run.mode === 'topgear')
+        recoverTopGearRun(run.id); startCaptureWatch(); app.listen(4317, '127.0.0.1', () => console.log(`Local Sim Dashboard API: http://127.0.0.1:4317 (${runtime().version})`)); }
+start().catch(error => { console.error(`Local Sim Dashboard failed to start: ${error instanceof Error ? error.message : String(error)}`); process.exitCode = 1; });

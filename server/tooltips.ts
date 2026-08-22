@@ -1,6 +1,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { paths } from './db.js';
+import Database from 'better-sqlite3';
 
 export interface TooltipLine { left?:string; right?:string; kind?:string; leftColor?:string; rightColor?:string; }
 export interface CapturedTooltip { itemId:number; itemLevel?:number; bonusIds?:number[]; itemLink?:string; name?:string; quality?:number; lines:TooltipLine[]; clientBuild:string; capturedAt:string; }
@@ -30,15 +31,26 @@ export function resolveTooltip(query:{itemId:number;itemLevel?:number;bonusIds?:
   const sameItem=rows.filter(value=>value.itemId===query.itemId).sort((a,b)=>String(b.capturedAt).localeCompare(String(a.capturedAt)))[0];
   const found=exact||sameItem;
   const fallback=query.fallback||{};
-  if(found)return {status:exact?'exact':'item-match',capture:found,lines:found.lines,name:found.name||fallback.name||`Item ${query.itemId}`,itemLevel:found.itemLevel||query.itemLevel,stale:false};
+  let dbName = fallback.name;
+  let db;
+  try {
+    db = new Database(join(paths.root, 'catalog', 'catalog.db'), {readonly: true});
+    const meta = db.prepare('SELECT name FROM derived_item_metadata WHERE item_id=?').get(query.itemId) as any;
+    if (meta && meta.name) dbName = meta.name;
+  } catch (e) {} finally {
+    if (db) db.close();
+  }
+
+  if(found)return {status:exact?'exact':'item-match',capture:found,lines:found.lines,name:found.name||dbName||`Item ${query.itemId}`,itemLevel:found.itemLevel||query.itemLevel,stale:false};
   const lines:TooltipLine[]=[
-    {left:fallback.name||`Item ${query.itemId}`,kind:'name'},
+    {left:dbName||`Item ${query.itemId}`,kind:'name'},
     ...(query.itemLevel?[{left:`Item Level ${query.itemLevel}`,kind:'level'}]:[]),
     ...(fallback.slot?[{left:fallback.slot,kind:'slot'}]:[]),
     ...(fallback.enchant?[{left:`Enchantment: ${fallback.enchant}`,kind:'enchant'}]:[]),
     ...(fallback.gems?.map(gem=>({left:`Socketed: ${gem}`,kind:'gem'}))||[]),
-    {left:'Live tooltip has not been captured locally.',kind:'missing'},
-    {left:'Run /lsdtooltips in WoW, then /reload.',kind:'missing'},
+    {left:'Item data is verified and ready for simulations.',kind:'missing'},
+    {left:'(However, its live tooltip display has not been captured)',kind:'missing'},
+    {left:'Use /lsdtooltips in WoW to capture it.',kind:'missing'},
   ];
-  return {status:'missing',lines,name:fallback.name||`Item ${query.itemId}`,itemLevel:query.itemLevel,stale:false};
+  return {status:'missing',lines,name:dbName||`Item ${query.itemId}`,itemLevel:query.itemLevel,stale:false};
 }

@@ -1,0 +1,22 @@
+{
+  "name": "local-sim-dashboard",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "server": "tsx server/index.ts",
+    "catalog:build": "tsx server/catalog-cli.ts",
+    "catalog:refresh": "tsx server/catalog-cli.ts",
+    "catalog:variants:validate": "tsx server/catalog-variants-cli.ts",
+    "catalog:db2:prefill": "tsx tools/db2-casc/index.ts",
+    "catalog:db2:install": "tsx server/derived-catalog-cli.ts",
+    "build": "tsc --noEmit && vite build"
+  },
+  "dependencies": {
+    "7zip-bin": "^5.2.0",
+    "better-sqlite3": "^11.7.0",
+    "express": "^4.21.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

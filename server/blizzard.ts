@@ -1,6 +1,6 @@
 export interface BlizzardConfig { region: string; locale: string; clientId?: string; clientSecret?: string; }
 export interface JournalIndexEntry { id: number; name: string; }
-export interface BlizzardItem { id: number; name: string; inventory_type?: { type?: string; name?: string }; level?: number; item_level?: number; }
+export interface BlizzardItem { id: number; name: string; inventory_type?: { type?: string; name?: string }; level?: number; item_level?: number; item_set?: { name?: string; item_set: { id: number } }; }
 
 export function blizzardConfig(): BlizzardConfig { return { region: process.env.BLIZZARD_REGION || 'us', locale: process.env.BLIZZARD_LOCALE || 'en_US', clientId: process.env.BLIZZARD_CLIENT_ID, clientSecret: process.env.BLIZZARD_CLIENT_SECRET }; }
 export function configured() { const c=blizzardConfig(); return Boolean(c.clientId && c.clientSecret); }

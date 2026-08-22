@@ -65,14 +65,21 @@ export function GameItemIcon({item,children,className='item-icon'}:Props){
 export function GlobalItemTooltip(){
   const [target,setTarget]=useState<HTMLElement>(); const [data,setData]=useState<any>();
   const [position,setPosition]=useState({left:0,top:0}); const timer=useRef<number>();
-  const itemFor=(icon:HTMLElement):TooltipItem=>{
+  const itemFor=(icon:HTMLElement):TooltipItem & {effect?:string}=>{
     const src=(icon.querySelector('img') as HTMLImageElement|undefined)?.src||'';
     const itemId=Number(src.match(/\/items\/(\d+)\/icon/)?.[1]);
     const container=icon.closest('label, .drops > div, .drop-result-row, .result-hero, .result-gear')||icon.parentElement;
     const name=container?.querySelector('b,strong')?.textContent?.trim()||container?.textContent?.trim().split('\n')[0];
-    return {itemId:itemId||undefined,name,slot:icon.getAttribute('aria-label')||undefined};
+    
+    let effect;
+    const smallText = container?.querySelector('small')?.textContent;
+    if (smallText && container?.classList.contains('enhancement-option')) {
+       effect = smallText.split(' · ')[0];
+    }
+    
+    return {itemId:itemId||undefined,name,slot:icon.getAttribute('aria-label')||undefined, effect};
   };
-  const show=(icon:HTMLElement)=>{const rect=icon.getBoundingClientRect(),width=Math.min(350,window.innerWidth-20);setPosition({left:Math.max(10,Math.min(window.innerWidth-width-10,rect.right+12)),top:Math.max(10,Math.min(window.innerHeight-20,rect.top))});setTarget(icon);const item=itemFor(icon),url=endpoint(item);if(!url){setData({status:'missing',lines:[{left:item.name||'Item information unavailable',kind:'name'},{left:'This icon has no captured item link.',kind:'missing'}]});return;}const key=`${item.itemId}|${item.itemLevel||''}`;const prior=cache.get(key);if(prior){setData(prior);return;}setData(undefined);fetch(url,{cache:'no-store'}).then(r=>r.ok?r.json():undefined).then(value=>{if(value){cache.set(key,value);setData(value);}}).catch(()=>undefined);};
+  const show=(icon:HTMLElement)=>{const rect=icon.getBoundingClientRect(),width=Math.min(350,window.innerWidth-20);setPosition({left:Math.max(10,Math.min(window.innerWidth-width-10,rect.right+12)),top:Math.max(10,Math.min(window.innerHeight-20,rect.top))});setTarget(icon);const item=itemFor(icon),url=endpoint(item);if(!url){if(item.effect){setData({status:'exact',lines:[{left:item.name,kind:'name'},{left:item.effect,kind:'enchant'}]});}else{setData({status:'missing',lines:[{left:item.name||'Item information unavailable',kind:'name'},{left:'This icon has no captured item link.',kind:'missing'}]});}return;}const key=`${item.itemId}|${item.itemLevel||''}`;const prior=cache.get(key);if(prior){setData(prior);return;}setData(undefined);fetch(url,{cache:'no-store'}).then(r=>r.ok?r.json():undefined).then(value=>{if(value){cache.set(key,value);setData(value);}}).catch(()=>undefined);};
   useEffect(()=>{
     const promote=()=>document.querySelectorAll<HTMLElement>('.item-icon').forEach(icon=>{if(icon.tabIndex<0)icon.tabIndex=0;icon.setAttribute('role','img');});
     promote();const observer=new MutationObserver(promote);observer.observe(document.body,{childList:true,subtree:true});

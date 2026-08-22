@@ -1,0 +1,21 @@
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { paths } from './db.js';
+const dir = join(paths.root, 'catalog'), file = join(dir, 'lifecycle.json');
+const fallback = { status: 'idle' };
+const read = () => { try {
+    return existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : { ...fallback };
+}
+catch {
+    return { ...fallback };
+} };
+const write = (value) => { mkdirSync(dir, { recursive: true }); writeFileSync(file, JSON.stringify(value, null, 2)); return value; };
+export function catalogLifecycle() { return read(); }
+export function restoreCatalogLifecycle() { const value = read(); if (value.status === 'running')
+    return write({ ...value, status: 'failed', completedAt: new Date().toISOString(), error: 'The previous catalog refresh was interrupted. Your last complete local catalog is still available.' }); return value; }
+export function beginCatalogRefresh() { return write({ status: 'running', lastAttemptAt: new Date().toISOString(), progress: { phase: 'starting', completed: 0, total: 1, detail: 'Preparing a staged catalog refresh' } }); }
+export function updateCatalogProgress(progress) { const current = read(); return write({ ...current, status: 'running', progress }); }
+export function completeCatalogRefresh(value) { const now = new Date().toISOString(), current = read(); return write({ ...current, status: 'completed', lastAttemptAt: current.lastAttemptAt || now, lastSuccessAt: now, completedAt: now, error: undefined, version: value.version, checksum: value.checksum, progress: value.progress }); }
+export function failCatalogRefresh(error) { const now = new Date().toISOString(), current = read(); return write({ ...current, status: 'failed', completedAt: now, error, lastAttemptAt: current.lastAttemptAt || now }); }
+export function catalogHealth(manifest, coverage, captures) { const lifecycle = catalogLifecycle(), generatedAt = manifest?.generatedAt || lifecycle.lastSuccessAt; const ageMs = generatedAt ? Math.max(0, Date.now() - new Date(generatedAt).getTime()) : undefined; const ageDays = ageMs === undefined ? undefined : Math.floor(ageMs / 86_400_000); const verified = coverage.reduce((sum, row) => sum + Number(row.verified || 0), 0), total = coverage.reduce((sum, row) => sum + Number(row.total || 0), 0); let health = lifecycle.status === 'running' ? 'refreshing' : lifecycle.status === 'failed' ? 'failed' : manifest?.checksum === 'local-starter' || !manifest?.season ? 'starter' : ageDays === undefined || ageDays >= 7 ? 'stale' : ageDays >= 5 ? 'aging' : 'fresh'; if (!['refreshing', 'failed', 'starter'].includes(health) && total > 0 && verified < total)
+    health = 'partial'; const reason = health === 'stale' ? 'This catalog is more than seven days old. Refresh when convenient.' : health === 'partial' ? 'Some listed drops do not have verified local variants yet.' : health === 'starter' ? 'Only the starter catalog is installed. Refresh to install the current season.' : health === 'failed' ? lifecycle.error || 'The last refresh failed; the previous local catalog remains available.' : health === 'refreshing' ? 'A staged catalog refresh is in progress.' : undefined; return { health, reason, ageDays, lastSuccessfulRefreshAt: lifecycle.lastSuccessAt || manifest?.generatedAt, lastAttemptAt: lifecycle.lastAttemptAt, lastError: lifecycle.error, lifecycle, coverage: { verified, total }, captures }; }

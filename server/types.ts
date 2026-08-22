@@ -15,8 +15,9 @@ export interface GearCandidate {
   id: string; slot: string; rawLine: string; itemId?: number; name: string; itemLevel?: number;
   source: CandidateSource; selected: boolean; locked: boolean; uniqueKey?: string;
   gems?: string[]; enchant?: string; icon?: string; quality?: string; handedness?: WeaponHandedness;
+  track?: string; simcLine?: string; setId?: number; setName?: string;
 }
-export interface Enhancement { id:string; type:'gem'|'enchant'|'weapon'; name:string; effect?:string; slots:string[]; simcFragment:string; icon?:string; provenance?:string; clientBuild?:string; currentSeason?:boolean; weaponHands?:WeaponHandedness[]; reviewStatus?:'reviewed'|'unreviewed'; db2Status?:'matched'|'unavailable'; simcValidation?:'syntax-valid'|'unvalidated'; }
+export interface Enhancement { id:string; type:'gem'|'enchant'|'weapon'; name:string; effect?:string; slots:string[]; simcFragment:string; icon?:string; provenance?:string; clientBuild?:string; currentSeason?:boolean; weaponHands?:WeaponHandedness[]; reviewStatus?:'reviewed'|'unreviewed'; db2Status?:'matched'|'unavailable'; simcValidation?:'syntax-valid'|'unvalidated'; iconFileDataId?:number; }
 export interface TalentBuild { id: string; name: string; talents: string; spec?: string; hero_talents?: string; selected: boolean; }
 export interface ParsedInventory { candidates: GearCandidate[]; talents: TalentBuild[]; vaultDetected: boolean; dualWieldCapable: boolean; }
 export interface OptimizationRequest {
@@ -25,5 +26,8 @@ export interface OptimizationRequest {
   /** When enabled, selected enhancement choices replace every detected existing
    * gem/enchant on compatible candidates instead of only filling empty values. */
   replaceExistingEnhancements?: boolean;
+  upgradeTarget?: number;
+  upgradeEquipped?: boolean;
+  minSetBonuses?: Record<string, number>;
 }
 export interface LoadoutResult { name: string; dps?: number; talentName: string; itemIds: string[]; source: 'bags' | 'vault'; vaultCandidateId?: string; }
