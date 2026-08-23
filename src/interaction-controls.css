@@ -282,6 +282,21 @@ textarea { line-height: 1.45; }
   outline: none;
 }
 
+.omnium-folio-picker { max-width: none; }
+.omnium-folio-picker .panel-header { display: flex; justify-content: space-between; gap: 18px; align-items: start; }
+.omnium-folio-picker .panel-header p { margin: 4px 0 0; font-size: 12px; }
+.folio-grid { display: grid; gap: 10px; margin-top: 16px; }
+.folio-row { display: grid; grid-template-columns: 78px minmax(0, 1fr); gap: 10px; align-items: center; }
+.folio-row-label { color: var(--muted); font: 700 10px ui-monospace, monospace; letter-spacing: .04em; text-transform: uppercase; }
+.folio-options { display: flex; flex-wrap: wrap; gap: 7px; }
+.folio-node { display: flex; align-items: center; gap: 7px; min-width: 160px; padding: 6px 9px !important; border-color: var(--control-border) !important; background: #151b1d !important; text-align: left; }
+.folio-node img, .folio-icon-placeholder { width: 24px; height: 24px; flex: 0 0 24px !important; border: 1px solid #4d5a57; border-radius: 3px; background: #26302e; object-fit: cover; }
+.folio-node > span:not(.folio-icon-placeholder) { flex: 1; font-size: 12px; }
+.folio-state { flex: 0 0 auto; padding: 2px 4px; border: 1px solid #4a7065; border-radius: 2px; color: var(--teal-hi); background: #1a3a32; font: 700 8px ui-monospace, monospace; letter-spacing: .04em; text-transform: uppercase; }
+.folio-state.selected { color: var(--ink); border-color: #6d6750; background: #302c20; }
+.folio-node.selected { border-color: var(--teal) !important; background: var(--selected-surface) !important; box-shadow: inset 3px 0 var(--teal); }
+.folio-node.equipped { border-color: #63b99f !important; }
+
 * { scrollbar-color: #68736e #101516; scrollbar-width: thin; }
 *::-webkit-scrollbar { width: 10px; height: 10px; }
 *::-webkit-scrollbar-track { background: #101516; }
@@ -293,6 +308,9 @@ textarea { line-height: 1.45; }
   .profile-popover { left: 0; right: auto; width: 100%; }
   .quick-nav-links { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
   .quick-nav-links a { white-space: nowrap; }
+  .omnium-folio-picker .panel-header, .folio-row { grid-template-columns: 1fr; flex-direction: column; }
+  .folio-row { align-items: start; }
+  .folio-node { min-width: 0; flex: 1 1 150px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,9 +1,16 @@
 import Database from 'better-sqlite3';
-import { existsSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { homedir } from 'node:os';
 import type { CharacterProfile, CharacterSnapshot, CharacterSummary, PersistenceMode, Run, Scenario } from './types.js';
 
-const root = join(process.cwd(), '.localsimdash'); mkdirSync(root, { recursive: true });
+const defaultRoot = join(homedir(), '.localsimdash');
+const root = process.env.LOCALSIMDASH_ROOT || defaultRoot;
+mkdirSync(root, { recursive: true });
+const settingsPath = join(root, 'settings.json');
+export function readSettings() { try { return JSON.parse(readFileSync(settingsPath, 'utf8')); } catch { return {}; } }
+export function saveSettings(settings: any) { writeFileSync(settingsPath, JSON.stringify(settings, null, 2)); }
+
 const db = new Database(join(root, 'dashboard.db')); db.pragma('journal_mode = WAL');
 const add=(sql:string)=>{try{db.exec(sql)}catch{/* already migrated */}};
 db.exec(`CREATE TABLE IF NOT EXISTS profiles (id INTEGER PRIMARY KEY, name TEXT NOT NULL, realm TEXT NOT NULL DEFAULT 'Unknown realm', class_name TEXT NOT NULL, spec TEXT NOT NULL, raw_profile TEXT NOT NULL, created_at TEXT NOT NULL);
@@ -14,6 +21,7 @@ db.exec(`CREATE TABLE IF NOT EXISTS characters (id INTEGER PRIMARY KEY, name TEX
 CREATE TABLE IF NOT EXISTS topgear_jobs (run_id INTEGER PRIMARY KEY, catalog_version TEXT NOT NULL, preview_json TEXT NOT NULL, plans_json TEXT NOT NULL, request_json TEXT NOT NULL, created_at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS droptimizer_jobs (run_id INTEGER PRIMARY KEY, request_json TEXT NOT NULL, entries_json TEXT NOT NULL, results_json TEXT, progress_json TEXT, diagnostics_path TEXT, created_at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS sim_calibrations (cache_key TEXT PRIMARY KEY, throughput REAL NOT NULL, samples INTEGER NOT NULL, updated_at TEXT NOT NULL);`);
+db.exec(`CREATE TABLE IF NOT EXISTS character_consumables (character_id INTEGER NOT NULL, spec TEXT NOT NULL, selections_json TEXT NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY(character_id,spec));`);
 add('ALTER TABLE topgear_jobs ADD COLUMN results_json TEXT'); add('ALTER TABLE topgear_jobs ADD COLUMN progress_json TEXT');
 add('ALTER TABLE droptimizer_jobs ADD COLUMN diagnostics_path TEXT');
 const norm=(value:string)=>value.trim().toLocaleLowerCase().replace(/\s+/g,' ');
@@ -33,6 +41,8 @@ export function characterSummary(id:number):CharacterSummary{const c=db.prepare(
 export function characters(){return (db.prepare('SELECT id FROM characters ORDER BY updated_at DESC').all() as any[]).map(x=>characterSummary(x.id));}
 export function deleteCharacter(id:number){const active=(db.prepare("SELECT count(*) count FROM runs WHERE character_id=? AND status IN ('queued','running')").get(id) as any).count;if(active)throw new Error('Cancel or wait for active simulations before deleting this character.');db.prepare('DELETE FROM profiles WHERE character_id=?').run(id);db.prepare('DELETE FROM characters WHERE id=?').run(id);}
 export function updateProfileRaw(id:number,rawProfile:string){db.prepare('UPDATE profiles SET raw_profile=?,updated_at=? WHERE id=?').run(rawProfile,new Date().toISOString(),id);return getProfile(id);}
+export function characterConsumables(profileId:number){const profile=getProfile(profileId);if(!profile?.characterId)return {selections:{},inherited:true};const row=db.prepare('SELECT selections_json FROM character_consumables WHERE character_id=? AND lower(spec)=lower(?)').get(profile.characterId,profile.spec) as {selections_json?:string}|undefined;return {selections:row?.selections_json?JSON.parse(row.selections_json):{},inherited:!row};}
+export function saveCharacterConsumables(profileId:number,selections:Record<string,string>){const profile=getProfile(profileId);if(!profile?.characterId)throw new Error('Save the character before storing consumable defaults.');db.prepare('INSERT INTO character_consumables (character_id,spec,selections_json,updated_at) VALUES (?,?,?,?) ON CONFLICT(character_id,spec) DO UPDATE SET selections_json=excluded.selections_json,updated_at=excluded.updated_at').run(profile.characterId,profile.spec,JSON.stringify(selections),new Date().toISOString());return characterConsumables(profileId);}
 function snapshot(p:CharacterProfile):CharacterSnapshot{return {name:p.name,realm:p.realm,className:p.className,spec:p.spec,profileId:p.id,characterId:p.characterId,persistence:p.persistence};}
 export function createRun(run:Omit<Run,'id'|'createdAt'>){const now=new Date().toISOString();const r=db.prepare('INSERT INTO runs (mode,title,status,scenario_json,input,report_path,summary,simc_version,created_at,completed_at,profile_id,character_id,character_json) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)').run(run.mode,run.title,run.status,JSON.stringify(run.scenario),run.input,run.reportPath??null,run.summary??null,run.simcVersion,now,run.completedAt??null,run.profileId??null,run.characterId??null,run.character?JSON.stringify(run.character):null);return Number(r.lastInsertRowid);}
 function cleanupDisposable(profileId?:number){if(!profileId)return;const p=getProfile(profileId);if(p?.persistence==='disposable')db.prepare('DELETE FROM profiles WHERE id=?').run(profileId);}

@@ -1,8 +1,18 @@
 import Database from 'better-sqlite3';
-import { existsSync, mkdirSync, readdirSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-const root = join(process.cwd(), '.localsimdash');
+import { homedir } from 'node:os';
+const defaultRoot = join(homedir(), '.localsimdash');
+const root = process.env.LOCALSIMDASH_ROOT || defaultRoot;
 mkdirSync(root, { recursive: true });
+const settingsPath = join(root, 'settings.json');
+export function readSettings() { try {
+    return JSON.parse(readFileSync(settingsPath, 'utf8'));
+}
+catch {
+    return {};
+} }
+export function saveSettings(settings) { writeFileSync(settingsPath, JSON.stringify(settings, null, 2)); }
 const db = new Database(join(root, 'dashboard.db'));
 db.pragma('journal_mode = WAL');
 const add = (sql) => { try {
@@ -21,10 +31,12 @@ add('ALTER TABLE runs ADD COLUMN character_id INTEGER');
 add('ALTER TABLE runs ADD COLUMN character_json TEXT');
 db.exec(`CREATE TABLE IF NOT EXISTS characters (id INTEGER PRIMARY KEY, name TEXT NOT NULL, realm TEXT NOT NULL, name_key TEXT NOT NULL, realm_key TEXT NOT NULL, created_at TEXT NOT NULL, updated_at TEXT NOT NULL, UNIQUE(name_key,realm_key));
 CREATE TABLE IF NOT EXISTS topgear_jobs (run_id INTEGER PRIMARY KEY, catalog_version TEXT NOT NULL, preview_json TEXT NOT NULL, plans_json TEXT NOT NULL, request_json TEXT NOT NULL, created_at TEXT NOT NULL);
-CREATE TABLE IF NOT EXISTS droptimizer_jobs (run_id INTEGER PRIMARY KEY, request_json TEXT NOT NULL, entries_json TEXT NOT NULL, results_json TEXT, progress_json TEXT, created_at TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS droptimizer_jobs (run_id INTEGER PRIMARY KEY, request_json TEXT NOT NULL, entries_json TEXT NOT NULL, results_json TEXT, progress_json TEXT, diagnostics_path TEXT, created_at TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS sim_calibrations (cache_key TEXT PRIMARY KEY, throughput REAL NOT NULL, samples INTEGER NOT NULL, updated_at TEXT NOT NULL);`);
+db.exec(`CREATE TABLE IF NOT EXISTS character_consumables (character_id INTEGER NOT NULL, spec TEXT NOT NULL, selections_json TEXT NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY(character_id,spec));`);
 add('ALTER TABLE topgear_jobs ADD COLUMN results_json TEXT');
 add('ALTER TABLE topgear_jobs ADD COLUMN progress_json TEXT');
+add('ALTER TABLE droptimizer_jobs ADD COLUMN diagnostics_path TEXT');
 const norm = (value) => value.trim().toLocaleLowerCase().replace(/\s+/g, ' ');
 const unknown = (realm) => !realm || /^unknown realm$/i.test(realm.trim());
 function backfill() { const old = db.prepare('SELECT id,name,COALESCE(realm,\'Unknown realm\') realm,created_at FROM profiles WHERE character_id IS NULL').all(); const now = new Date().toISOString(); const insert = db.prepare('INSERT OR IGNORE INTO characters (name,realm,name_key,realm_key,created_at,updated_at) VALUES (?,?,?,?,?,?)'); const find = db.prepare('SELECT id FROM characters WHERE name_key=? AND realm_key=?'); const link = db.prepare('UPDATE profiles SET character_id=?,persistence=COALESCE(persistence,\'reusable\'),updated_at=COALESCE(updated_at,created_at) WHERE id=?'); for (const p of old) {
@@ -52,6 +64,10 @@ export function characters() { return db.prepare('SELECT id FROM characters ORDE
 export function deleteCharacter(id) { const active = db.prepare("SELECT count(*) count FROM runs WHERE character_id=? AND status IN ('queued','running')").get(id).count; if (active)
     throw new Error('Cancel or wait for active simulations before deleting this character.'); db.prepare('DELETE FROM profiles WHERE character_id=?').run(id); db.prepare('DELETE FROM characters WHERE id=?').run(id); }
 export function updateProfileRaw(id, rawProfile) { db.prepare('UPDATE profiles SET raw_profile=?,updated_at=? WHERE id=?').run(rawProfile, new Date().toISOString(), id); return getProfile(id); }
+export function characterConsumables(profileId) { const profile = getProfile(profileId); if (!profile?.characterId)
+    return { selections: {}, inherited: true }; const row = db.prepare('SELECT selections_json FROM character_consumables WHERE character_id=? AND lower(spec)=lower(?)').get(profile.characterId, profile.spec); return { selections: row?.selections_json ? JSON.parse(row.selections_json) : {}, inherited: !row }; }
+export function saveCharacterConsumables(profileId, selections) { const profile = getProfile(profileId); if (!profile?.characterId)
+    throw new Error('Save the character before storing consumable defaults.'); db.prepare('INSERT INTO character_consumables (character_id,spec,selections_json,updated_at) VALUES (?,?,?,?) ON CONFLICT(character_id,spec) DO UPDATE SET selections_json=excluded.selections_json,updated_at=excluded.updated_at').run(profile.characterId, profile.spec, JSON.stringify(selections), new Date().toISOString()); return characterConsumables(profileId); }
 function snapshot(p) { return { name: p.name, realm: p.realm, className: p.className, spec: p.spec, profileId: p.id, characterId: p.characterId, persistence: p.persistence }; }
 export function createRun(run) { const now = new Date().toISOString(); const r = db.prepare('INSERT INTO runs (mode,title,status,scenario_json,input,report_path,summary,simc_version,created_at,completed_at,profile_id,character_id,character_json) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)').run(run.mode, run.title, run.status, JSON.stringify(run.scenario), run.input, run.reportPath ?? null, run.summary ?? null, run.simcVersion, now, run.completedAt ?? null, run.profileId ?? null, run.characterId ?? null, run.character ? JSON.stringify(run.character) : null); return Number(r.lastInsertRowid); }
 function cleanupDisposable(profileId) { if (!profileId)
@@ -83,7 +99,8 @@ export function getTopGearJob(runId) { const row = db.prepare('SELECT * FROM top
 export function saveDroptimizerJob(runId, request, entries) { db.prepare('INSERT OR REPLACE INTO droptimizer_jobs (run_id,request_json,entries_json,created_at) VALUES (?,?,?,?)').run(runId, JSON.stringify(request), JSON.stringify(entries), new Date().toISOString()); }
 export function saveDroptimizerProgress(runId, progress) { db.prepare('UPDATE droptimizer_jobs SET progress_json=? WHERE run_id=?').run(JSON.stringify(progress), runId); }
 export function saveDroptimizerResults(runId, results) { db.prepare('UPDATE droptimizer_jobs SET results_json=? WHERE run_id=?').run(JSON.stringify(results), runId); }
-export function getDroptimizerJob(runId) { const row = db.prepare('SELECT * FROM droptimizer_jobs WHERE run_id=?').get(runId); return row && { runId: row.run_id, request: JSON.parse(row.request_json), entries: JSON.parse(row.entries_json), results: row.results_json ? JSON.parse(row.results_json) : [], progress: row.progress_json ? JSON.parse(row.progress_json) : undefined, createdAt: row.created_at }; }
+export function saveDroptimizerDiagnostics(runId, path) { db.prepare('UPDATE droptimizer_jobs SET diagnostics_path=? WHERE run_id=?').run(path, runId); }
+export function getDroptimizerJob(runId) { const row = db.prepare('SELECT * FROM droptimizer_jobs WHERE run_id=?').get(runId); return row && { runId: row.run_id, request: JSON.parse(row.request_json), entries: JSON.parse(row.entries_json), results: row.results_json ? JSON.parse(row.results_json) : [], progress: row.progress_json ? JSON.parse(row.progress_json) : undefined, diagnosticsPath: row.diagnostics_path || undefined, createdAt: row.created_at }; }
 export function calibration(key) { return db.prepare('SELECT throughput,samples FROM sim_calibrations WHERE cache_key=?').get(key); }
 export function saveCalibration(key, throughput) { if (!Number.isFinite(throughput) || throughput <= 0)
     return; const existing = calibration(key), samples = (existing?.samples || 0) + 1, blended = existing ? (existing.throughput * existing.samples + throughput) / samples : throughput; db.prepare('INSERT INTO sim_calibrations (cache_key,throughput,samples,updated_at) VALUES (?,?,?,?) ON CONFLICT(cache_key) DO UPDATE SET throughput=excluded.throughput,samples=excluded.samples,updated_at=excluded.updated_at').run(key, blended, samples, new Date().toISOString()); }

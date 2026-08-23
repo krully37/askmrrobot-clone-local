@@ -2,6 +2,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { paths } from './db.js';
 import { enhancementSeed } from './enhancements.js';
+import { tierBonusFor, tierSeasonForItem } from './tier-bonuses.js';
 import Database from 'better-sqlite3';
 
 export interface TooltipLine { left?:string; right?:string; kind?:string; leftColor?:string; rightColor?:string; }
@@ -10,6 +11,20 @@ export interface CapturedTooltip { itemId:number; itemLevel?:number; bonusIds?:n
 const file=join(paths.root,'catalog','tooltip-captures.json');
 const read=():CapturedTooltip[]=>existsSync(file)?JSON.parse(readFileSync(file,'utf8')):[];
 const identity=(value:Pick<CapturedTooltip,'itemId'|'itemLevel'|'bonusIds'>)=>`${value.itemId}|${value.itemLevel||''}|${[...(value.bonusIds||[])].sort((a,b)=>a-b).join('/')}`;
+const hasTierBonus=(lines:TooltipLine[])=>lines.some(line=>/^\s*(?:\([24]\)\s*)?Set:/i.test(line.left||''));
+export function withTierBonuses(lines:TooltipLine[],query:{itemId:number;className?:string;spec?:string}){
+  if(!hasTierBonus(lines))return lines;
+  const bonus=tierBonusFor(query.className,query.spec,query.itemId);
+  if(!bonus)return lines;
+  const normalized=lines.filter(line=>!/^\s*(?:\([24]\)\s*)?Set:/i.test(line.left||''));
+  const additions:TooltipLine[]=[
+    {left:`${tierSeasonForItem(query.itemId)==='season1'?'Season 1':'Season 2'} set · ${bonus.spec}`,kind:'set-header',leftColor:'#ffd200'},
+    {left:`(2) Set: ${bonus.twoPiece}`,kind:'set',leftColor:'#00ff00'},
+    {left:`(4) Set: ${bonus.fourPiece}`,kind:'set',leftColor:'#00ff00'},
+  ];
+  const classesAt=normalized.findIndex(line=>/^\s*Classes:/i.test(line.left||''));
+  return classesAt<0?[...normalized,...additions]:[...normalized.slice(0,classesAt),...additions,...normalized.slice(classesAt)];
+}
 
 export function storeTooltips(values:CapturedTooltip[]){
   if(!values.length)return;
@@ -27,7 +42,7 @@ export function tooltipStatus(){
   return {captured:rows.length,exactVariants:exact.size,lastCapturedAt:rows.map(x=>x.capturedAt).sort().at(-1)};
 }
 
-export function resolveTooltip(query:{itemId:number;itemLevel?:number;bonusIds?:number[];fallback?:{name?:string;slot?:string;source?:string;enchant?:string;gems?:string[]}}){
+export function resolveTooltip(query:{itemId:number;itemLevel?:number;bonusIds?:number[];className?:string;spec?:string;fallback?:{name?:string;slot?:string;source?:string;enchant?:string;gems?:string[]}}){
   const rows=read(), wanted=identity(query);
   const exact=rows.find(value=>identity(value)===wanted);
   const sameItem=rows.filter(value=>value.itemId===query.itemId).sort((a,b)=>String(b.capturedAt).localeCompare(String(a.capturedAt)))[0];
@@ -61,7 +76,7 @@ export function resolveTooltip(query:{itemId:number;itemLevel?:number;bonusIds?:
     return {id,name:gemNames.get(id)||seedName(`gem_id=${id}`)||`Gem ${id}`,iconUrl:`/api/catalog/items/${encodeURIComponent(id)}/icon`};
   });
 
-  if(found)return {status:exact?'exact':'item-match',capture:found,lines:found.lines,gems,name:found.name||dbName||`Item ${query.itemId}`,itemLevel:found.itemLevel||query.itemLevel,stale:false};
+  if(found)return {status:exact?'exact':'item-match',capture:found,lines:withTierBonuses(found.lines,query),gems,name:found.name||dbName||`Item ${query.itemId}`,itemLevel:found.itemLevel||query.itemLevel,stale:false};
   const lines:TooltipLine[]=[
     {left:dbName||`Item ${query.itemId}`,kind:'name'},
     ...(query.itemLevel?[{left:`Item Level ${query.itemLevel}`,kind:'level'}]:[]),

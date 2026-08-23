@@ -51,6 +51,14 @@ function userItems(){if(!existsSync(catalogPath))return [] as CatalogItem[];cons
 export function installCatalogPackage(packagePath:string,nextManifestPath?:string){const next=new Database(packagePath,{readonly:true});const valid=next.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='item_variants'").get();next.close();if(!valid)throw new Error('Catalog package is missing the item_variants table.');const preserved=userItems();mkdirSync(catalogDir,{recursive:true});const backup=`${catalogPath}.previous`,manifestBackup=`${manifestPath}.previous`;if(existsSync(backup))unlinkSync(backup);if(existsSync(manifestBackup))unlinkSync(manifestBackup);if(existsSync(catalogPath))renameSync(catalogPath,backup);if(existsSync(manifestPath))renameSync(manifestPath,manifestBackup);try{renameSync(packagePath,catalogPath);if(nextManifestPath)copyFileSync(nextManifestPath,manifestPath);const db=open();for(const item of preserved)db.prepare(`INSERT INTO items (id,name,slot,item_level,source,unique_key,simc_line) VALUES (?,?,?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET name=excluded.name,slot=excluded.slot,item_level=excluded.item_level,source=excluded.source,unique_key=excluded.unique_key,simc_line=excluded.simc_line`).run(item.id,item.name,item.slot,item.itemLevel??null,item.source??null,item.uniqueKey??null,item.simcLine??null);db.close();return catalogStatus();}catch(error){if(existsSync(catalogPath))unlinkSync(catalogPath);if(existsSync(backup))renameSync(backup,catalogPath);if(existsSync(manifestPath))unlinkSync(manifestPath);if(existsSync(manifestBackup))renameSync(manifestBackup,manifestPath);throw error;}}
 export const openCatalog = open;
 
+const fallbackOmniumSpells = [
+  [1279596, 'Void-Touched Orbs'], [1279599, 'Unleashed Fire'],
+  [1279603, 'Self-Mending'], [1279604, 'Void-Tainted Shell'], [1279605, 'Lynxlike Reflexes'],
+  [1287555, 'Lingering'],
+  [1279609, 'Critical Power'], [1279610, 'Burning Haste'], [1279612, 'Masterful Cunning'], [1279613, 'The Versatile Warrior'],
+  [1279614, 'Overload'], [1279615, 'Residual Energy'], [1279616, 'Echoes'],
+].map(([id,name])=>({id:Number(id),name:String(name),description:'Local Omnium Folio power metadata.',iconUrl:''}));
+
 export async function catalogOmniumSpells() {
   const db = open();
   let rows = db.prepare('SELECT id, name, description, icon_url as iconUrl FROM derived_spells').all() as any[];
@@ -84,7 +92,8 @@ export async function catalogOmniumSpells() {
       db2.close();
     }
   }
-  return rows;
+  const liveById=new Map(rows.map(row=>[row.id,row]));
+  return fallbackOmniumSpells.map(spell=>({...spell,...liveById.get(spell.id)}));
 }
 
 export async function ensureItemSets(itemIds: number[]) {

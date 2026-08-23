@@ -1,0 +1,570 @@
+{
+    "version": "midnight-12.1-tier-bonuses-1",
+    "source": "midnight_season_1_2_tier_set_bonuses.xlsx",
+    "sets": {
+        "season1": [
+            {
+                "className": "Death Knight",
+                "spec": "Blood",
+                "twoPiece": "Your Blood Boil deals 8% increased damage and generates 3 Runic Power.",
+                "fourPiece": "Death Strike deals 8% increased damage and has 10% chance to grant a charge of Blood Boil.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Death Knight",
+                "spec": "Frost",
+                "twoPiece": "Empower Rune Weapon increases the damage of your next Obliterate by 20% or Frostcythe by 20%.",
+                "fourPiece": "Empower Rune Weapon recharges 20% faster and Pillar of Frost grants 1 additional charge.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Death Knight",
+                "spec": "Unholy",
+                "twoPiece": "Dread Plague damage increased by 25%. Virulent Plague damage increased by 25%.",
+                "fourPiece": "Putrefy deals 20% increased damage and causes your next Scourge Strike to cost no Rune.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Demon Hunter",
+                "spec": "Devourer",
+                "twoPiece": "Void Ray damage increased by 10%.",
+                "fourPiece": "Collapsing Star damage increased by 10% and it now generates 10 Fury.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Demon Hunter",
+                "spec": "Havoc",
+                "twoPiece": "Blade Dance damage increased by 15%.",
+                "fourPiece": "Your haste is increased by an additional 6% during Metamorphosis.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Demon Hunter",
+                "spec": "Vengeance",
+                "twoPiece": "Fracture damage increased by 35%.",
+                "fourPiece": "Fracture has a 30% chance to spark a violent detonation, causing Fire damage onto nearby enemies. Damage reduced beyond 5 targets.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Druid",
+                "spec": "Balance",
+                "twoPiece": "Shooting Stars deal 50% more damage and generates 3 additional Astral Power outside Eclipse.",
+                "fourPiece": "Starfall and Starsurge damage increased by 5% and casting them has a 40% chance to strike an affected target with an exploding Shooting Star that also deals Astral damage to all nearby enemies.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Druid",
+                "spec": "Feral",
+                "twoPiece": "Gaining Clearcasting from Omen of Clarity increases your chance to critically strike by 5% for 4 seconds.",
+                "fourPiece": "Rake damage increased by 20%. Clearcasting increases Shred or Swipe damage by an additional 15%.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Druid",
+                "spec": "Guardian",
+                "twoPiece": "Raze/Maul and Ravage damage increased by 10%. Moonfire damage increased by 10%.",
+                "fourPiece": "Raze/Maul and Ravage have an additional 5% chance to activate Galactic Guardian. Moonfire�s periodic damage has a chance to make your next Raze/Maul or Ravage strike again at 100% effectiveness.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Druid",
+                "spec": "Restoration",
+                "twoPiece": "Wild Growth healing increased by 25%.",
+                "fourPiece": "Wild Growth cooldown reduced by 2 seconds, and mana cost reduced by 10%.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Evoker",
+                "spec": "Augmentation",
+                "twoPiece": "Eruption damage increased by 15% and it extends Ebon Might by an additional 0.3 seconds.",
+                "fourPiece": "While Ebon Might is active, empower spells deal 20% more damage and cool down 20% faster.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Evoker",
+                "spec": "Devastation",
+                "twoPiece": "Azure Sweep damage increased by 50% and its damage against your primary target is increased by an additional 100%.",
+                "fourPiece": "Eternity Surge grants 1 additional charge of Azure Sweep. Casting Azure Sweep reduces the cooldown of Eternity Surge by 2 seconds.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Evoker",
+                "spec": "Preservation",
+                "twoPiece": "Verdant Embrace healing increased by 20% and cooldown reduced by 2 seconds.",
+                "fourPiece": "Verdant Embrace grows an Emerald Blossom on your target at 100% effectiveness.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Hunter",
+                "spec": "Beast Mastery",
+                "twoPiece": "Bestial Wrath�s direct damage is increased by 25%.",
+                "fourPiece": "Bestial Wrath summons 1 Dire Beast for 8 seconds.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Hunter",
+                "spec": "Marksmanship",
+                "twoPiece": "Precise Shots damage increased by an additional 20%.",
+                "fourPiece": "Spending Precise Shots has a small chance to release a volley of arrows at your target, dealing damage to nearby enemies.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Hunter",
+                "spec": "Survival",
+                "twoPiece": "Wildfire Bomb damage increased by 10%",
+                "fourPiece": "Wildfire Bomb provokes an additional Strike as One at 100% effectiveness.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Mage",
+                "spec": "Arcane",
+                "twoPiece": "Each Arcane Charge increases your critical strike chance by 1%.",
+                "fourPiece": "The critical strike damage of your Arcane spells is increased by 10%.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Mage",
+                "spec": "Fire",
+                "twoPiece": "Pyroblast and Flamestrike deal 8% increased damage.",
+                "fourPiece": "Casting Pyroblast or Flamestrike reduces the cooldown of Fire Blast by 0.50 seconds.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Mage",
+                "spec": "Frost",
+                "twoPiece": "Flurry damage increased by 10% and Flurry has a 10% chance to grant Fingers of Frost.",
+                "fourPiece": "Fingers of Frost increases Shatter�s damage by 15%.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Monk",
+                "spec": "Brewmaster",
+                "twoPiece": "Keg Smash damage increased by 10%. Breath of Fire damage increased by 10%.",
+                "fourPiece": "Keg Smash�s Energy cost is reduced by 5 and when it strikes a target afflicted by Breath of Fire it deals additional Fire damage.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Monk",
+                "spec": "Mistweaver",
+                "twoPiece": "Renewing Mist healing is increased by 20%.",
+                "fourPiece": "Casting Thunder Focus Tea applies a Renewing Mist for 20 seconds onto a nearby ally.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Monk",
+                "spec": "Windwalker",
+                "twoPiece": "Strike of the Windlord and Whirling Dragon Punch�s damage is increased by 30%.",
+                "fourPiece": "The cooldowns of Strike of the Windlord and Whirling Dragon Punch are reduced by 5 seconds.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Paladin",
+                "spec": "Holy",
+                "twoPiece": "Holy Shock�s healing is increased by 15%.",
+                "fourPiece": "Holy Shock transfers an additional 20% healing into your Beacon of Light.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Paladin",
+                "spec": "Protection",
+                "twoPiece": "Shield of the Righteous deals 20% increased damage.",
+                "fourPiece": "After casting Shield of the Righteous, your next Avenger�s Shield deals 5% increased damage. Stacks up to 5.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Paladin",
+                "spec": "Retribution",
+                "twoPiece": "Expurgation deals 20% increased damage.",
+                "fourPiece": "Final Verdict/Templar�s Verdict applies Expurgation at 100% effectiveness, while Divine Storm applies it at 50% effectiveness.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Priest",
+                "spec": "Discipline",
+                "twoPiece": "Flash Heal, Shadow Mend, and Power Word: Radiance healing increased by 25%.",
+                "fourPiece": "Atonements applied by Flash Heal and Power Word: Radiance last an additional 3 seconds.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Priest",
+                "spec": "Holy",
+                "twoPiece": "Casting Benediction has a high chance to summon a Divine Image.",
+                "fourPiece": "Divine Image lasts for an additional 3 seconds and its healing and damage is increased by 30%.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Priest",
+                "spec": "Shadow",
+                "twoPiece": "Shadow Word: Madness damage increased by 10% and Insanity cost reduced by 5.",
+                "fourPiece": "Shadowy Apparitions and Void Apparitions damage increased by 40%.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Rogue",
+                "spec": "Assassination",
+                "twoPiece": "Garrote's damage is increased by 30% and it also applies your weapon poisons.",
+                "fourPiece": "Garrote's Energy cost is reduced by 10. Mutilate, Ambush, and Fan of Knives deal 25% increased damage to targets affected by your weapon poisons.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Rogue",
+                "spec": "Outlaw",
+                "twoPiece": "Blade Rush's damage is increased by 30% and its damage to your primary target is increased by an additional 15%.",
+                "fourPiece": "Blade Rush's cooldown is reduced by 6 seconds and it increases your damage dealt by 5% for 8 seconds.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Rogue",
+                "spec": "Subtlety",
+                "twoPiece": "Finishing moves deal 1.5% more damage per combo point spent.",
+                "fourPiece": "Shadow Blades has 4 seconds increased duration and causes your attacks to deal an additional 6% damage as Shadow.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Shaman",
+                "spec": "Elemental",
+                "twoPiece": "Casting Stormkeeper grants 15% haste for 10 seconds.",
+                "fourPiece": "Stormkeeper grants 1 additional stack and increases the damage of Lightning Bolt and Chain Lightning by 25%.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Shaman",
+                "spec": "Enhancement",
+                "twoPiece": "Stormstrike deals 15% increased damage and Lava Lash deals 15% increased damage.",
+                "fourPiece": "Crash Lightning weapon enhancement effect additionally increases your Mastery by 2%.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Shaman",
+                "spec": "Restoration",
+                "twoPiece": "Unleash Life's cooldown is reduced by 3 seconds and its direct healing is increased by 100%.",
+                "fourPiece": "Unleash Life affects an additional spell cast at 100% effectiveness.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Warlock",
+                "spec": "Affliction",
+                "twoPiece": "Unstable Affliction and Seed of Corruption damage increased by 10%.",
+                "fourPiece": "Agony starts at 2 additional stacks, and its damage is increased by 20%.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Warlock",
+                "spec": "Demonology",
+                "twoPiece": "Hand of Gul'dan damage increased by 15%.",
+                "fourPiece": "Your Dreadstalkers deal 10% increased damage and last 3 additional seconds.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Warlock",
+                "spec": "Destruction",
+                "twoPiece": "Chaos Bolt and Rain of Fire damage increased by 5%.",
+                "fourPiece": "Conflagrate generates 2 additional Soul Shard fragments and its damage is increased by 10%.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Warrior",
+                "spec": "Arms",
+                "twoPiece": "Mortal Strike and Cleave damage increased by 5%. Colossus Smash increases damage taken by an additional 5%.",
+                "fourPiece": "Damaging a target affected by Colossus Smash with Mortal Strike or Cleave that hits 3 or more targets extends Colossus Smash's effect on them by 1 second.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Warrior",
+                "spec": "Fury",
+                "twoPiece": "Ramage damage increased by 10% and Odyn's Fury damage increased by 10%.",
+                "fourPiece": "Ramage reduces the cooldown of Odyn's Fury by 2.5 seconds and Odyn's Fury damage is increased by an additional 10%.",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            },
+            {
+                "className": "Warrior",
+                "spec": "Protection",
+                "twoPiece": "Shield Slam damage increased by 10% and Shield Charge damage increased by 100%.",
+                "fourPiece": "Thunder Clap and Revenge damage increased by 10% and Shield Charge grants Revenge!",
+                "source": "https://www.wowhead.com/news/gear-up-with-new-pve-and-pvp-class-sets-in-midnight-380713"
+            }
+        ],
+        "season2": [
+            {
+                "className": "Death Knight",
+                "spec": "Blood",
+                "twoPiece": "Casting Death Strike grants Blood Debt, increasing your total Strength by 0.5% while it persists and stacking up to 10. At 10 stacks, casting Marrowrend consumes these stacks to grant you 10% strength for 10 seconds. These effects can overlap.",
+                "fourPiece": "Consuming Blood Debt grants 3 additional Bone Shield charges and deals a large burst of damage to the target and all nearby enemies.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Death Knight",
+                "spec": "Frost",
+                "twoPiece": "Each time Remorseless Winter damages at least 1 enemy, gain Freezing Tempest which grants 2% attack speed and 4% increased Icy Death Torrent damage for 5 sec, stacking.",
+                "fourPiece": "Remorseless Winter deals damage 25% more frequently, and Freezing Tempest lasts 5 seconds longer.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Death Knight",
+                "spec": "Unholy",
+                "twoPiece": "Your Magus of the Dead and Lord of the Dead cast a more powerful Necrotic Bolt instead of Frostbolt, and Withering Grasp instead of Shadow Bolt.",
+                "fourPiece": "Necrotic Bolt�s damage is increased by 130%, and Withering Grasp�s damage is increased by 130%, against enemies below 35% health.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Demon Hunter",
+                "spec": "Devourer",
+                "twoPiece": "Harvesting 4 or more Soul Fragments with Reap has a 20% chance to cause your next Consume to be instant cast and explode in a Soulburst, dealing (600% of Spell Power) Cosmic damage to nearby enemies.",
+                "fourPiece": "Soulburst generates 8 Soul Fragments and grants Moment of Craving. Reap deals 20% increased damage.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Demon Hunter",
+                "spec": "Havoc",
+                "twoPiece": "Blade Dance, Chaos Strike, and Essence Break deal 12% increased damage.",
+                "fourPiece": "Essence Break now applies and benefits from the effects of Cycle of Hatred, has 25% increased initial strike damage, and has 2 seconds of increased duration.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Demon Hunter",
+                "spec": "Vengeance",
+                "twoPiece": "Sigil of Flame's damage over time is increased by 50%. Soul Cleave increases the duration of Sigil of Flame on your primary target by 2.0 sec.",
+                "fourPiece": "Immolation Aura and Sigil of Spite have 100% increased damage against targets affected by your Sigil of Flame.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Druid",
+                "spec": "Balance",
+                "twoPiece": "Starsurge damage increased by 20%. Starfall also deals some Astral damage instantly to all valid enemies in range when cast.",
+                "fourPiece": "Your damage is increased by 10% while in any Eclipse. This bonus wanes to 2% at the midpoint of the Eclipse, then waxes back to 10% at the end.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Druid",
+                "spec": "Feral",
+                "twoPiece": "When Berserk ends, you deal 10% increased damage for 1 sec for each combo point spent during Berserk.",
+                "fourPiece": "Berserk lasts 10 seconds longer",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Druid",
+                "spec": "Guardian",
+                "twoPiece": "Thrash has a 20% chance to make your next Mangle deal 100% increased damage.",
+                "fourPiece": "Thrash calls up 3 thorns, each impaling a target Nature damage and dealing additional Nature damage to up to 5 nearby enemies, and extends the duration of Incarnation: Guardian of Ursoc by 0.5 sec, up to 5.0 sec.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Druid",
+                "spec": "Restoration",
+                "twoPiece": "Rejuvenation has a 15% chance to grant Genesis, causing all your heal over time effects to heal for 15% more for 8 sec. Multiple applications may overlap.",
+                "fourPiece": "Nature's Swiftness, Tranquility, Incarnation: Tree of Life, Convoke the Spirits have a 100% chance to grant Genesis, and Genesis duration is increased by 4 sec. Does not proc off Reforestation.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Evoker",
+                "spec": "Augmentation",
+                "twoPiece": "Upheaval's cooldown is reduced by 10 sec.",
+                "fourPiece": "Upheaval magnifies your Fate Mirror effects for 8 sec, increasing the amount of damage echoed to 45%.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Evoker",
+                "spec": "Devastation",
+                "twoPiece": "Shattering Star�s damage is increased by 50%, and it casts as if you had reached maximum empower level.",
+                "fourPiece": "Eternity Surge damage increase. Causality reduces the remaining cooldown of your empower spells by an additional 0.1 seconds each time the effect occurs.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Evoker",
+                "spec": "Preservation",
+                "twoPiece": "Consuming Essence Burst sends forth a Living Flame at your target at 100% effectiveness, or a nearby injured target if they are full health.",
+                "fourPiece": "Green spells restore 5% more health, and Verdant Embrace has a 100% chance to grant Essence Burst.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Hunter",
+                "spec": "Beast Mastery",
+                "twoPiece": "Barbed Shot causes your pets to stomp 1 additional time at 50% effectiveness.",
+                "fourPiece": "Stomp causes your next Cobra Shot to either benefit from Beast Cleave at 20% effectiveness, or strike your primary target for 15% additional damage, stacking up to 4 times.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Hunter",
+                "spec": "Marksmanship",
+                "twoPiece": "Explosive Shot lasts 1.0 sec longer and deals 5% increased damage.",
+                "fourPiece": "Aimed Shot and Rapid Fire damage increased by 5%. Each time Explosive Shot causes a burst of damage, the cooldown of Aimed Shot and Rapid Fire is reduced by 0.5 sec.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Hunter",
+                "spec": "Survival",
+                "twoPiece": "Mongoose Fury also increases the damage of Wildfire Bomb by 10%",
+                "fourPiece": "Each blast of Boomstick extends the duration of Mongoose Fury by 1.0 sec. Mongoose Fury effects are increased by 10%.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Mage",
+                "spec": "Arcane",
+                "twoPiece": "Arcane Missiles fires 1 additional Missile and deals 20% increased damage.",
+                "fourPiece": "Each wave of Arcane Missiles increases the damage of your next Arcane Blast, Arcane Pulse, or Prismatic Bolt by 5%, up to 40%.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Mage",
+                "spec": "Fire",
+                "twoPiece": "Pyroclasm causes Flamestrike and Pyroblast to always critically strike.",
+                "fourPiece": "Pyroclasm reduces the cast time of Flamestrike and Pyroblast by 20% and its damage bonus is increased by 25%.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Mage",
+                "spec": "Frost",
+                "twoPiece": "Each stack of Freezing Shattered has a 4% chance to generate an Icicle. Glacial Spike damage increased by 20%.",
+                "fourPiece": "Casting Glacial Spike has a chance to rapidly generate 5 Icicles over 1 sec. Shatter damage increased by 5%.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Monk",
+                "spec": "Brewmaster",
+                "twoPiece": "Breath of Fire ignites your next Keg Smash, causing it to explode on contact, dealing additional Flamestrike damage to its primary target and reduced damage to additional targets.",
+                "fourPiece": "Ignited Keg Smashes cause enemies struck to take 8% increased damage from your Physical abilities, and leave a patch of flames on the ground, dealing Fire damage each second for 5 seconds.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Monk",
+                "spec": "Mistweaver",
+                "twoPiece": "Rising Sun Kick deals 30% increased damage and Rushing Wind Kick�s healing is increased by 100%.",
+                "fourPiece": "Rising Sun Kick and Rushing Wind Kick have a chance to cause their next cast to ignore their cooldown and have their mana cost reduced by 100%.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Monk",
+                "spec": "Windwalker",
+                "twoPiece": "Fists of Fury strikes an additional time at the start of its channel at 50% effectiveness.",
+                "fourPiece": "Fists of Fury increases the damage of your next Rising Sun Kick by 10% or Spinning Crane Kick by 20% each time it strikes, stacking up to 6 times.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Paladin",
+                "spec": "Holy",
+                "twoPiece": "Infusion of Light increases the healing of Flash of Light by an additional 75% and the absorb from Greater Judgment by an additional 75%.",
+                "fourPiece": "Judgment now has a 20% chance to grant Infusion of Light. Holy Light now has a 50% chance to grant Infusion of Light.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Paladin",
+                "spec": "Protection",
+                "twoPiece": "Consecration is 30% larger and enemies within your Consecration are illuminated, increasing the chance for your abilities to critically strike them by 5%.",
+                "fourPiece": "Enemies struck by Judgment or Crusader Strike take 20% additional Holy damage. If they are struck by a critical strike, the additional damage is increased by 100%.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Paladin",
+                "spec": "Retribution",
+                "twoPiece": "Divine Purpose has an additional 10% chance to activate and consuming it grants Divine Power, increasing Holy damage done by 10% for 12 seconds.",
+                "fourPiece": "Consuming Divine Purpose with Divine Storm causes your next Final Verdict to be free and unleash Divine Arbiter at its target, dealing Holy damage and Holy damage to enemies within 8 yards.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Priest",
+                "spec": "Discipline",
+                "twoPiece": "Penance damage and healing increased by 20%. Casting Penance reduces the cooldown of Mind Blast by 2 seconds.",
+                "fourPiece": "After casting Mind Blast, your next Power Word: Shield or Void Shield absorbs 25% more damage.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Priest",
+                "spec": "Holy",
+                "twoPiece": "Each target affected by your Renew increases your Haste by 2%, up to 6%.",
+                "fourPiece": "Renew healing increased by 10%. Light�s Resurgence now has a 100% chance to leave a Renew on the first target Prayer of Mending heals.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Priest",
+                "spec": "Shadow",
+                "twoPiece": "Tentacle Slam cooldown reduced by 3 seconds and its damage is increased by 100%.",
+                "fourPiece": "Tentacle Slam has a 100% chance to grant a free use of Void Volley at 125% effectiveness.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Rogue",
+                "spec": "Assassination",
+                "twoPiece": "Envenom damage increased by 10% and it increases your damage dealt by 3%.",
+                "fourPiece": "Deadly Poison increases your bleed damage on the target by 10%. Auto-attacks against targets with your Amplifying Poison deal 2% increased damage per stack. Wound Poison hits a second time.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Rogue",
+                "spec": "Outlaw",
+                "twoPiece": "Dispatch damage increased by 15%.",
+                "fourPiece": "Sinister Strike and Ambush have a 20% chance to cause your next Dispatch to be free and deal damage as if you spent the maximum combo points.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Rogue",
+                "spec": "Subtlety",
+                "twoPiece": "Backstab costs 10 less Energy and deals 100% increased damage. Shuriken Storm costs 5 less Energy and deals 60% increased damage.",
+                "fourPiece": "Lingering Darkness now also benefits Eviscerate and Black Powder at 100% effectiveness.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Shaman",
+                "spec": "Elemental",
+                "twoPiece": "Earth Shock, Elemental Blast, and Earthquake damage increased by 25%.",
+                "fourPiece": "When Stormkeeper or Ascendance fade, your next 2 Lightning Bolts, Chain Lightnings, or Lava Bursts deal 25% increased damage and cause your next Earthquake, Earth Shock, or Elemental Blast to cost 100% less Maelstrom.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Shaman",
+                "spec": "Enhancement",
+                "twoPiece": "Voltaic Blaze applies Smoldering Core to your primary target, causing them to erupt in a Fire Nova every 2 seconds for 6 seconds, and take 200% increased damage from your Fire Nova effect.",
+                "fourPiece": "Each Fire Nova you trigger reduces the cooldown of Crash Lightning by 2 seconds and grants a stack of Short Circuit, increasing the damage of your next Crash Lightning by 8% per stack, stacking up to 5 times.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Shaman",
+                "spec": "Restoration",
+                "twoPiece": "Healing Wave and Chain Heal have a chance to create a Healing Rain at the target�s location for 10 seconds.",
+                "fourPiece": "Every 1 second, 1 ally inside of Healing Rain gains a watery shield that absorbs X damage for 10 seconds.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Warlock",
+                "spec": "Affliction",
+                "twoPiece": "You have a 20% chance to refund a Soul Shard after spending a Soul Shard.",
+                "fourPiece": "Each active Unstable Affliction increases your damage dealt by your spells and abilities by 2%, up to 6%. Seed of Corruption applies Unstable Affliction at 50% effectiveness to your target.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Warlock",
+                "spec": "Demonology",
+                "twoPiece": "Wild Imp damage increased by 10%. Implosion damage increased by 20%.",
+                "fourPiece": "When their energy depletes, Wild Imps have a 20% chance to fling themselves at their target and Implode at 150% effectiveness to their main target and 125% effectiveness to other targets.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Warlock",
+                "spec": "Destruction",
+                "twoPiece": "Incinerate damage increased by 25% and Incinerate has a 10% increased chance to evoke an Echo of Sargeras.",
+                "fourPiece": "Targets damaged by Echo of Sargeras take 6% increased damage from your spells and abilities for 6 sec.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Warrior",
+                "spec": "Arms",
+                "twoPiece": "Mortal Strike damage increased by 10% and when you Slam a target, Slam also deals damage to enemies within 8 yards of it. Deals reduced damage beyond 5 targets.",
+                "fourPiece": "Overpower damage increased by 15%. Mortal Strike and Overpower increase the damage of your next Slam by 10%, stacking up to 3 times.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Warrior",
+                "spec": "Fury",
+                "twoPiece": "Raging Blow damage increased by 15% and during Recklessness, Raging Blow extends the Duration of Recklessness by 2 seconds, up to 6 seconds.",
+                "fourPiece": "Bloodthirst damage increased by 10% and during Recklessness, Bloodthirst increases the critical strike bonus of Recklessness by 5%, up to 10%.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            },
+            {
+                "className": "Warrior",
+                "spec": "Protection",
+                "twoPiece": "Free revenges deal 15% additional damage and cause your next Shield Slam to deal 20% additional damage.",
+                "fourPiece": "Ravager and your free Revenges cause all targets to bleed for X damage over 12 sec. Ravager�s cooldown is reduced by 30 seconds.",
+                "source": "https://www.wowhead.com/guide/midnight/season-2-tier-set-bonus-appearance-overview"
+            }
+        ]
+    }
+}

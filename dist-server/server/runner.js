@@ -5,6 +5,8 @@ import { paths, saveRunResult, updateRun } from './db.js';
 import { runtime, ensureReports } from './runtime.js';
 import { parseSimcResult } from './results.js';
 const running = new Map();
+const activity = new Map();
+export function executionActivity(id) { const current = activity.get(id), process = running.get(id); return current ? { ...current, processKnown: Boolean(process), pid: process?.pid ?? current.pid, killed: process?.killed ?? false, exitCode: process?.exitCode ?? null } : undefined; }
 /**
  * json2 changed profilesets from an array/object of results to an object with a
  * `metric` and `results` property.  Read both layouts because historical runs
@@ -39,7 +41,10 @@ export async function execute(id, input, options = {}) {
     writeFileSync(inputPath, input);
     updateRun(id, { status: 'running' });
     const started = Date.now();
-    return await new Promise((resolve, reject) => { const p = spawn(rt.path, [inputPath, `html=${reportPath}`, `json2=${jsonPath}`], { windowsHide: true }); running.set(id, p); let out = ''; let err = ''; let lineBuffer = ''; let currentProfile = ''; let completedInBatch = 0; p.stdout.on('data', d => { const chunk = d.toString(); out += chunk; if (options.onProgress) {
+    return await new Promise((resolve, reject) => { const p = spawn(rt.path, [inputPath, `html=${reportPath}`, `json2=${jsonPath}`], { windowsHide: true }); const now = new Date().toISOString(); activity.set(id, { startedAt: now, lastOutputAt: now, stdoutBytes: 0, stderrBytes: 0, pid: p.pid }); running.set(id, p); let out = ''; let err = ''; let lineBuffer = ''; let currentProfile = ''; let completedInBatch = 0; p.stdout.on('data', d => { const chunk = d.toString(); out += chunk; const state = activity.get(id); if (state) {
+        state.lastOutputAt = new Date().toISOString();
+        state.stdoutBytes += Buffer.byteLength(chunk);
+    } if (options.onProgress) {
         lineBuffer += chunk;
         const parts = lineBuffer.split(/[\r\n]+/);
         lineBuffer = parts.pop() || '';
@@ -57,9 +62,16 @@ export async function execute(id, input, options = {}) {
                 latestTotal = Number(m[3]);
             }
         }
-        if (latestCompleted > 0 && latestTotal > 0)
+        if (latestCompleted > 0 && latestTotal > 0) {
+            const current = activity.get(id);
+            if (current)
+                current.lastProgressAt = new Date().toISOString();
             options.onProgress(completedInBatch + (latestCompleted / latestTotal), 0);
-    } }); p.stderr.on('data', d => err += d); p.on('error', reject); p.on('close', code => { running.delete(id); if (code === 0 && existsSync(reportPath)) {
+        }
+    } }); p.stderr.on('data', d => { err += d; const state = activity.get(id); if (state) {
+        state.lastOutputAt = new Date().toISOString();
+        state.stderrBytes += Buffer.byteLength(String(d));
+    } }); p.on('error', reject); p.on('close', code => { running.delete(id); if (code === 0 && existsSync(reportPath)) {
         const dps = out.match(/(?:DPS|Raid DPS)\s*=\s*([\d,.]+)/i)?.[1];
         const profilesets = existsSync(jsonPath) ? profileResults(JSON.parse(readFileSync(jsonPath, 'utf8'))) : [];
         if (options.finalize !== false) {

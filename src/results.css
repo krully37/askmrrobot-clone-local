@@ -141,8 +141,8 @@
 
 .compare-row {
   display: grid;
-  grid-template-columns: 40px 1fr auto;
-  gap: 16px;
+  grid-template-columns: 48px minmax(0, 1fr) minmax(250px, auto);
+  gap: 18px;
   align-items: center;
   padding: 14px 20px;
   border-bottom: 1px solid #202c30;
@@ -160,7 +160,7 @@
 .compare-gear-diffs {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   align-items: center;
 }
 
@@ -185,13 +185,70 @@
 .compare-details {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 18px;
   text-align: right;
 }
 
-.compare-details > span {
+.compare-loadout {
+  display: grid;
+  grid-template-columns: auto 15px;
+  column-gap: 5px;
+  align-items: center;
+  justify-items: end;
   color: #94a4a7;
   font-size: 12px;
+}
+
+.compare-loadout small {
+  grid-column: 1 / -1;
+  color: #73888a;
+  font-size: 10px;
+}
+
+.loadout-help {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border: 1px solid #61777a;
+  border-radius: 50%;
+  color: #bed4cc;
+  font-size: 10px;
+  font-weight: 800;
+  cursor: help;
+}
+
+.loadout-help::after {
+  content: attr(aria-label);
+  position: absolute;
+  z-index: 20;
+  right: -7px;
+  bottom: calc(100% + 8px);
+  width: min(300px, 70vw);
+  padding: 9px 10px;
+  border: 1px solid #65715c;
+  border-radius: 5px;
+  background: #111719;
+  box-shadow: 0 8px 22px #000b;
+  color: #e8e0c9;
+  font: 11px/1.45 Inter, Segoe UI, system-ui, sans-serif;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(3px);
+  transition: opacity 120ms ease, transform 120ms ease;
+}
+
+.loadout-help:hover::after,
+.loadout-help:focus-visible::after { opacity: 1; transform: translateY(0); }
+
+.compare-diff-text {
+  flex: 1 1 220px;
+  min-width: 0;
+  color: #d4d0c4;
+  font: 600 14px/1.35 Georgia, Cambria, "Times New Roman", serif;
+  letter-spacing: .005em;
 }
 
 .compare-details strong {
@@ -210,6 +267,13 @@
   color: #8d9da1;
   min-width: 80px;
   text-align: right;
+}
+
+@media (max-width: 760px) {
+  .compare-row { grid-template-columns: 36px minmax(0, 1fr); gap: 10px; padding: 13px 14px; }
+  .compare-details { grid-column: 2; justify-content: space-between; text-align: left; }
+  .compare-loadout { justify-items: start; }
+  .compare-details strong em { text-align: left; min-width: 0; }
 }
 
 .metric-row {

@@ -73,7 +73,8 @@ export function parseInventory(clean: string): ParsedInventory {
   if(active) talents.unshift({id:'active',name:'Active loadout',talents:active,spec:activeSpec,hero_talents:activeHero,selected:true});
   const className=clean.match(/^\s*(deathknight|death_knight|demonhunter|demon_hunter|druid|evoker|hunter|mage|monk|paladin|priest|rogue|shaman|warlock|warrior)=/mi)?.[1]||'';
   const spec=clean.match(/^\s*spec=([^\n]+)/mi)?.[1]||'';
-  return { candidates, talents, vaultDetected:candidates.some(c=>c.source==='vault'), dualWieldCapable:canDualWield(className,spec) };
+  const omniumFolio=(clean.match(/^\s*omnium_talents=([^\n]+)/mi)?.[1]||'').split('/').map(entry=>Number(entry.trim().split(':',1)[0])).filter(id=>Number.isInteger(id)&&id>0);
+  return { candidates, talents, vaultDetected:candidates.some(c=>c.source==='vault'), dualWieldCapable:canDualWield(className,spec), omniumFolio };
 }
 
 export function scenarioOverlay(s: Scenario) {
@@ -92,6 +93,10 @@ export function scenarioOverlay(s: Scenario) {
   if (s.bloodlust === 'health') lines.push(`bloodlust_percent=${s.bloodlustValue ?? 25}`);
   if (s.bloodlust === 'end') lines.push('bloodlust_time=0');
   if (!s.raidBuffs) lines.push('optimal_raid=0');
+  const selections=s.consumableSelections||{};
+  for(const key of ['food','flask','potion'])if(selections[key])lines.push(`${key}=${selections[key]}`);
+  const temporary=[['main_hand',selections.main_hand],['off_hand',selections.off_hand]].filter(([,value])=>Boolean(value)).map(([slot,value])=>`${slot}:${value}`);
+  if(temporary.length)lines.push(`temporary_enchant=${temporary.join('/')}`);
   // Current nightlies do not accept the old global default_* consumable flags.
   // Leave consumables to the imported profile / current SimC defaults instead.
   return lines.join('\n');

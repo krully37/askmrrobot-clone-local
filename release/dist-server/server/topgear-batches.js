@@ -11,7 +11,7 @@ export async function runTopGearBatches(runId, rawProfile, plans, scenario, thre
     const started = Date.now();
     let results = [];
     let reports = [];
-    const save = (patch) => { const elapsedMs = Date.now() - started; const completedProfiles = patch.completedProfiles ?? results.length; const rate = completedProfiles ? elapsedMs / completedProfiles : undefined; const progress = { stage: 'simulating', totalProfiles: plans.length, completedProfiles, currentBatch: Math.min(batches.length, Math.floor(completedProfiles / batchSize) + 1), totalBatches: batches.length, elapsedMs, estimatedRemainingMs: rate ? Math.max(0, (plans.length - completedProfiles) * rate) : undefined, partialResults: [...results].sort((a, b) => (b.dps || 0) - (a.dps || 0)).slice(0, 10), reports, ...patch }; saveTopGearProgress(runId, progress); saveTopGearResults(runId, results); return progress; };
+    const save = (patch) => { const elapsedMs = Date.now() - started; const completedProfiles = patch.completedProfiles ?? results.length; const rate = completedProfiles ? elapsedMs / completedProfiles : undefined; const progress = { stage: 'simulating', totalProfiles: plans.length, completedProfiles, currentBatch: Math.min(batches.length, Math.floor(completedProfiles / batchSize) + 1), totalBatches: batches.length, elapsedMs, estimatedRemainingMs: rate ? Math.max(0, (plans.length - completedProfiles) * rate) : undefined, partialResults: [...results].sort((a, b) => (b.dps || 0) - (a.dps || 0)).slice(0, 10), reports, lastProgressAt: new Date().toISOString(), ...patch }; saveTopGearProgress(runId, progress); saveTopGearResults(runId, results); return progress; };
     save({ stage: 'queued', currentBatch: 0 });
     updateRun(runId, { status: 'running' });
     try {

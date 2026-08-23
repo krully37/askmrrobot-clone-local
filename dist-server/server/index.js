@@ -1,25 +1,34 @@
 import express from 'express';
 import { existsSync, readFileSync } from 'node:fs';
-import { calibration, characters, cleanupStaleDisposables, createDisposableProfile, createRun, deleteCharacter, deleteRuns, getDroptimizerJob, getProfile, getRun, getTopGearJob, importCandidates, paths, profiles, runResult, runs, saveCalibration, saveProfile, saveTopGearJob, updateProfileRaw, updateRun } from './db.js';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { calibration, characters, characterConsumables, cleanupStaleDisposables, createDisposableProfile, createRun, deleteCharacter, deleteRuns, getDroptimizerJob, getProfile, getRun, getTopGearJob, importCandidates, paths, profiles, runResult, runs, saveCalibration, saveCharacterConsumables, saveProfile, saveTopGearJob, updateProfileRaw, updateRun, readSettings, saveSettings } from './db.js';
 import { computeCapacity, safeThreads } from './compute.js';
 import { buildInput, parseInventory, parseProfile } from './profile.js';
-import { cancel, execute } from './runner.js';
+import { cancel, execute, executionActivity } from './runner.js';
+import { assessRunHealth } from './run-health.js';
 import { RESTART_AFTER_RUNTIME_UPDATE, ensureCurrentRuntime, runtime, runtimeStatus, smokeTest } from './runtime.js';
-import { catalogDrops, catalogEnhancements, catalogSourceCategories, catalogSources, catalogStatus, enrichInventory, searchCatalog, upsertCatalogItem, upsertEnhancement, catalogOmniumSpells } from './catalog.js';
+import { catalogDrops, catalogEnhancements, catalogSourceCategories, catalogSources, catalogStatus, ensureItemSets, enrichInventory, searchCatalog, upsertCatalogItem, upsertEnhancement, catalogOmniumSpells, synthesizeVariants } from './catalog.js';
 import { installEnhancementSeed } from './enhancements.js';
 import { derivedCatalogHealth, installDerivedCatalog } from './derived-catalog.js';
 import { refreshCatalog, refreshStatus } from './catalog-refresh.js';
 import { calibratePreview, planOptimization, previewOptimization } from './optimizer.js';
 import { recoverTopGearRun, runTopGearBatches } from './topgear-batches.js';
-import { runDroptimizer } from './droptimizer.js';
+import { omniumFolioVariants } from '../shared/omnium-folio.js';
+import { runDroptimizer, runDroptimizerVerification } from './droptimizer.js';
 import { localItemIcon, readLocalItemIcon } from './item-media.js';
 import { captureStatus, configureCaptureImport, importCapturePayload, startCaptureWatch } from './captures.js';
 import { resolveTooltip, tooltipStatus } from './tooltips.js';
 cleanupStaleDisposables();
-const app = express();
+export const app = express();
 app.use('/api', (_req, res, next) => { res.set('Cache-Control', 'no-store, max-age=0'); next(); });
 app.use(express.json({ limit: '5mb' }));
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+app.use(express.static(join(__dirname, '..', 'dist')));
 const defaults = { name: 'Patchwerk - 1 target', fightStyle: 'Patchwerk', duration: 300, variation: 20, targets: 1, bloodlust: 'pull', raidBuffs: true, consumables: true, powerInfusion: false, rawOverride: '' };
+function resolveOmniumFolioVariants(selected) { const ids = Array.isArray(selected) ? selected.filter((value) => typeof value === 'number' && Number.isInteger(value) && value > 0) : []; if (!ids.length)
+    return [[]]; return omniumFolioVariants(ids).filter(variant => variant.length === 5); }
 const calibrationKey = (p, s, n) => [p.className, p.spec, runtime().version, n, s.fightStyle, s.targets, s.duration].join('|');
 const quickPreview = (p, s, n) => { const throughput = calibration(calibrationKey(p, s, n))?.throughput || 250000; const iterations = 10000, estimatedSeconds = Math.max(3, Math.ceil(iterations / throughput)); const intensity = estimatedSeconds <= 30 ? 'green' : estimatedSeconds <= 300 ? 'amber' : estimatedSeconds <= 1800 ? 'orange' : 'red'; return { combinations: 1, profilesets: 1, iterations, totalIterations: iterations, enhancementVariants: 0, enhancementCombinations: 1, replaceExistingEnhancements: false, estimatedSeconds, intensity, calibration: throughput === 250000 ? 'estimated' : 'learned', warnings: [] }; };
 function indexEnhancements(candidates) { for (const c of candidates) {
@@ -40,6 +49,42 @@ catch (e) {
     res.status(422).json({ error: e.message });
 } });
 app.get('/api/compute/capacity', async (_, res) => res.json(await computeCapacity()));
+app.get('/api/config/settings', (_, res) => res.json(readSettings()));
+app.post('/api/config/settings', (req, res) => { try {
+    saveSettings(req.body);
+    res.json({ ok: true });
+}
+catch (e) {
+    res.status(422).json({ error: String(e) });
+} });
+app.post('/api/config/browse-simc', async (_, res) => {
+    try {
+        let electron;
+        try {
+            electron = require('electron');
+        }
+        catch (e) { }
+        if (electron && electron.dialog) {
+            const result = await electron.dialog.showOpenDialog({
+                title: 'Select SimulationCraft Executable',
+                filters: [{ name: 'Executables', extensions: ['exe'] }],
+                properties: ['openFile']
+            });
+            if (!result.canceled && result.filePaths.length > 0) {
+                return res.json({ path: result.filePaths[0] });
+            }
+            else {
+                return res.json({ canceled: true });
+            }
+        }
+        else {
+            res.status(400).json({ error: 'Native file picker is only available in the desktop app.' });
+        }
+    }
+    catch (e) {
+        res.status(500).json({ error: String(e) });
+    }
+});
 app.get('/api/catalog/db2/status', (_, res) => res.json(derivedCatalogHealth()));
 app.post('/api/catalog/db2/install', (_, res) => { try {
     res.json(installDerivedCatalog());
@@ -70,11 +115,19 @@ app.post('/api/profiles', (req, res) => { try {
 catch (e) {
     res.status(422).json({ error: e.message });
 } });
-app.get('/api/profiles/:id/inventory', (req, res) => { const p = getProfile(+req.params.id); if (!p)
-    return res.sendStatus(404); res.json({ ...enrichInventory(parseInventory(p.rawProfile)), enhancements: catalogEnhancements() }); });
+app.get('/api/profiles/:id/inventory', async (req, res) => { const p = getProfile(+req.params.id); if (!p)
+    return res.sendStatus(404); const parsed = parseInventory(p.rawProfile); const itemIds = parsed.candidates.map(c => c.itemId).filter(Boolean); await ensureItemSets(itemIds); res.json({ ...enrichInventory(parsed), enhancements: catalogEnhancements(), omniumFolio: parsed.omniumFolio }); });
+app.get('/api/profiles/:id/consumables', (req, res) => res.json(characterConsumables(+req.params.id)));
+app.put('/api/profiles/:id/consumables', (req, res) => { try {
+    res.json(saveCharacterConsumables(+req.params.id, req.body?.selections || {}));
+}
+catch (error) {
+    res.status(422).json({ error: error.message });
+} });
 app.post('/api/profiles/:id/candidates', (req, res) => { const p = getProfile(+req.params.id); if (!p)
     return res.sendStatus(404); const line = String(req.body.line || '').trim().replace(/^#\s*/, ''); if (!/^[a-z_0-9]+=.+$/i.test(line))
-    return res.status(422).json({ error: 'Enter a complete SimC item line, such as finger1=item_name,id=123.' }); const updated = updateProfileRaw(p.id, `${p.rawProfile}\n\n# Custom Candidates\n# ${line}\n`); res.status(201).json({ profile: updated, inventory: parseInventory(updated.rawProfile) }); });
+    return res.status(422).json({ error: 'Enter a complete SimC item line, such as finger1=item_name,id=123.' }); if (!/(?:^|,)id=\d+/.test(line))
+    return res.status(422).json({ error: 'The SimC line must contain a valid item id, such as id=123.' }); const updated = updateProfileRaw(p.id, `${p.rawProfile}\n\n# Custom Candidates\n# ${line}\n`); res.status(201).json({ profile: updated, inventory: parseInventory(updated.rawProfile) }); });
 app.get('/api/runs', (_, res) => res.json(runs()));
 app.delete('/api/runs', (req, res) => { try {
     res.json({ deleted: deleteRuns((req.body?.ids || []).map(Number)) });
@@ -106,10 +159,16 @@ app.post('/api/runs', async (req, res) => { const p = getProfile(+req.body.profi
 app.post('/api/runs/:id/cancel', (req, res) => { const id = +req.params.id, run = getRun(id); const wasActive = cancel(id); if (!wasActive && run && ['queued', 'running'].includes(run.status))
     updateRun(id, { status: 'cancelled', completedAt: new Date().toISOString() }); res.json({ cancelled: wasActive || Boolean(run && ['queued', 'running'].includes(run.status)) }); });
 app.get('/api/runs/:id/progress', (req, res) => { const r = getRun(+req.params.id); if (!r)
-    return res.sendStatus(404); const job = getTopGearJob(r.id) || getDroptimizerJob(r.id); if (job?.progress)
-    return res.json({ ...job.progress, status: r.status, cancelAvailable: ['queued', 'running'].includes(r.status) }); res.json({ stage: r.status === 'running' ? 'simulating' : r.status, elapsedMs: Date.now() - new Date(r.createdAt).getTime(), status: r.status, cancelAvailable: ['queued', 'running'].includes(r.status) }); });
+    return res.sendStatus(404); const job = getTopGearJob(r.id) || getDroptimizerJob(r.id), progress = job?.progress; const health = assessRunHealth({ status: r.status, stage: progress?.stage, createdAt: r.createdAt, lastProgressAt: progress?.lastProgressAt, activity: executionActivity(r.id), development: process.env.NODE_ENV !== 'production' }); if (progress)
+    return res.json({ ...progress, status: r.status, cancelAvailable: ['queued', 'running'].includes(r.status), health }); res.json({ stage: r.status === 'running' ? 'simulating' : r.status, elapsedMs: Date.now() - new Date(r.createdAt).getTime(), status: r.status, cancelAvailable: ['queued', 'running'].includes(r.status), health }); });
 app.get('/api/catalog/status', (_, res) => res.json(catalogStatus()));
 app.get('/api/catalog/items', (req, res) => res.json(searchCatalog(String(req.query.q || ''), String(req.query.slot || ''))));
+app.get('/api/catalog/icons/:fileDataId', (req, res) => { const fileDataId = req.params.fileDataId; const iconsDir = join(paths.root, 'icons'); const file = join(iconsDir, `${fileDataId}.png`); if (existsSync(file)) {
+    res.type('image/png').sendFile(file);
+}
+else {
+    res.sendStatus(404);
+} });
 app.get('/api/catalog/items/:id/icon', async (req, res) => { const id = Number(req.params.id); try {
     let bytes = readLocalItemIcon(id);
     let mime = 'image/png';
@@ -133,6 +192,12 @@ app.post('/api/catalog/refresh', (_, res) => { try {
 catch (e) {
     res.status(409).json({ error: e instanceof Error ? e.message : String(e) });
 } });
+app.post('/api/catalog/synthesize', (_, res) => { try {
+    res.json({ synthesized: synthesizeVariants() });
+}
+catch (e) {
+    res.status(500).json({ error: String(e) });
+} });
 app.get('/api/catalog/sources', (_, res) => res.json(catalogSources()));
 app.get('/api/catalog/drops', (req, res) => res.json(catalogDrops(String(req.query.instance || ''))));
 app.get('/api/catalog/captures/status', (_, res) => res.json(captureStatus()));
@@ -155,13 +220,13 @@ catch (e) {
     res.status(500).json({ error: String(e) });
 } });
 app.get('/api/catalog/tooltips/status', (_, res) => res.json(tooltipStatus()));
-app.get('/api/catalog/items/:id/tooltip', (req, res) => { const itemId = Number(req.params.id), itemLevel = Number(req.query.itemLevel) || undefined, bonusIds = String(req.query.bonusIds || '').split('/').map(Number).filter(Number.isFinite), fallback = { name: req.query.name ? String(req.query.name) : undefined, slot: req.query.slot ? String(req.query.slot) : undefined, source: req.query.source ? String(req.query.source) : undefined, enchant: req.query.enchant ? String(req.query.enchant) : undefined, gems: req.query.gems ? String(req.query.gems).split('/').filter(Boolean) : undefined }; if (!Number.isInteger(itemId) || itemId <= 0)
-    return res.status(422).json({ error: 'An item ID is required.' }); res.json(resolveTooltip({ itemId, itemLevel, bonusIds, fallback })); });
+app.get('/api/catalog/items/:id/tooltip', (req, res) => { const itemId = Number(req.params.id), itemLevel = Number(req.query.itemLevel) || undefined, bonusIds = String(req.query.bonusIds || '').split('/').map(Number).filter(Number.isFinite), className = req.query.className ? String(req.query.className) : undefined, spec = req.query.spec ? String(req.query.spec) : undefined, fallback = { name: req.query.name ? String(req.query.name) : undefined, slot: req.query.slot ? String(req.query.slot) : undefined, source: req.query.source ? String(req.query.source) : undefined, enchant: req.query.enchant ? String(req.query.enchant) : undefined, gems: req.query.gems ? String(req.query.gems).split('/').filter(Boolean) : undefined }; if (!Number.isInteger(itemId) || itemId <= 0)
+    return res.status(422).json({ error: 'An item ID is required.' }); res.json(resolveTooltip({ itemId, itemLevel, bonusIds, className, spec, fallback })); });
 app.post('/api/topgear/preview', async (req, res) => { const p = getProfile(+req.body.profileId); if (!p)
     return res.sendStatus(404); try {
-    const s = { ...defaults, ...req.body.scenario };
+    const s = { ...defaults, ...req.body.scenario }, request = { ...req.body, omniumFolioVariants: await resolveOmniumFolioVariants(req.body.omniumFolio) };
     const compute = await safeThreads(req.body.threads);
-    res.json({ ...calibratePreview(previewOptimization(enrichInventory(parseInventory(p.rawProfile)), req.body, catalogEnhancements()), calibration(calibrationKey(p, s, compute.threads))?.throughput), appliedThreads: compute.threads, capacity: compute.capacity, clamped: compute.clamped });
+    res.json({ ...calibratePreview(previewOptimization(enrichInventory(parseInventory(p.rawProfile)), request, catalogEnhancements()), calibration(calibrationKey(p, s, compute.threads))?.throughput), appliedThreads: compute.threads, capacity: compute.capacity, clamped: compute.clamped });
 }
 catch (e) {
     res.status(422).json({ error: e.message });
@@ -169,14 +234,7 @@ catch (e) {
 app.post('/api/topgear/run', async (req, res) => { const p = getProfile(+req.body.profileId); if (!p)
     return res.sendStatus(404); if (p.persistence === 'disposable' && runs().some(r => r.profileId === p.id))
     return res.status(422).json({ error: 'A disposable import can run only once.' }); try {
-    let rawOverride = '';
-    if (req.body.omniumFolio?.length > 0) {
-        const spells = await catalogOmniumSpells();
-        const spellIds = req.body.omniumFolio.map((n) => spells.find(s => s.name === n)?.id).filter(Boolean);
-        if (spellIds.length > 0)
-            rawOverride += `omnium_folio=${spellIds.join('/')}\n`;
-    }
-    const request = { ...req.body, scenario: { ...defaults, ...req.body.scenario, rawOverride } };
+    const request = { ...req.body, omniumFolioVariants: await resolveOmniumFolioVariants(req.body.omniumFolio), scenario: { ...defaults, ...req.body.scenario, rawOverride: req.body.scenario?.rawOverride || '' } };
     const optimized = planOptimization(enrichInventory(parseInventory(p.rawProfile)), request, catalogEnhancements());
     const compute = await safeThreads(request.threads);
     const id = createRun({ mode: 'topgear', title: `${p.name} · ${p.realm} · ${p.spec} — Top Gear`, status: 'queued', scenario: request.scenario, input: '', simcVersion: runtime().version, profileId: p.id, characterId: p.characterId, character: { name: p.name, realm: p.realm, className: p.className, spec: p.spec, profileId: p.id, characterId: p.characterId, persistence: p.persistence } });
@@ -188,13 +246,46 @@ app.post('/api/topgear/run', async (req, res) => { const p = getProfile(+req.bod
 catch (e) {
     res.status(422).json({ error: e.message });
 } });
+import { buildAdvisorLoadouts } from './advisor.js';
 import { getAllUpgradeTargets } from './tracks.js';
 app.get('/api/droptimizer/targets', (_, res) => res.json(getAllUpgradeTargets()));
+app.get('/api/droptimizer/drops', (req, res) => { const p = getProfile(Number(req.query.profileId)); if (!p)
+    return res.sendStatus(404); const all = catalogDrops(String(req.query.instance || ''), { className: p.className, spec: p.spec }); res.json(all.filter(drop => drop.eligibility?.eligible && drop.slot !== 'unknown')); });
 app.post('/api/droptimizer/run', async (req, res) => { const p = getProfile(+req.body.profileId); if (!p)
     return res.sendStatus(404); if (p.persistence === 'disposable' && runs().some(r => r.profileId === p.id))
-    return res.status(422).json({ error: 'A disposable import can run only once.' }); const source = String(req.body.source || ''), difficulty = String(req.body.difficulty || ''); const allDrops = catalogDrops(source).filter((x) => !difficulty || x.difficulty === difficulty); if (!allDrops.length)
-    return res.status(422).json({ error: 'Choose a source and difficulty with catalog drops first.' }); const drops = allDrops.filter((x) => x.status === 'verified' && x.simcFragment); if (!drops.length)
-    return res.status(422).json({ error: `${source} · ${difficulty} has no verified difficulty variants yet. Import captured Encounter Journal variants before simming it.` }); const scenario = { ...defaults, ...req.body.scenario }; const compute = await safeThreads(req.body.threads); const id = createRun({ mode: 'droptimizer', title: `${p.name} · ${p.realm} · ${p.spec} — Droptimizer`, status: 'queued', scenario, input: '', simcVersion: runtime().version, profileId: p.id, characterId: p.characterId, character: { name: p.name, realm: p.realm, className: p.className, spec: p.spec, profileId: p.id, characterId: p.characterId, persistence: p.persistence } }); const run = getRun(id); runDroptimizer(id, p.rawProfile, drops, scenario, compute.threads, req.body.upgradeTarget, req.body.upgradeEquipped).catch(() => undefined); res.status(202).json({ id, run, planned: drops.length, blocked: allDrops.length - drops.length, appliedThreads: compute.threads, capacity: compute.capacity, clamped: compute.clamped }); });
+    return res.status(422).json({ error: 'A disposable import can run only once.' }); const source = String(req.body.source || ''), difficulty = String(req.body.difficulty || ''); const catalog = catalogDrops(source, { className: p.className, spec: p.spec }).filter((x) => !difficulty || x.difficulty === difficulty); const allDrops = catalog.filter(x => x.eligibility?.eligible && x.slot !== 'unknown'); if (!allDrops.length)
+    return res.status(422).json({ error: 'Choose a source and difficulty with usable catalog drops first.' }); const submitted = catalog.filter((x) => x.status === 'verified' && x.simcFragment); const drops = allDrops.filter((x) => x.status === 'verified' && x.simcFragment); if (!drops.length)
+    return res.status(422).json({ error: `${source} · ${difficulty} has no verified usable difficulty variants yet. Import captured Encounter Journal variants before simming it.` }); if (req.body.upgradeTarget) {
+    const inv = parseInventory(p.rawProfile);
+    const eq = inv.candidates.filter(c => c.source === 'equipped');
+    const avg = eq.reduce((sum, c) => sum + (c.itemLevel || 0), 0) / Math.max(1, eq.length);
+    if (req.body.upgradeTarget < avg - 5)
+        return res.status(422).json({ error: `The requested upgrade target (${req.body.upgradeTarget}) is significantly lower than your equipped average item level (${Math.round(avg)}). This usually results in negative DPS evaluations.` });
+} const scenario = { ...defaults, ...req.body.scenario }; const compute = await safeThreads(req.body.threads); const id = createRun({ mode: 'droptimizer', title: `${p.name} · ${p.realm} · ${p.spec} — Droptimizer`, status: 'queued', scenario, input: '', simcVersion: runtime().version, profileId: p.id, characterId: p.characterId, character: { name: p.name, realm: p.realm, className: p.className, spec: p.spec, profileId: p.id, characterId: p.characterId, persistence: p.persistence } }); const run = getRun(id); runDroptimizer(id, p.rawProfile, submitted, scenario, compute.threads, req.body.upgradeTarget, req.body.upgradeEquipped, req.body.minSetBonuses).catch(() => undefined); res.status(202).json({ id, run, planned: drops.length, blocked: catalog.length - drops.length, filtered: catalog.length - allDrops.length, appliedThreads: compute.threads, capacity: compute.capacity, clamped: compute.clamped }); });
+app.post('/api/droptimizer/runs/:id/verify-item', async (req, res) => { const original = getRun(+req.params.id), job = getDroptimizerJob(+req.params.id); if (!original || original.mode !== 'droptimizer' || !job)
+    return res.status(404).json({ error: 'Droptimizer run not found.' }); const request = job.request, rawProfile = request.rawProfile; const itemId = Number(req.body.itemId), slot = String(req.body.slot || ''); const entry = job.entries.find(entry => entry.drop?.id === itemId && entry.slot === slot); if (!rawProfile || !entry)
+    return res.status(422).json({ error: 'This saved run cannot be verified. Run Droptimizer again to capture the required loadout snapshot.' }); const compute = await safeThreads(req.body.threads); const id = createRun({ mode: 'droptimizer-verify', title: `${original.title} — targeted verification`, status: 'queued', scenario: original.scenario, input: '', simcVersion: runtime().version, profileId: original.profileId, characterId: original.characterId, character: original.character }); const run = getRun(id); runDroptimizerVerification(id, rawProfile, entry, original.scenario, compute.threads).catch(() => undefined); res.status(202).json({ id, run, appliedThreads: compute.threads }); });
+app.post('/api/advisor/run', async (req, res) => {
+    const p = getProfile(+req.body.profileId);
+    if (!p)
+        return res.sendStatus(404);
+    if (p.persistence === 'disposable' && runs().some(r => r.profileId === p.id))
+        return res.status(422).json({ error: 'A disposable import can run only once.' });
+    try {
+        const { permutations, loadouts } = buildAdvisorLoadouts(enrichInventory(parseInventory(p.rawProfile)), req.body);
+        const scenario = { ...defaults, ...req.body.scenario };
+        const compute = await safeThreads(req.body.threads);
+        const id = createRun({ mode: 'topgear', title: `${p.name} · ${p.realm} · ${p.spec} — Upgrade Advisor`, status: 'queued', scenario, input: '', simcVersion: runtime().version, profileId: p.id, characterId: p.characterId, character: { name: p.name, realm: p.realm, className: p.className, spec: p.spec, profileId: p.id, characterId: p.characterId, persistence: p.persistence } });
+        const run = getRun(id);
+        const preview = { combinations: loadouts.length, pruned: 0, talentBuilds: 1, warnings: [], enhancementVariants: 0, enhancementCombinations: 0, replaceExistingEnhancements: false, profilesets: loadouts.length, iterations: 10000, totalIterations: loadouts.length * 10000, estimatedSeconds: loadouts.length, intensity: 'green', calibration: 'estimated' };
+        saveTopGearJob(id, catalogStatus().version, preview, loadouts, { ...req.body, threads: compute.threads });
+        runTopGearBatches(id, p.rawProfile, loadouts, scenario, compute.threads, () => undefined).catch(() => undefined);
+        res.status(202).json({ id, run, permutations, planned: loadouts.length, appliedThreads: compute.threads, capacity: compute.capacity, clamped: compute.clamped });
+    }
+    catch (e) {
+        res.status(422).json({ error: e.message });
+    }
+});
 app.get('/api/topgear/:runId', (req, res) => { const j = getTopGearJob(+req.params.runId); if (!j)
     return res.sendStatus(404); res.json({ ...j, run: getRun(+req.params.runId) }); });
 app.post('/api/runtime/smoke-test', async (_, res) => { const rt = runtime(); if (!rt.path)
@@ -218,4 +309,6 @@ catch (error) {
     console.log(`Activated SimC ${outcome.status.version}.`); for (const run of runs())
     if (run.mode === 'topgear')
         recoverTopGearRun(run.id); startCaptureWatch(); app.listen(4317, '127.0.0.1', () => console.log(`Local Sim Dashboard API: http://127.0.0.1:4317 (${runtime().version})`)); }
-start().catch(error => { console.error(`Local Sim Dashboard failed to start: ${error instanceof Error ? error.message : String(error)}`); process.exitCode = 1; });
+if (process.env.VITEST !== 'true') {
+    start().catch(error => { console.error(`Local Sim Dashboard failed to start: ${error instanceof Error ? error.message : String(error)}`); process.exitCode = 1; });
+}

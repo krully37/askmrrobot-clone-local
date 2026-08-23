@@ -14,7 +14,7 @@ const supportedSlots=new Set<string>(DROPTIMIZER_SLOTS);
 const paired=(slot:string)=>slot.startsWith('finger')?['finger1','finger2']:slot.startsWith('trinket')?['trinket1','trinket2']:[slot];
 export interface Drop extends DroptimizerDrop {}
 type Entry = DroptimizerGearset;
-interface DropProgress {stage:'queued'|'baseline'|'simulating'|'completed'|'cancelled'|'failed';totalProfiles:number;completedProfiles:number;currentBatch:number;totalBatches:number;elapsedMs:number;estimatedRemainingMs?:number;partialResults:{name:string;dps?:number;boss?:string;delta?:number}[];reports:string[];failedProfiles:number;threads:number;error?:string}
+interface DropProgress {stage:'queued'|'baseline'|'simulating'|'completed'|'cancelled'|'failed';totalProfiles:number;completedProfiles:number;currentBatch:number;totalBatches:number;elapsedMs:number;estimatedRemainingMs?:number;partialResults:{name:string;dps?:number;boss?:string;delta?:number}[];reports:string[];failedProfiles:number;threads:number;error?:string;lastProgressAt?:string}
 
 export async function runDroptimizer(runId:number, rawProfile:string, drops:Drop[], scenario:Scenario, threads:number, upgradeTarget?: number, upgradeEquipped?: boolean, minSetBonuses?: Record<string, number>) {
   const characterClass=rawProfile.match(/^\s*([a-z_]+)=/mi)?.[1]||'';
@@ -94,7 +94,7 @@ export async function runDroptimizer(runId:number, rawProfile:string, drops:Drop
     const elapsedMs=Date.now()-started, remaining=Math.max(0,entries.length-completedProfiles);
     const msPerProfile=completedProfiles?elapsedMs/completedProfiles:undefined;
     const plannedRemainingBatches=Math.ceil(remaining/Math.max(1,batchSize));
-    const progress:DropProgress={stage:'simulating',totalProfiles:entries.length,completedProfiles,currentBatch,totalBatches:currentBatch+plannedRemainingBatches,elapsedMs,estimatedRemainingMs:msPerProfile?Math.round(remaining*msPerProfile):undefined,partialResults:rows().filter(x=>x.dps).slice(0,8).map(x=>({name:x.name,dps:x.dps,boss:x.boss,delta:x.delta})),reports,failedProfiles:failures.size,threads,...patch};
+    const progress:DropProgress={stage:'simulating',totalProfiles:entries.length,completedProfiles,currentBatch,totalBatches:currentBatch+plannedRemainingBatches,elapsedMs,estimatedRemainingMs:msPerProfile?Math.round(remaining*msPerProfile):undefined,partialResults:rows().filter(x=>x.dps).slice(0,8).map(x=>({name:x.name,dps:x.dps,boss:x.boss,delta:x.delta})),reports,failedProfiles:failures.size,threads,lastProgressAt:new Date().toISOString(),...patch};
     saveDroptimizerProgress(runId,progress); saveDroptimizerResults(runId,rows()); return progress;
   };
   const cancelled=()=>getRun(runId)?.status==='cancelled';

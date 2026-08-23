@@ -30,6 +30,12 @@ describe('SimulationCraft profile support', () => {
     expect(input).not.toContain('default_food=');
     expect(input).not.toContain('override.power_infusion=');
   });
+  it('only applies consumables when a user explicitly supplies a run override', () => {
+    const scenario={name:'Patchwerk',fightStyle:'Patchwerk',duration:300,variation:20,targets:1,bloodlust:'pull' as const,raidBuffs:true,consumables:true,powerInfusion:false,rawOverride:'',consumableSelections:{flask:'flask_of_the_magisters_2',main_hand:'thalassian_phoenix_oil_2',off_hand:'thalassian_phoenix_oil_2'}};
+    const input=buildInput(profile,scenario,8);
+    expect(input).toContain('flask=flask_of_the_magisters_2');
+    expect(input).toContain('temporary_enchant=main_hand:thalassian_phoenix_oil_2/off_hand:thalassian_phoenix_oil_2');
+  });
   it('expands selected gem and enchant alternatives into exact SimC item variants', () => {
     const candidate={id:'head',slot:'head',name:'Helm',rawLine:'head=helm,id=1,gem_id=10',source:'equipped' as const,selected:true,locked:true};
     const variants=withEnhancementVariants([candidate],[{id:'gem-20',type:'gem' as const,name:'Gem',slots:['head'],simcFragment:'gem_id=20'},{id:'ench-30',type:'enchant' as const,name:'Enchant',slots:['head'],simcFragment:'enchant_id=30'}],['gem-20','ench-30'],true);
@@ -68,6 +74,10 @@ describe('Top Gear inventory planning', () => {
     expect(inventory.vaultDetected).toBe(true);
     expect(inventory.talents.map(t => t.name)).toContain('Cleave');
   });
+  it('reads actual Omnium Folio C_Traits entries from an addon export', () => {
+    const inventory = parseInventory(`${profile}\nomnium_talents=136814:1/136821:1/136817:1/136823:1/136822:1`);
+    expect(inventory.omniumFolio).toEqual([136814, 136821, 136817, 136823, 136822]);
+  });
   it('keeps Vault rewards mutually exclusive in planned loadouts', () => {
     const inventory = parseInventory(raw);
     const request = { candidateIds: inventory.candidates.map(c=>c.id), lockedSlots: [], talentIds: [inventory.talents[0].id], threads: 1, limit: 100, profileId: 1, scenario: { name:'x',fightStyle:'Patchwerk',duration:60,variation:0,targets:1,bloodlust:'pull' as const,raidBuffs:true,consumables:true,rawOverride:'' }, confirmLarge: true };
@@ -100,11 +110,15 @@ describe('Top Gear inventory planning', () => {
     expect(input.match(/profileset\."hands"\+=main_hand=/g)).toHaveLength(1);
     expect(input.match(/profileset\."hands"\+=off_hand=/g)).toHaveLength(1);
   });
+  it('writes Folio profileset overrides with the supported omnium_talents syntax', () => {
+    const plans=[{name:'folio',source:'bags' as const,talent:{id:'active',name:'Active',talents:'x',active:true,selected:true},omniumFolio:[136814,136821,136817,136823,136822],candidates:[]}];
+    expect(buildProfilesetInput(profile,plans)).toContain('profileset."folio"+=omnium_talents=136814:1/136821:1/136817:1/136823:1/136822:1');
+  });
 });
 
 describe('SimC profileset results', () => {
   it('reads the current json2 profilesets.results layout', () => {
-    expect(profileResults({sim:{profilesets:{metric:'Damage per Second',results:[{name:'bags_active_1',mean:12345}]}}})).toEqual([{name:'bags_active_1',dps:12345}]);
+    expect(profileResults({sim:{profilesets:{metric:'Damage per Second',results:[{name:'bags_active_1',mean:12345}]}}})).toEqual([{name:'bags_active_1',dps:12345,error:0,iterations:0}]);
   });
 });
 

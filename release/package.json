@@ -3,7 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "main": "electron-main.cjs",
   "scripts": {
+    "start:electron": "wait-on tcp:4317 && electron .",
+    "build:electron": "npm run build:prod && electron-builder --dir",
+    "dist": "npm run build:prod && electron-builder",
     "server": "tsx server/index.ts",
     "catalog:build": "tsx server/catalog-cli.ts",
     "catalog:refresh": "tsx server/catalog-cli.ts",
@@ -16,7 +20,33 @@
     "7zip-bin": "^5.2.0",
     "better-sqlite3": "^11.7.0",
     "express": "^4.21.2",
+    "puppeteer": "^19.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
+  },
+  "build": {
+    "npmRebuild": false,
+    "asar": false,
+    "appId": "com.localsimdashboard.app",
+    "productName": "Local Sim Dashboard",
+    "directories": {
+      "output": "C:/temp/localsimdash-release"
+    },
+    "files": [
+      "dist/**/*",
+      "dist-server/**/*",
+      "data/**/*",
+      "electron-main.cjs",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always"
+    }
   }
 }

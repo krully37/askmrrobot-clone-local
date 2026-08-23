@@ -20,7 +20,7 @@ export interface GearCandidate {
 }
 export interface Enhancement { id:string; type:'gem'|'enchant'|'weapon'; name:string; effect?:string; slots:string[]; simcFragment:string; icon?:string; provenance?:string; clientBuild?:string; currentSeason?:boolean; weaponHands?:WeaponHandedness[]; reviewStatus?:'reviewed'|'unreviewed'; db2Status?:'matched'|'unavailable'; simcValidation?:'syntax-valid'|'unvalidated'; iconFileDataId?:number; }
 export interface TalentBuild { id: string; name: string; talents: string; spec?: string; hero_talents?: string; selected: boolean; }
-export interface ParsedInventory { candidates: GearCandidate[]; talents: TalentBuild[]; vaultDetected: boolean; dualWieldCapable: boolean; }
+export interface ParsedInventory { candidates: GearCandidate[]; talents: TalentBuild[]; vaultDetected: boolean; dualWieldCapable: boolean; omniumFolio: number[]; }
 export interface OptimizationRequest {
   profileId: number; scenario: Scenario; candidateIds: string[]; lockedSlots: string[];
   talentIds: string[]; threads: number; limit: number; confirmLarge?: boolean; enhancementIds?: string[];
@@ -30,5 +30,6 @@ export interface OptimizationRequest {
   upgradeTarget?: number;
   upgradeEquipped?: boolean;
   minSetBonuses?: Record<string, number>;
+  omniumFolioVariants?: number[][];
 }
 export interface LoadoutResult { name: string; dps?: number; talentName: string; itemIds: string[]; source: 'bags' | 'vault'; vaultCandidateId?: string; }

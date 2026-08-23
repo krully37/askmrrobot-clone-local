@@ -2,6 +2,7 @@ import { StrictMode, useCallback, useEffect, useMemo, useRef, useState } from "r
 import { createRoot } from "react-dom/client";
 import { GlobalItemTooltip } from "./item-tooltip";
 import consumableSeed from "../data/midnight-consumables.json";
+import weaponConsumableSeed from "../data/midnight-weapon-consumables.json";
 import enhancementSeed from "../data/midnight-enhancements.json";
 import { OmniumFolioPicker } from "./OmniumFolioPicker";
 import "./styles.css";
@@ -19,6 +20,7 @@ type Profile = {
   characterId?: number;
   name: string;
   realm: string;
+  className: string;
   spec: string;
   persistence?: "reusable" | "disposable";
   updatedAt?: string;
@@ -155,6 +157,7 @@ type Inventory = {
   vaultDetected: boolean;
   dualWieldCapable: boolean;
   enhancements: Enhancement[];
+  omniumFolio?: number[];
 };
 type Preview = {
   combinations: number;
@@ -165,6 +168,7 @@ type Preview = {
   intensity: string;
   enhancementVariants: number;
   enhancementCombinations: number;
+  omniumFolioVariants?: number;
   replaceExistingEnhancements: boolean;
   warnings: string[];
   calibration: string;
@@ -186,12 +190,13 @@ type Run = {
   characterId?: number;
 };
 type Consumable = {
-  type: "Food" | "Flask" | "Potion";
+  type: "Food" | "Flask" | "Potion" | "Weapon buff";
   name: string;
   function: string;
   effect: string;
+  simc?: string;
 };
-const consumables = consumableSeed.entries as Consumable[];
+const consumables = [...consumableSeed.entries, ...weaponConsumableSeed.entries] as Consumable[];
 const api = async (path: string, init?: RequestInit) => {
   const method = init?.method?.toUpperCase() || "GET";
   const r = await fetch(
@@ -368,7 +373,8 @@ function App() {
     [locks, setLocks] = useState(new Set<string>()),
     [talents, setTalents] = useState(new Set<string>()),
     [enhancementIds, setEnhancementIds] = useState(new Set<string>()),
-    [omniumFolio, setOmniumFolio] = useState<string[]>([]),
+    [omniumFolio, setOmniumFolio] = useState<number[]>([]),
+    [equippedOmniumFolio, setEquippedOmniumFolio] = useState<number[]>([]),
     [replaceExistingEnhancements, setReplaceExistingEnhancements] =
       useState(false),
     [preview, setPreview] = useState<Preview>(),
@@ -376,6 +382,7 @@ function App() {
     [targets, setTargets] = useState(1),
     [custom, setCustom] = useState(""),
     [minSetBonuses, setMinSetBonuses] = useState<Record<string, number>>({}),
+    [consumableSelections, setConsumableSelections] = useState<Record<string, string>>({}),
     [resultId, setResultId] = useState<number>();
   const topCompute = useComputePower("topgear");
   replaceExistingPreference = replaceExistingEnhancements;
@@ -447,9 +454,17 @@ function App() {
           new Set(x.talents.filter((t) => t.selected).map((t) => t.id)),
         );
         setEnhancementIds(new Set());
-        setOmniumFolio([]);
+        setEquippedOmniumFolio(x.omniumFolio || []);
+        setOmniumFolio(x.omniumFolio || []);
+        api(`/profiles/${profileId}/consumables`).then((value) => setConsumableSelections(value.selections || {})).catch(() => setConsumableSelections({}));
       });
   }, [profileId]);
+  useEffect(() => {
+    const profile=profiles.find(value=>value.id===profileId);
+    document.documentElement.dataset.tooltipClass=profile?.className||'';
+    document.documentElement.dataset.tooltipSpec=profile?.spec||'';
+    return () => { delete document.documentElement.dataset.tooltipClass; delete document.documentElement.dataset.tooltipSpec; };
+  }, [profiles, profileId]);
   const toggle = (
     set: Set<string>,
     id: string,
@@ -471,7 +486,7 @@ function App() {
       replaceExistingEnhancements,
       threads: topCompute.threads,
       limit,
-      scenario: defaultScenario(targets),
+      scenario: {...defaultScenario(targets), consumableSelections},
     }),
     [
       profileId,
@@ -484,6 +499,7 @@ function App() {
       replaceExistingEnhancements,
       limit,
       targets,
+      consumableSelections,
       topCompute.threads,
     ],
   );
@@ -584,6 +600,7 @@ function App() {
               ["quick", "Quick Sim"],
               ["import", "Import character"],
               ["characters", "Saved characters"],
+              ["configurations", "Configurations"],
               ["topgear", "Top Gear"],
               ["catalog", "Catalog"],
               ["droptimizer", "Droptimizer"],
@@ -643,6 +660,7 @@ function App() {
             ["dashboard", "Dashboard"],
             ["quick", "Quick Sim"],
             ["import", "Import character"],
+            ["configurations", "Configurations"],
             ["topgear", "Top Gear"],
             ["catalog", "Catalog"],
             ["droptimizer", "Droptimizer"],
@@ -710,6 +728,7 @@ function App() {
             talents={talents}
             enhancementIds={enhancementIds}
             omniumFolio={omniumFolio}
+            equippedOmniumFolio={equippedOmniumFolio}
             setOmniumFolio={setOmniumFolio}
             toggle={toggle}
             setSelected={setSelected}
@@ -725,6 +744,7 @@ function App() {
             compute={topCompute}
             custom={custom}
             setCustom={setCustom}
+            onChangeConsumables={() => setPage("configurations")}
             addCustom={async () => {
               if (!profileId) return;
               try {
@@ -744,7 +764,7 @@ function App() {
           />
         )}{" "}
         {page === "catalog" && <Catalog />}{" "}
-        {page === "droptimizer" && <Droptimizer profileId={profileId} inventory={inventory} minSetBonuses={minSetBonuses} setMinSetBonuses={setMinSetBonuses} />}{" "}
+        {page === "droptimizer" && <Droptimizer profileId={profileId} inventory={inventory} minSetBonuses={minSetBonuses} setMinSetBonuses={setMinSetBonuses} consumableSelections={consumableSelections} onChangeConsumables={() => setPage("configurations")} />}{" "}
         {page === "history" && (
           <Runs
             runs={runs}
@@ -757,6 +777,12 @@ function App() {
         )}{" "}
         {page === "result" && (
           <Result runId={resultId} back={() => setPage("history")} />
+        )}
+        {page === "configurations" && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <ApplicationConfiguration notice={setNotice} />
+            <ConsumableConfiguration profile={profiles.find(profile=>profile.id===profileId)} selections={consumableSelections} setSelections={setConsumableSelections} notice={setNotice} />
+          </div>
         )}
       </main>
     </div>
@@ -1210,13 +1236,14 @@ function TopGear(p: any) {
           </section>
         ) : null;
       })()}
-      <OmniumFolioPicker value={p.omniumFolio} onChange={p.setOmniumFolio} />
+      <OmniumFolioPicker value={p.omniumFolio} equipped={p.equippedOmniumFolio || []} onChange={p.setOmniumFolio} />
       <Enhancements
         inventory={inventory}
         selected={p.enhancementIds}
         toggle={p.toggle}
         setSelected={p.setEnhancementIds}
       />
+      <button className="inline-action" onClick={p.onChangeConsumables}>Change Consumables</button>
       <section className="topgear-actions">
         <div>
           <b>Ready to compare locally</b>
@@ -1654,7 +1681,8 @@ function Workload({ preview }: { preview?: Preview }) {
     iterations = Number(preview.iterations || 0),
     total = Number(preview.totalIterations ?? profiles * iterations),
     variants = Number(preview.enhancementVariants || 0),
-    matrix = Number(preview.enhancementCombinations || 1);
+    matrix = Number(preview.enhancementCombinations || 1),
+    folioVariants = Number(preview.omniumFolioVariants || 1);
   return (
     <section className={`workload ${preview.intensity || "green"}`}>
       <div>
@@ -1681,6 +1709,11 @@ function Workload({ preview }: { preview?: Preview }) {
             ? "Replacing existing enhancements"
             : "Keeping imported enhancements"}
         </small>
+      </div>
+      <div>
+        <span>Folio matrix</span>
+        <b>{folioVariants.toLocaleString()}× power variants</b>
+        <small>{folioVariants > 1 ? "Comparing DPS power choices" : "Using equipped Folio powers"}</small>
       </div>
       <div>
         <span>Local estimate</span>
@@ -1825,7 +1858,7 @@ function Catalog() {
     </section>
   );
 }
-function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses }: { profileId?: number; inventory?: Inventory; minSetBonuses?: Record<string, number>; setMinSetBonuses?: (v: Record<string, number>) => void }) {
+function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses, consumableSelections, onChangeConsumables }: { profileId?: number; inventory?: Inventory; minSetBonuses?: Record<string, number>; setMinSetBonuses?: (v: Record<string, number>) => void; consumableSelections:Record<string,string>; onChangeConsumables:()=>void }) {
   const [sources, setSources] = useState<any[]>([]),
     [source, setSource] = useState(""),
     [difficulty, setDifficulty] = useState(""),
@@ -1867,7 +1900,7 @@ function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses }: 
           minSetBonuses,
           upgradeTarget,
           upgradeEquipped,
-          scenario: defaultScenario(1),
+          scenario: {...defaultScenario(1),consumableSelections},
         }),
       );
       window.dispatchEvent(new CustomEvent("droptimizer-run", { detail: x }));
@@ -1877,6 +1910,7 @@ function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses }: 
   };
   return (
     <section className="droptimizer">
+      <button className="inline-action" onClick={onChangeConsumables}>Change Consumables</button>
       <p className="drop-lead">
         Choose a current-season source and Droptimizer will evaluate its
         personal loot against your equipped character.
@@ -2104,6 +2138,19 @@ function Result({ runId, back }: { runId?: number; back: () => void }) {
                 <span>{progress.failedProfiles} unavailable</span>
               ) : null}
             </div>
+            {progress?.health?.state && progress.health.state !== "healthy" ? (
+              <div className={`run-health ${progress.health.state}`} role="status" aria-live="polite">
+                <b>{progress.health.state === "orphaned" ? "Tracking connection lost" : progress.health.state === "stalled" ? "Simulation may be stuck" : "Simulation activity is quiet"}</b>
+                <span>{progress.health.message}</span>
+                {(progress.health.state === "stalled" || progress.health.state === "orphaned") && <small>Cancel this run, then start it again from its original setup page.</small>}
+                {progress.health.developer ? (
+                  <details>
+                    <summary>Developer diagnostics</summary>
+                    <code>stage: {progress.health.developer.stage || "unknown"} · process: {progress.health.developer.processKnown ? `connected${progress.health.developer.pid ? ` (PID ${progress.health.developer.pid})` : ""}` : "not found"} · output age: {progress.health.developer.outputAgeMs ? formatTime(Math.floor(progress.health.developer.outputAgeMs / 1000)) : "n/a"} · stdout: {progress.health.developer.stdoutBytes} B · stderr: {progress.health.developer.stderrBytes} B</code>
+                  </details>
+                ) : null}
+              </div>
+            ) : null}
             {progress?.partialResults?.length ? (
               <div className="partial-leaders">
                 <b>Provisional upgrades</b>
@@ -2209,13 +2256,13 @@ function Result({ runId, back }: { runId?: number; back: () => void }) {
                       );
                       return !baseItem || baseItem.rawLine !== g.rawLine;
                     }) || [];
+                const enhancementLabel = (value: string | undefined) =>
+                  value ? enhancementName("enchant", value) : "No enchant";
                 const diffDescriptions = diffs.map((g: any) => {
                   const baseItem = baselineGear.find(
                     (bg: any) => bg.slot === g.slot,
                   );
                   if (!baseItem) return `+ ${g.name}`;
-                  if (baseItem.name !== g.name)
-                    return `+ ${g.name} (- ${baseItem.name})`;
                   const changes = [];
                   const gEnchant = g.rawLine.match(
                     /(?:^|,)enchant_id=([^,]+)/,
@@ -2224,16 +2271,19 @@ function Result({ runId, back }: { runId?: number; back: () => void }) {
                     /(?:^|,)enchant_id=([^,]+)/,
                   )?.[1];
                   if (gEnchant !== bEnchant)
-                    changes.push(`Enchant: ${gEnchant || "None"}`);
+                    changes.push(enhancementLabel(gEnchant));
                   const gGems = g.rawLine.match(/(?:^|,)gem_id=([^,]+)/)?.[1];
                   const bGems = baseItem.rawLine.match(
                     /(?:^|,)gem_id=([^,]+)/,
                   )?.[1];
                   if (gGems !== bGems)
                     changes.push(
-                      `Gems: ${gGems ? gGems.split("/").join(", ") : "None"}`,
+                      `Gems: ${gGems ? gGems.split("/").map((gem: string) => enhancementName("gem", gem)).join(", ") : "None"}`,
                     );
-                  return `${g.name} (${changes.join("; ")})`;
+                  const replacement = baseItem.name !== g.name
+                    ? `${g.name} replaces ${baseItem.name}`
+                    : g.name;
+                  return changes.length ? `${replacement} · ${changes.join(" · ")}` : replacement;
                 });
                 return (
                   <div className="compare-row" key={x.name}>
@@ -2262,23 +2312,16 @@ function Result({ runId, back }: { runId?: number; back: () => void }) {
                         <span className="muted">No items changed</span>
                       )}
                       {!isBaseline && diffDescriptions.length > 0 && (
-                        <span
-                          className="compare-diff-text"
-                          style={{
-                            fontSize: "0.85rem",
-                            color: "#999",
-                            marginLeft: "8px",
-                            lineHeight: "1.4",
-                          }}
-                        >
-                          {diffDescriptions.join(" | ")}
-                        </span>
+                          <span className="compare-diff-text">
+                            {diffDescriptions.join(" | ")}
+                          </span>
                       )}
                     </div>
                     <div className="compare-details">
-                      <span>
-                        {x.talent || "Loadout"} ·{" "}
-                        {x.source === "vault" ? "Vault claim" : "Best in Bags"}
+                      <span className="compare-loadout">
+                        <span>{x.talent || "Active loadout"}</span>
+                        <span className="loadout-help" tabIndex={0} aria-label="Active Loadout refers to your current talent page. This uses your character's talent page names, so if you do not select an alternate talent build it will show Active loadout here, not to be confused with your active equipped gearset.">?</span>
+                        <small>{isBaseline ? "Equipped baseline" : diffs.length ? `${diffs.length} gear change${diffs.length === 1 ? "" : "s"}` : "Talent change only"}</small>
                       </span>
                       <strong>
                         {Math.round(x.dps).toLocaleString()}{" "}
@@ -2636,6 +2679,74 @@ function ConsumableReference() {
         </section>
       )}
     </aside>
+  );
+}
+function ConsumableConfiguration({profile,selections,setSelections,notice}:{profile?:Profile;selections:Record<string,string>;setSelections:(value:Record<string,string>)=>void;notice:(value:string)=>void}) {
+  const profileId=profile?.id;
+  const set=(key:string,value:string)=>setSelections({...selections,[key]:value});
+  const save=async()=>{if(!profileId)return;try{await api(`/profiles/${profileId}/consumables`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({selections})});notice('Character consumable defaults saved. They will be offered to Top Gear and Droptimizer without changing the spec reference.');}catch(error){notice(error instanceof Error?error.message:'Could not save consumables.');}};
+  const groups:[string,string,string[]][]=[['Food','food',['Food']],['Flask','flask',['Flask']],['Potion','potion',['Potion']],['Main-hand weapon buff','main_hand',['Weapon buff']],['Off-hand weapon buff','off_hand',['Weapon buff']]];
+  const classSlug=(profile?.className||'').replace('deathknight','death-knight').replace('demonhunter','demon-hunter');
+  const specSlug=(profile?.spec||'').toLowerCase().replace(/\s+/g,'-');
+  const wowheadUrl=classSlug&&specSlug?`https://www.wowhead.com/guide/classes/${classSlug}/${specSlug}/enchants-gems-pve-dps`:undefined;
+  return <section className="panel consumable-config"><p className="eyebrow">CHARACTER CONFIGURATION</p><h2>Consumable defaults</h2><p>These are this character’s choices. They inherit from the selected reference until you save an override; imported SimC values are not replaced unless you apply them to a run.</p>{wowheadUrl?<a href={wowheadUrl} target="_blank" rel="noreferrer">Wowhead reference: {displayName(profile?.spec)} {displayName(profile?.className)} consumables</a>:<p className="muted">No class/spec guide link is available until a saved profile is selected.</p>}<div className="form-grid">{groups.map(([label,key,types])=><label key={key}>{label}<select value={selections[key]||''} onChange={event=>set(key,event.target.value)}><option value="">Auto / imported profile</option>{consumables.filter(entry=>types.includes(entry.type)).map(entry=><option key={entry.name} value={entry.simc||entry.name.toLowerCase().replace(/[^a-z0-9]+/g,'_')}>{entry.name}</option>)}</select></label>)}</div><div className="buttons"><button className="primary" disabled={!profileId} onClick={save}>Save character defaults</button><button onClick={()=>setSelections({})}>Use inherited defaults</button></div></section>;
+}
+function ApplicationConfiguration({ notice }: { notice: (value: string) => void }) {
+  const [simcPath, setSimcPath] = useState('');
+  const [runtime, setRuntime] = useState<any>(null);
+
+  useEffect(() => {
+    api('/config/settings').then(res => setSimcPath(res.simcPath || ''));
+    api('/health').then(res => setRuntime(res.runtime));
+  }, []);
+
+  const save = async (path: string) => {
+    try {
+      await api('/config/settings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ simcPath: path }) });
+      setSimcPath(path);
+      notice('Application settings saved. Restart the dashboard if you changed the simc.exe path.');
+      const health = await api('/health');
+      setRuntime(health.runtime);
+    } catch (e) {
+      notice(e instanceof Error ? e.message : 'Could not save settings.');
+    }
+  };
+
+  const browse = async () => {
+    try {
+      const res = await api('/config/browse-simc', { method: 'POST' });
+      if (res.path) {
+        await save(res.path);
+      } else if (res.error) {
+        notice(res.error);
+      }
+    } catch (e) {
+      notice(e instanceof Error ? e.message : 'Could not open file browser.');
+    }
+  };
+
+  return (
+    <section className="panel application-config">
+      <p className="eyebrow">APPLICATION CONFIGURATION</p>
+      <h2>SimulationCraft Path</h2>
+      <p>
+        Set a custom path to your <code>simc.exe</code> if you don't want to use the automatic nightly downloads.
+        <br />
+        <small className="muted">
+          Current status: {runtime?.source === 'managed' ? 'Using managed nightly build' : runtime?.source === 'SIMC_PATH' ? 'Using custom configuration' : runtime?.source === 'legacy' ? 'Using legacy fallback path' : 'No runtime available'}
+        </small>
+      </p>
+      <div className="form-grid">
+        <label>
+          Local simc.exe Path
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <input type="text" value={simcPath} onChange={e => setSimcPath(e.target.value)} placeholder="e.g. C:\Simulationcraft\simc.exe" style={{ flex: 1 }} />
+            <button onClick={browse}>Browse</button>
+            <button className="primary" onClick={() => save(simcPath)}>Save</button>
+          </div>
+        </label>
+      </div>
+    </section>
   );
 }
 function CharacterManager({

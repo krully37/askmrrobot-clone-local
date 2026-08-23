@@ -3,7 +3,7 @@ import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, renameSync, r
 import { spawn, spawnSync } from 'node:child_process';
 import { join } from 'node:path';
 import { path7za } from '7zip-bin';
-import { paths } from './db.js';
+import { paths, readSettings } from './db.js';
 
 const DOWNLOAD_PAGE = 'https://www.simulationcraft.org/download.html';
 const RESTART_AFTER_RUNTIME_UPDATE = 75;
@@ -40,7 +40,8 @@ function managedRuntime():RuntimeStatus|undefined {
   return {path,available:true,version:m.executableVersion,source:'managed',buildId:m.id,lastCheckedAt:s.lastCheckedAt,lastCheckResult:s.lastCheckResult,warning:s.lastCheckResult==='fallback'?s.lastError:undefined};
 }
 function configuredRuntime():RuntimeStatus|undefined {
-  const configured=process.env.SIMC_PATH;
+  const settings = readSettings();
+  const configured = settings.simcPath || process.env.SIMC_PATH;
   if (!configured || !existsSync(configured)) return undefined;
   const s=state();
   return {path:configured,available:true,version:firstVersionLine(versionOutput(configured)),source:'SIMC_PATH',lastCheckedAt:s.lastCheckedAt,lastCheckResult:s.lastCheckResult,warning:s.lastCheckResult==='fallback'?s.lastError:undefined};

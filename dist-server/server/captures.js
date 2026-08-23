@@ -56,13 +56,17 @@ function installCaptures(payload) {
         db.transaction(() => {
             const findStatic = db.prepare(`SELECT e.id,e.name FROM instances i JOIN encounters e ON e.instance_id=i.id JOIN loot_drops d ON d.encounter_id=e.id WHERE i.name=? AND e.name=? AND d.item_id=? AND d.difficulty=?`);
             const findMplus = db.prepare(`SELECT e.id,e.name FROM instances i JOIN encounters e ON e.instance_id=i.id JOIN loot_drops d ON d.encounter_id=e.id WHERE i.name=? AND d.item_id=? AND d.difficulty='Mythic+'`);
+            const fuzzyMatch = db.prepare(`SELECT e.id,e.name FROM instances i JOIN encounters e ON e.instance_id=i.id JOIN loot_drops d ON d.encounter_id=e.id WHERE i.name=? AND d.item_id=?`);
             const knownItem = db.prepare(`SELECT 1 FROM items WHERE id=? UNION SELECT 1 FROM derived_item_metadata WHERE item_id=? LIMIT 1`);
             const ensureInstance = db.prepare(`INSERT OR IGNORE INTO instances (id,name,kind) VALUES (?,?,?)`), ensureEncounter = db.prepare(`INSERT OR IGNORE INTO encounters (id,instance_id,name) VALUES (?,?,?)`), ensureItem = db.prepare(`INSERT OR IGNORE INTO items (id,name,slot,source,handedness) VALUES (?,?,?,?,?)`), ensureDrop = db.prepare(`INSERT OR IGNORE INTO loot_drops (encounter_id,item_id,difficulty) VALUES (?,?,?)`), ensureSource = db.prepare(`INSERT OR IGNORE INTO loot_sources (id,season,instance_name,boss,difficulty) VALUES (?,?,?,?,?)`);
             const existing = db.prepare('SELECT simc_fragment,captured_at,status FROM item_variants WHERE encounter_id=? AND item_id=? AND difficulty=? AND track=?'), upsert = db.prepare('INSERT OR REPLACE INTO item_variants (id,item_id,encounter_id,season,difficulty,track,item_level,bonus_ids,simc_fragment,provenance,captured_at,client_build,status) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)');
             const genericMatch = (record) => { if (!knownItem.get(record.itemId, record.itemId))
                 return []; const instanceId = stableId(`source:${record.category}:${record.source}`), encounterId = stableId(`source:${record.category}:${record.source}:${record.track}`), boss = record.boss || record.category; ensureInstance.run(instanceId, record.source, record.category); ensureEncounter.run(encounterId, instanceId, boss); ensureItem.run(record.itemId, `Captured item ${record.itemId}`, 'unknown', 'Local addon capture', 'unknown'); ensureDrop.run(encounterId, record.itemId, record.difficulty); ensureSource.run(`${payload.season}:${encounterId}:${record.difficulty}`, payload.season, record.source, boss, record.difficulty); return [{ id: encounterId, name: boss }]; };
             for (const record of records) {
-                const matches = (record.category ? genericMatch(record) : record.difficulty === 'Mythic+' ? findMplus.all(record.source, record.itemId) : findStatic.all(record.source, record.boss, record.itemId, record.difficulty));
+                let matches = (record.category ? genericMatch(record) : record.difficulty === 'Mythic+' ? findMplus.all(record.source, record.itemId) : findStatic.all(record.source, record.boss, record.itemId, record.difficulty));
+                if (!matches.length && !record.category && record.difficulty !== 'Mythic+') {
+                    matches = fuzzyMatch.all(record.source, record.itemId);
+                }
                 if (!matches.length) {
                     result.unresolved.push(`${record.source} · ${record.boss || record.track || record.category} · ${record.itemId}`);
                     continue;
