@@ -42,19 +42,6 @@ Use **Catalog → Refresh** only when you want newer seasonal data. Your persona
 - **The browser says it cannot connect:** wait a few seconds, then make sure the black setup window is still open.
 - **A simulation cannot start:** revisit **Configurations** and choose the correct `simc.exe` path.
 
-## Advanced and developer use
+## Privacy and local files
 
-The commands below are optional. Most people should use **Setup Local Sim Dashboard.cmd** instead.
-
-```powershell
-npm install
-npm run dev
-```
-
-Local state lives under `.localsimdash/`. It includes pasted profiles, scenarios, run inputs, reports, history, settings, and the catalog. Nothing is sent to a cloud service by the dashboard.
-
-### Catalog and addon captures
-
-Copy [addon/LocalSimDashCatalog](addon/LocalSimDashCatalog) into `World of Warcraft\_retail_\Interface\AddOns`. In-game, run `/lsdscan all` and paste the capture into **Catalog → Live addon captures**, or configure your Retail folder there for automatic SavedVariables import.
-
-To create the public catalog for a new release after a catalog refresh, run `npm run catalog:bundle`. The bundling script strips all local-only rows before replacing `data/catalog.db`.
+Local state lives under `.localsimdash/`. It includes pasted profiles, scenarios, run inputs, reports, history, settings, and the catalog. Nothing is sent to a cloud service by the dashboard, and this folder is excluded from Git downloads.

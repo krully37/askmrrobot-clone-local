@@ -2718,25 +2718,12 @@ function ApplicationConfiguration({ notice }: { notice: (value: string) => void 
     }
   };
 
-  const browse = async () => {
-    try {
-      const res = await api('/config/browse-simc', { method: 'POST' });
-      if (res.path) {
-        await save(res.path);
-      } else if (res.error) {
-        notice(res.error);
-      }
-    } catch (e) {
-      notice(e instanceof Error ? e.message : 'Could not open file browser.');
-    }
-  };
-
   return (
     <section className="panel application-config">
       <p className="eyebrow">APPLICATION CONFIGURATION</p>
       <h2>SimulationCraft Path</h2>
       <p>
-        Set a custom path to your <code>simc.exe</code> if you don't want to use the automatic nightly downloads.
+        The setup file chooses <code>simc.exe</code> for you. Paste a different path here only if you need to change it later.
         <br />
         <small className="muted">
           Current status: {runtime?.source === 'managed' ? 'Using managed nightly build' : runtime?.source === 'SIMC_PATH' ? 'Using custom configuration' : runtime?.source === 'legacy' ? 'Using legacy fallback path' : 'No runtime available'}
@@ -2747,7 +2734,6 @@ function ApplicationConfiguration({ notice }: { notice: (value: string) => void 
           Local simc.exe Path
           <div style={{ display: 'flex', gap: '8px' }}>
             <input type="text" value={simcPath} onChange={e => setSimcPath(e.target.value)} placeholder="e.g. C:\Simulationcraft\simc.exe" style={{ flex: 1 }} />
-            <button onClick={browse}>Browse</button>
             <button className="primary" onClick={() => save(simcPath)}>Save</button>
           </div>
         </label>

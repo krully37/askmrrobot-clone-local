@@ -1,5 +1,10 @@
 node_modules/
 dist/
+dist-server/
+release/
+release-build/
+release-installer/
+build/
 .localsimdash/
 dashboard.db*
 app.db

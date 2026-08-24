@@ -3,72 +3,19 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "electron-main.cjs",
   "scripts": {
-    "start:electron": "wait-on tcp:4317 && electron .",
-    "build:electron": "npm run build:prod && electron-builder --dir",
-    "dist": "npm run build:prod && electron-builder",
+    "start": "tsx server/dev-supervisor.ts",
     "dev": "tsx server/dev-supervisor.ts",
-    "server": "tsx server/index.ts",
-    "catalog:build": "tsx server/catalog-cli.ts",
-    "catalog:refresh": "tsx server/catalog-cli.ts",
-    "catalog:variants:validate": "tsx server/catalog-variants-cli.ts",
-    "catalog:db2:prefill": "tsx tools/db2-casc/index.ts",
-    "catalog:db2:install": "tsx server/derived-catalog-cli.ts",
-    "catalog:bundle": "node tools/create-prebuilt-catalog.cjs",
-    "build": "tsc --noEmit && vite build",
-    "build:server": "tsc --project tsconfig.server.json || exit 0",
-    "build:prod": "npm run catalog:variants:validate && npm run build:server && npm run build && tsx scripts/package-release.ts",
-    "test": "vitest run"
+    "server": "tsx server/index.ts"
   },
   "dependencies": {
     "7zip-bin": "^5.2.0",
     "better-sqlite3": "^11.7.0",
     "express": "^4.21.2",
-    "puppeteer": "^19.0.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
-  },
-  "devDependencies": {
-    "@rhyster/wow-casc-dbc": "^2.16.1",
-    "@types/better-sqlite3": "^7.6.12",
-    "@types/express": "^5.0.0",
-    "@types/node": "^22.10.5",
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
+    "react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.4",
-    "concurrently": "^9.1.2",
-    "electron": "^32.0.0",
-    "electron-builder": "^26.15.3",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2",
-    "vite": "^6.0.5",
-    "vitest": "^2.1.8",
-    "wait-on": "^9.1.0"
-  },
-  "build": {
-    "npmRebuild": false,
-    "asar": false,
-    "appId": "com.localsimdashboard.app",
-    "productName": "Local Sim Dashboard",
-    "directories": {
-      "output": "C:/temp/localsimdash-release"
-    },
-    "files": [
-      "dist/**/*",
-      "dist-server/**/*",
-      "data/**/*",
-      "electron-main.cjs",
-      "package.json"
-    ],
-    "win": {
-      "target": "nsis",
-      "icon": "build/icon.png"
-    },
-    "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": "always"
-    }
+    "vite": "^6.0.5"
   }
 }

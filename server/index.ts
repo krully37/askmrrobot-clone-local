@@ -35,28 +35,6 @@ function indexEnhancements(candidates:ReturnType<typeof parseInventory>['candida
 app.get('/api/health',(_,res)=>res.json({ok:true,runtime:runtimeStatus()})); app.get('/api/runtime/status',(_,res)=>res.json(runtimeStatus())); app.get('/api/profiles',(_,res)=>res.json(profiles())); app.get('/api/characters',(_,res)=>res.json(characters())); app.delete('/api/characters/:id',(req,res)=>{try{deleteCharacter(+req.params.id);res.sendStatus(204);}catch(e){res.status(422).json({error:(e as Error).message});}}); app.get('/api/compute/capacity',async(_,res)=>res.json(await computeCapacity()));
 app.get('/api/config/settings',(_,res)=>res.json(readSettings()));
 app.post('/api/config/settings',(req,res)=>{try{saveSettings(req.body);res.json({ok:true});}catch(e){res.status(422).json({error:String(e)});}});
-app.post('/api/config/browse-simc',async(_,res)=>{
-  try {
-    let electron;
-    try { electron = require('electron'); } catch (e) {}
-    if (electron && electron.dialog) {
-      const result = await electron.dialog.showOpenDialog({
-        title: 'Select SimulationCraft Executable',
-        filters: [{ name: 'Executables', extensions: ['exe'] }],
-        properties: ['openFile']
-      });
-      if (!result.canceled && result.filePaths.length > 0) {
-        return res.json({ path: result.filePaths[0] });
-      } else {
-        return res.json({ canceled: true });
-      }
-    } else {
-      res.status(400).json({ error: 'Native file picker is only available in the desktop app.' });
-    }
-  } catch(e) {
-    res.status(500).json({ error: String(e) });
-  }
-});
 app.get('/api/catalog/db2/status',(_,res)=>res.json(derivedCatalogHealth()));
 app.post('/api/catalog/db2/install',(_,res)=>{try{res.json(installDerivedCatalog());}catch(error){res.status(422).json({error:(error as Error).message});}});
 app.get('/api/catalog/source-categories',(_,res)=>res.json(catalogSourceCategories()));
