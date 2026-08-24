@@ -1,9 +1,8 @@
 import Database from 'better-sqlite3';
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { homedir } from 'node:os';
-const defaultRoot = join(homedir(), '.localsimdash');
-const root = process.env.LOCALSIMDASH_ROOT || defaultRoot;
+import { storageRoot } from './storage.js';
+const root = storageRoot();
 mkdirSync(root, { recursive: true });
 const settingsPath = join(root, 'settings.json');
 export function readSettings() { try {

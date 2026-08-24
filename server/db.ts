@@ -1,11 +1,10 @@
 import Database from 'better-sqlite3';
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { homedir } from 'node:os';
+import { storageRoot } from './storage.js';
 import type { CharacterProfile, CharacterSnapshot, CharacterSummary, PersistenceMode, Run, Scenario } from './types.js';
 
-const defaultRoot = join(homedir(), '.localsimdash');
-const root = process.env.LOCALSIMDASH_ROOT || defaultRoot;
+const root = storageRoot();
 mkdirSync(root, { recursive: true });
 const settingsPath = join(root, 'settings.json');
 export function readSettings() { try { return JSON.parse(readFileSync(settingsPath, 'utf8')); } catch { return {}; } }
