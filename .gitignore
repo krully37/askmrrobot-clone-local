@@ -1,6 +1,11 @@
 node_modules/
 dist/
 .localsimdash/
+dashboard.db*
+app.db
+catalog.sqlite
+settings.local.json
+*.local.json
 runtime/
 *.log
 .env

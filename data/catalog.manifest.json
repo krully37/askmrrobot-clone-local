@@ -1,0 +1,17 @@
+{
+  "version": "midnight-season-2-2026-08-21-bundled",
+  "schemaVersion": 2,
+  "season": "midnight-season-2",
+  "displayName": "Midnight Season 2 bundled catalog",
+  "game": "Retail",
+  "generatedAt": "2026-08-21T22:55:35.667Z",
+  "checksum": "bundled-public-catalog",
+  "counts": {
+    "instances": 11,
+    "encounters": 39,
+    "items": 354,
+    "drops": 729,
+    "variants": 225
+  },
+  "notes": "Bundled public catalog. It contains no imported profiles, local addon captures, local DB2 data, or diagnostics."
+}

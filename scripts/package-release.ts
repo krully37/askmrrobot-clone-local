@@ -16,17 +16,9 @@ cpSync(join(process.cwd(), 'dist-server'), join(releaseDir, 'dist-server'), { re
 // 2. Copy data folder
 cpSync(join(process.cwd(), 'data'), join(releaseDir, 'data'), { recursive: true });
 
-// 3. Copy .localsimdash but exclude large logs/reports
-const localDashSrc = join(process.cwd(), '.localsimdash');
-const localDashDest = join(releaseDir, '.localsimdash');
-mkdirSync(localDashDest);
-const itemsToCopy = ['catalog', 'runtime', 'settings.json'];
-for (const item of itemsToCopy) {
-  const src = join(localDashSrc, item);
-  if (existsSync(src)) {
-    cpSync(src, join(localDashDest, item), { recursive: true });
-  }
-}
+// 3. Never package the developer's .localsimdash directory. It can contain
+// profiles, reports, settings, addon paths, and other machine-specific data.
+// The public starter catalog comes from data/catalog.db instead.
 
 // 4. Clean package.json for production
 const pkgRaw = readFileSync(join(process.cwd(), 'package.json'), 'utf8');

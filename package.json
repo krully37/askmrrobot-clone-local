@@ -15,6 +15,7 @@
     "catalog:variants:validate": "tsx server/catalog-variants-cli.ts",
     "catalog:db2:prefill": "tsx tools/db2-casc/index.ts",
     "catalog:db2:install": "tsx server/derived-catalog-cli.ts",
+    "catalog:bundle": "node tools/create-prebuilt-catalog.cjs",
     "build": "tsc --noEmit && vite build",
     "build:server": "tsc --project tsconfig.server.json || exit 0",
     "build:prod": "npm run catalog:variants:validate && npm run build:server && npm run build && tsx scripts/package-release.ts",

@@ -1187,6 +1187,12 @@ function TopGear(p: any) {
         </div>
       </section>
       <Workload preview={p.preview} />
+      <ComputePower
+        value={p.compute.threads}
+        setValue={p.compute.setThreads}
+        capacity={p.compute.capacity}
+        refresh={p.compute.refresh}
+      />
       <section id="gear" className="gear-board">
         {slotGroups.map(([group, slots]) => {
           const groupSlots = slots as readonly string[];
@@ -1915,6 +1921,12 @@ function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses, co
         Choose a current-season source and Droptimizer will evaluate its
         personal loot against your equipped character.
       </p>
+      <ComputePower
+        value={compute.threads}
+        setValue={compute.setThreads}
+        capacity={compute.capacity}
+        refresh={compute.refresh}
+      />
       <div className="source-picker">
         <h2>Sources</h2>
         <div className="source-tiles">
@@ -2014,12 +2026,6 @@ function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses, co
                 </section>
               ) : null;
             })()}
-            <ComputePower
-              value={compute.threads}
-              setValue={compute.setThreads}
-              capacity={compute.capacity}
-              refresh={compute.refresh}
-            />
             {error && <p className="result-warnings">{error}</p>}
             {verified.length > 50 && (
               <p className="result-warnings" style={{ color: 'orange', fontSize: '0.9rem', marginBottom: '1rem', marginTop: '1rem' }}>
