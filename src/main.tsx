@@ -1389,11 +1389,11 @@ function Slot({
                   />
                 ) : null}
                 {slotIcons[slot]}
-              </span>
+                </span>
               <span className="item-copy">
                 <b>{displayName(c.name)}</b>
                 <small>
-                  <em>{c.source === "vault" ? "Vault" : c.source}</em>
+                  <em>{c.source === "vault" ? "Great Vault reward" : c.source}</em>
                   {c.itemLevel ? ` · ilvl ${c.itemLevel}` : ""}
                   {c.handedness === "one-hand" &&
                   ["main_hand", "off_hand"].includes(slot)
@@ -1407,6 +1407,7 @@ function Slot({
                   </i>
                 ) : null}
               </span>
+              {c.source === "vault" ? <span className="vault-reward-badge">Great Vault</span> : null}
             </label>
           ))
         ) : (
