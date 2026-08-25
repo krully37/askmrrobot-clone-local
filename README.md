@@ -20,7 +20,7 @@ After that, double-click **Setup Local Sim Dashboard.cmd** whenever you want to 
 - Checks whether Node.js is installed.
 - Downloads the dashboard's required packages on the first run only.
 - Lets you choose `simc.exe` with a Windows file picker. It does **not** scan your PC for programs or files.
-- Saves only that selected path as your `SIMC_PATH` Windows setting, then opens `http://127.0.0.1:5173` in your browser.
+- Saves only that selected path as your `SIMC_PATH` Windows setting, then opens `http://127.0.0.1:5173` in your browser. You may also need to try "http://localhost:5173" instead if that doesn't work.
 
 ## Included catalog
 
@@ -34,6 +34,11 @@ Use **Catalog → Refresh** only when you want newer seasonal data. Your persona
 2. Copy the text it gives you.
 3. In Local Sim Dashboard, choose **Import character**, paste the text, and select **Save reusable character**.
 4. Use **Quick Sim** for your equipped gear, **Top Gear** to compare items you own, or **Droptimizer** for eligible catalog drops.
+
+## Thread Tuning
+
+Simulations run on your own computer, so you can choose how much of its CPU capacity SimulationCraft uses. The dashboard checks your number of logical processors and current system CPU usage, then recommends a thread count and limits the slider to a safe maximum so Windows and other applications retain capacity.
+Higher-core CPUs can generally complete larger simulations faster. You can adjust the slider for each simulator; the dashboard remembers your choice locally. If your computer is busy or becomes less responsive, lower the thread count or use Refresh safety check before starting a run.
 
 ## Help
 
