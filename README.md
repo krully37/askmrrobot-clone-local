@@ -8,7 +8,9 @@ Local Sim Dashboard is a Windows-local browser interface for SimulationCraft. It
 2. Leave SimulationCraft to the dashboard, or set `SIMC_PATH` to pin a specific `simc.exe`. See [Keeping SimC current](#keeping-simc-current).
 3. Run `npm run dev` and open `http://localhost:5173`.
 
-The API listens on port 4317. Set `LOCALSIMDASH_PORT` if something else already holds it.
+Ports are checked before anything binds. The API prefers 4317 and the UI prefers 5173, and if either is already taken the next free port is used and the chosen URL is printed at startup. `LOCALSIMDASH_PORT` sets the preferred API port; it is still checked rather than assumed.
+
+The dev supervisor resolves both ports up front and passes the API port to the UI proxy, so the two cannot end up pointing at different places. It also restarts the API if it exits unexpectedly, backing off and giving up after five failures with no stable run in between.
 
 Use `/simc` in World of Warcraft with the SimulationCraft addon, paste the generated profile into **Import character**, configure a scenario, and start a local run.
 

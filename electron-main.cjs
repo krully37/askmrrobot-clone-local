@@ -21,8 +21,7 @@ try {
   console.error('Failed to load initial settings:', e);
 }
 
-const PORT = Number(process.env.LOCALSIMDASH_PORT) || 4317;
-const SERVER_URL = `http://127.0.0.1:${PORT}`;
+let serverUrl;
 
 let mainWindow;
 
@@ -43,7 +42,7 @@ function createWindow() {
   });
 
   mainWindow.setMenuBarVisibility(false);
-  mainWindow.loadURL(SERVER_URL);
+  mainWindow.loadURL(serverUrl);
 }
 
 /**
@@ -59,11 +58,22 @@ function resolveServerEntry() {
   return candidates.find(candidate => fs.existsSync(candidate));
 }
 
-function startServer() {
+async function startServer() {
   const entry = resolveServerEntry();
   if (!entry) {
     throw new Error('The compiled dashboard server was not found. Run "npm run build:server" before packaging.');
   }
+  // Claim a free port before the server binds, so an unrelated local service
+  // holding the default cannot stop the desktop app from opening. The window
+  // URL is derived from the same value, so the two cannot disagree.
+  const ports = await import(pathToFileURL(path.join(path.dirname(entry), 'ports.js')).href);
+  const requested = ports.requestedApiPort();
+  const port = await ports.findAvailablePort(requested);
+  if (port !== requested) {
+    console.warn(`Port ${requested} is already in use; the dashboard will use ${port} instead.`);
+  }
+  process.env.LOCALSIMDASH_PORT = String(port);
+  serverUrl = `http://127.0.0.1:${port}`;
   // The compiled server is ESM and Electron 32 runs Node 20, where require() of
   // an ES module throws ERR_REQUIRE_ESM. It has to be imported dynamically, and
   // on Windows the specifier must be a file:// URL rather than a drive path.
@@ -75,7 +85,7 @@ function waitForServer(timeoutMs = 180000) {
   const deadline = Date.now() + timeoutMs;
   return new Promise((resolve, reject) => {
     const attempt = () => {
-      const request = http.get(`${SERVER_URL}/api/health`, response => {
+      const request = http.get(`${serverUrl}/api/health`, response => {
         response.resume();
         if (response.statusCode === 200) return resolve();
         retry();

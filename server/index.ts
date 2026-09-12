@@ -9,6 +9,7 @@ import { buildInput, parseInventory, parseProfile } from './profile.js';
 import { cancel, execute, executionActivity } from './runner.js';
 import { assessRunHealth } from './run-health.js';
 import { RESTART_AFTER_RUNTIME_UPDATE, ensureCurrentRuntime, rollbackRuntime, runtime, runtimeStatus, scheduleRuntimeUpdates, smokeTest } from './runtime.js';
+import { findAvailablePort, requestedApiPort } from './ports.js';
 import type { Scenario } from './types.js';
 import { catalogDrops, catalogEnhancements, catalogSourceCategories, catalogSources, catalogStatus, ensureItemSets, enrichInventory, searchCatalog, upsertCatalogItem, upsertEnhancement, catalogOmniumSpells, synthesizeVariants } from './catalog.js';
 import { installEnhancementSeed } from './enhancements.js';
@@ -126,7 +127,19 @@ app.use((error:unknown,_req:express.Request,res:express.Response,_next:express.N
 process.on('unhandledRejection',reason=>console.error('Unhandled promise rejection:',reason));
 process.on('uncaughtException',error=>console.error('Uncaught exception:',error));
 
-async function start(){try{installDerivedCatalog();}catch(error){console.warn(`DB2 derived catalog was not installed: ${(error as Error).message}`);}installEnhancementSeed();const outcome=await ensureCurrentRuntime();if(outcome.updated&&process.env.SIMC_RUNTIME_SUPERVISED==='1'){console.log(`Activated SimC ${outcome.status.version}; restart required.`);process.exitCode=RESTART_AFTER_RUNTIME_UPDATE;return;}if(outcome.updated)console.log(`Activated SimC ${outcome.status.version}.`);for(const run of runs())if(run.mode==='topgear')recoverTopGearRun(run.id);startCaptureWatch();const apiPort=Number(process.env.LOCALSIMDASH_PORT||4317);app.listen(apiPort,'127.0.0.1',()=>{console.log(`Local Sim Dashboard API: http://127.0.0.1:${apiPort} (${runtime().version})`);scheduleRuntimeUpdates();});}
+async function start(){try{installDerivedCatalog();}catch(error){console.warn(`DB2 derived catalog was not installed: ${(error as Error).message}`);}installEnhancementSeed();const outcome=await ensureCurrentRuntime();if(outcome.updated&&process.env.SIMC_RUNTIME_SUPERVISED==='1'){console.log(`Activated SimC ${outcome.status.version}; restart required.`);process.exitCode=RESTART_AFTER_RUNTIME_UPDATE;return;}if(outcome.updated)console.log(`Activated SimC ${outcome.status.version}.`);for(const run of runs())if(run.mode==='topgear')recoverTopGearRun(run.id);startCaptureWatch();const requested=requestedApiPort();
+  // Under the dev supervisor and the desktop app the port is already resolved,
+  // so this normally agrees. Running the API on its own still checks, because
+  // binding blind is what produced the original EADDRINUSE crash.
+  const apiPort=await findAvailablePort(requested);
+  if(apiPort!==requested) console.warn(`Port ${requested} is already in use; the dashboard API is using ${apiPort} instead.`);
+  const server=app.listen(apiPort,'127.0.0.1',()=>{console.log(`Local Sim Dashboard API: http://127.0.0.1:${apiPort} (${runtime().version})`);scheduleRuntimeUpdates();});
+  server.on('error',error=>{
+    const failure=error as NodeJS.ErrnoException;
+    if(failure.code==='EADDRINUSE') console.error(`Port ${apiPort} was taken between the check and the bind. Restart the dashboard.`);
+    else console.error('Dashboard API server error:',failure);
+    process.exitCode=1;
+  });}
 if (process.env.VITEST !== 'true') {
   start().catch(error=>{console.error(`Local Sim Dashboard failed to start: ${error instanceof Error?error.message:String(error)}`);process.exitCode=1;});
 }
