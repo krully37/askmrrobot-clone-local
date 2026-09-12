@@ -3,10 +3,14 @@
   "compilerOptions": {
     "noEmit": false,
     "outDir": "./dist-server",
+    // server/ imports ../shared/, which pulls the inferred root up to the
+    // project. Pinning rootDir keeps the emitted layout stable at
+    // dist-server/server/ instead of moving when imports change.
+    "rootDir": ".",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ES2022"
   },
-  "include": ["server"],
+  "include": ["server", "shared"],
   "exclude": ["**/*.test.ts"]
 }

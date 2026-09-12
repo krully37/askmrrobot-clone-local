@@ -2,6 +2,7 @@ import express from 'express';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { calibration, characters, characterConsumables, cleanupStaleDisposables, createDisposableProfile, createRun, deleteCharacter, deleteRuns, getDroptimizerJob, getProfile, getRun, getTopGearJob, importCandidates, paths, profiles, runResult, runs, saveCalibration, saveCharacterConsumables, saveProfile, saveTopGearJob, updateProfileRaw, updateRun, readSettings, saveSettings } from './db.js';
 import { computeCapacity, safeThreads } from './compute.js';
 import { buildInput, parseInventory, parseProfile } from './profile.js';
@@ -25,7 +26,12 @@ cleanupStaleDisposables();
 export const app=express(); app.use('/api',(_req,res,next)=>{res.set('Cache-Control','no-store, max-age=0');next();}); app.use(express.json({limit:'5mb'}));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-app.use(express.static(join(__dirname, '..', 'dist')));
+// Under tsx the module runs from server/, and compiled it runs from
+// dist-server/server/, so the built frontend sits one or two levels up. Probing
+// both keeps the desktop window from loading a 404 when the emitted layout
+// changes.
+const frontendRoot=[join(__dirname,'..','dist'),join(__dirname,'..','..','dist')].find(existsSync);
+if(frontendRoot) app.use(express.static(frontendRoot));
 const defaults:Scenario={name:'Patchwerk - 1 target',fightStyle:'Patchwerk',duration:300,variation:20,targets:1,bloodlust:'pull',raidBuffs:true,consumables:true,powerInfusion:false,rawOverride:''};
 function resolveOmniumFolioVariants(selected:unknown){const ids=Array.isArray(selected)?selected.filter((value):value is number=>typeof value==='number'&&Number.isInteger(value)&&value>0):[];if(!ids.length)return [[]];return omniumFolioVariants(ids).filter(variant=>variant.length===5);}
 const calibrationKey=(p:{className:string;spec:string},s:Scenario,n:number)=>[p.className,p.spec,runtime().version,n,s.fightStyle,s.targets,s.duration].join('|');
@@ -38,7 +44,11 @@ app.post('/api/config/settings',(req,res)=>{try{saveSettings(req.body);res.json(
 app.post('/api/config/browse-simc',async(_,res)=>{
   try {
     let electron;
-    try { electron = require('electron'); } catch (e) {}
+    // This module is ESM, where bare require() is not defined at all, so the
+    // old call always threw and the picker was never available even inside the
+    // desktop app. Under plain Node the electron package resolves to a path
+    // string rather than the API, which the dialog check below filters out.
+    try { electron = createRequire(import.meta.url)('electron'); } catch (e) {}
     if (electron && electron.dialog) {
       const result = await electron.dialog.showOpenDialog({
         title: 'Select SimulationCraft Executable',

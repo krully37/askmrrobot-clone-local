@@ -37,6 +37,16 @@ Runs therefore reconcile the gear they requested against the gear SimC reported 
 
 Top Gear candidate enumeration and the seasonal item catalog require the character export's bag section and an updatable catalog package. The architecture/API surface is present; the starter catalog is intentionally empty rather than shipping outdated live-game data.
 
+## Desktop app
+
+`npm run dist` builds the installer and `npm run build:electron` produces an unpacked directory.
+
+better-sqlite3 ships one compiled binary per ABI, and Node and Electron do not share one: Node 22 is NODE_MODULE_VERSION 127 while Electron 32 is 128. Loading the wrong one fails with `ERR_DLOPEN_FAILED`. Both packaging scripts therefore run `npm run rebuild:electron` first, which downloads the published Electron binary rather than compiling, so no C++ toolchain is needed.
+
+That swap is global to `node_modules`, so run `npm run rebuild:node` before going back to `npm run dev`.
+
+The desktop window is a plain web page with no Node or Electron access. The API it talks to runs inside the Electron main process, which is also what lets the SimC file picker open a native dialog.
+
 ## Current-season catalog
 
 Set `BLIZZARD_CLIENT_ID` and `BLIZZARD_CLIENT_SECRET` as user environment variables, restart the dashboard, then use **Catalog → Refresh current season**. The same process is available as `npm run catalog:build`.

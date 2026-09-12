@@ -6,8 +6,10 @@
   "main": "electron-main.cjs",
   "scripts": {
     "start:electron": "wait-on tcp:4317 && electron .",
-    "build:electron": "npm run build:prod && electron-builder --dir",
-    "dist": "npm run build:prod && electron-builder",
+    "rebuild:node": "node scripts/rebuild-native.mjs node",
+    "rebuild:electron": "node scripts/rebuild-native.mjs electron",
+    "build:electron": "npm run build:prod && npm run rebuild:electron && electron-builder --dir",
+    "dist": "npm run build:prod && npm run rebuild:electron && electron-builder",
     "dev": "tsx server/dev-supervisor.ts",
     "server": "tsx server/index.ts",
     "catalog:build": "tsx server/catalog-cli.ts",
