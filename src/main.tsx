@@ -1925,18 +1925,39 @@ function Catalog() {
     </section>
   );
 }
+type SourceCategory = {
+  id: string;
+  name: string;
+  captureMode: string;
+  tracks: string[];
+  sources: number;
+  verifiedVariants: number;
+};
+
+function categoryReason(category: SourceCategory, catalogRefreshed: boolean) {
+  if (!catalogRefreshed)
+    return "No catalog refresh yet. Refresh the Blizzard catalog to populate this.";
+  if (category.captureMode === "link")
+    return "No captures yet. Import in-game item links for this source.";
+  return "No captures yet. The last catalog refresh returned no encounters here.";
+}
+
 function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses, consumableSelections, onChangeConsumables }: { profileId?: number; inventory?: Inventory; minSetBonuses?: Record<string, number>; setMinSetBonuses?: (v: Record<string, number>) => void; consumableSelections:Record<string,string>; onChangeConsumables:()=>void }) {
   const [sources, setSources] = useState<any[]>([]),
     [source, setSource] = useState(""),
     [difficulty, setDifficulty] = useState(""),
     [drops, setDrops] = useState<any[]>([]),
     [error, setError] = useState("");
+  const [categories, setCategories] = useState<SourceCategory[] | null>(null);
   const [upgradeTargets, setUpgradeTargets] = useState<any[]>([]);
   const [upgradeTarget, setUpgradeTarget] = useState<number>(0);
   const [upgradeEquipped, setUpgradeEquipped] = useState<boolean>(false);
   const compute = useComputePower("droptimizer");
   useEffect(() => {
     api("/catalog/sources").then(setSources);
+    api("/catalog/source-categories")
+      .then((value) => setCategories(Array.isArray(value) ? value : []))
+      .catch(() => setCategories([]));
     api("/droptimizer/targets").then(setUpgradeTargets).catch(() => {});
   }, []);
   useEffect(() => {
@@ -2003,19 +2024,35 @@ function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses, co
               <span>{s.instanceName}</span>
             </button>
           ))}
-          {[
-            "Great Vault",
-            "Bonus rolls",
-            "Delves",
-            "Crafted items",
-            "Catalyst",
-          ].map((name) => (
-            <div className="source-tile unavailable" key={name}>
-              <span>{name}</span>
-              <small>Catalog data not installed</small>
+          {(categories || []).map((category) => (
+            <div
+              className={
+                category.sources
+                  ? "source-tile category"
+                  : "source-tile category unavailable"
+              }
+              key={category.id}
+            >
+              <small>{(category.tracks || []).join(" · ") || category.captureMode}</small>
+              <span>{category.name}</span>
+              <em>
+                {category.verifiedVariants} verified variant
+                {category.verifiedVariants === 1 ? "" : "s"}
+              </em>
+              <em>
+                {category.sources
+                  ? `${category.sources} source${category.sources === 1 ? "" : "s"}, listed above`
+                  : categoryReason(category, sources.length > 0)}
+              </em>
             </div>
           ))}
         </div>
+        {categories !== null && categories.length === 0 && (
+          <p className="source-note">
+            Source categories are not installed, so only the instances above are
+            listed.
+          </p>
+        )}
         {source && (
           <>
             <h3>Difficulty / track</h3>
