@@ -34,8 +34,8 @@ function createWindow() {
 
   mainWindow.setMenuBarVisibility(false);
 
-  // The server starts on port 4317
-  mainWindow.loadURL('http://127.0.0.1:4317');
+  // The server starts on port 4317 unless LOCALSIMDASH_PORT overrides it
+  mainWindow.loadURL(`http://127.0.0.1:${process.env.LOCALSIMDASH_PORT || 4317}`);
 }
 
 // Make dialog available globally so the express server can require('electron') and use it
