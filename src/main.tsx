@@ -34,6 +34,16 @@ function displayName(value?: string) {
     .replace(/(^|[\s'-])([a-z])/g, (_match, prefix, letter) => `${prefix}${letter.toUpperCase()}`);
 }
 
+/**
+ * A gem is an item, so its art comes from the item icon endpoint. The id lives
+ * in the SimC fragment rather than the enhancement id, which is spelled
+ * "gem-240904" for catalog entries but "imported-gem-240904" for captured ones.
+ */
+function gemItemId(enhancement: { simcFragment?: string }) {
+  const id = Number(enhancement.simcFragment?.match(/^gem_id=(\d+)$/)?.[1]);
+  return Number.isInteger(id) && id > 0 ? id : undefined;
+}
+
 function enhancementName(type: "enchant" | "gem", value: string | undefined, enhancements: Enhancement[] = []) {
   if (!value) return undefined;
   const id = value.match(/\d+/)?.[0];
@@ -216,6 +226,10 @@ const post = (body: unknown) => ({
 // without duplicating the complete optimization request in a child component.
 let replaceExistingPreference = false;
 let setReplaceExistingPreference: (value: boolean) => void = () => undefined;
+// Candidates this far below the best item level available for the slot are
+// dimmed: still selectable, just visually demoted so the realistic upgrades
+// stand out in slots that carry a long tail of leftover gear.
+const outclassedItemLevelGap = 15;
 const slotGroups = [
   [
     "Armor",
@@ -271,6 +285,66 @@ const slotIcons: Record<string, string> = {
   main_hand: "⚔",
   off_hand: "⛨",
 };
+
+/**
+ * The one place gear art is rendered. Item icons are fetched lazily and can be
+ * unavailable, so a failed image uncovers the slot glyph underneath instead of
+ * leaving an empty square, and it does so in every view rather than only on the
+ * gear cards.
+ *
+ * Two details matter. The <img> stays mounted while hidden, because
+ * GlobalItemTooltip reads the item id back out of its src. And "did it fail" is
+ * React state tied to the id rather than an inline style written by the error
+ * handler, so a row that swaps to a different item is not left permanently
+ * blank by the previous item's failure.
+ */
+function ItemIcon({
+  itemId,
+  src,
+  slot,
+  fallback,
+  className = "item-icon",
+  title,
+  enchant,
+  gems,
+}: {
+  itemId?: number;
+  /** Overrides the item endpoint, for art that is not keyed by item id. */
+  src?: string;
+  slot?: string;
+  /** Shown when the slot is unknown, so the square is never blank. */
+  fallback?: string;
+  className?: string;
+  title?: string;
+  enchant?: string;
+  gems?: string[];
+}) {
+  const [failed, setFailed] = useState<string>();
+  const source =
+    src ?? (itemId ? `/api/catalog/items/${itemId}/icon` : undefined);
+  const glyph = (slot ? slotIcons[slot] : undefined) ?? fallback;
+  return (
+    <span
+      className={className}
+      title={title}
+      aria-label={slot ? slotNames[slot] || slot : undefined}
+      data-enchant={enchant}
+      data-gems={gems?.join("/")}
+    >
+      {source ? (
+        <img
+          src={source}
+          alt=""
+          loading="lazy"
+          className={failed === source ? "broken" : undefined}
+          onError={() => setFailed(source)}
+        />
+      ) : null}
+      {glyph}
+    </span>
+  );
+}
+
 const defaultScenario = (targets: number) => ({
   name: `Patchwerk · ${targets} target${targets === 1 ? "" : "s"}`,
   fightStyle: "Patchwerk",
@@ -1323,6 +1397,17 @@ function Slot({
   const title = slotNames[slot],
     allSelected =
       candidates.length > 0 && candidates.every((c) => p.selected.has(c.id));
+  const bestItemLevel = candidates.reduce(
+    (best, c) => Math.max(best, c.itemLevel || 0),
+    0,
+  );
+  // Keep a picked card at full strength: the choice is deliberate even when
+  // the item level says otherwise.
+  const outclassed = (c: Candidate) =>
+    bestItemLevel > 0 &&
+    !!c.itemLevel &&
+    bestItemLevel - c.itemLevel > outclassedItemLevelGap &&
+    !p.selected.has(c.id);
   const toggleAll = () => {
     const next = new Set(p.selected);
     if (allSelected) candidates.forEach((c) => next.delete(c.id));
@@ -1353,37 +1438,25 @@ function Slot({
         {candidates.length ? (
           candidates.map((c) => (
             <label
-              className={`gear-card ${p.selected.has(c.id) ? "picked" : ""} ${c.source}`}
+              className={`gear-card ${p.selected.has(c.id) ? "picked" : ""} ${c.source} ${outclassed(c) ? "outclassed" : ""}`}
               key={`${c.id}-${slot}`}
+              title={
+                outclassed(c)
+                  ? `${bestItemLevel - (c.itemLevel || 0)} item levels below the best ${title.toLowerCase()} candidate`
+                  : undefined
+              }
             >
               <input
                 type="checkbox"
                 checked={p.selected.has(c.id)}
                 onChange={() => p.toggle(p.selected, c.id, p.setSelected)}
               />
-              <span
-                className="item-icon"
-                data-enchant={c.enchant}
-                data-gems={c.gems?.join("/")}
-                style={{ position: "relative", overflow: "hidden" }}
-              >
-                {c.itemId ? (
-                  <img
-                    src={`/api/catalog/items/${c.itemId}/icon`}
-                    style={{
-                      position: "absolute",
-                      inset: 0,
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                    onError={(e) => {
-                      e.currentTarget.style.display = "none";
-                    }}
-                  />
-                ) : null}
-                {slotIcons[slot]}
-              </span>
+              <ItemIcon
+                itemId={c.itemId}
+                slot={slot}
+                enchant={c.enchant}
+                gems={c.gems}
+              />
               <span className="item-copy">
                 <b>{displayName(c.name)}</b>
                 <small>
@@ -1531,14 +1604,11 @@ function Enhancements({
                                     toggle(selected, x.id, setSelected)
                                   }
                                 />
-                                  {x.iconFileDataId ? (
-                                    <>
-                                      <img src={`/api/catalog/icons/${x.iconFileDataId}`} className="item-icon small" onError={(e: any) => { e.target.style.display = 'none'; e.target.nextElementSibling.style.display = 'inline-block'; }} />
-                                      <span className="item-icon small fallback" style={{display: 'none'}}>✦</span>
-                                    </>
-                                  ) : (
-                                    <span className="item-icon small">✦</span>
-                                  )}
+                                  <ItemIcon
+                                    className="item-icon small"
+                                    src={x.iconFileDataId ? `/api/catalog/icons/${x.iconFileDataId}` : undefined}
+                                    fallback="✦"
+                                  />
                                 <span>
                                   <b>{x.name}</b>
                                   <small>
@@ -1601,14 +1671,11 @@ function Enhancements({
                                       toggle(selected, x.id, setSelected)
                                     }
                                   />
-                                  {x.iconFileDataId ? (
-                                    <>
-                                      <img src={`/api/catalog/icons/${x.iconFileDataId}`} className="item-icon small" onError={(e: any) => { e.target.style.display = 'none'; e.target.nextElementSibling.style.display = 'inline-block'; }} />
-                                      <span className="item-icon small fallback" style={{display: 'none'}}>◇</span>
-                                    </>
-                                  ) : (
-                                    <span className="item-icon small">◇</span>
-                                  )}
+                                  <ItemIcon
+                                    className="item-icon small"
+                                    itemId={gemItemId(x)}
+                                    fallback="◇"
+                                  />
                                   <span>
                                     <b>{x.name}</b>
                                     <small>
@@ -1858,18 +1925,39 @@ function Catalog() {
     </section>
   );
 }
+type SourceCategory = {
+  id: string;
+  name: string;
+  captureMode: string;
+  tracks: string[];
+  sources: number;
+  verifiedVariants: number;
+};
+
+function categoryReason(category: SourceCategory, catalogRefreshed: boolean) {
+  if (!catalogRefreshed)
+    return "No catalog refresh yet. Refresh the Blizzard catalog to populate this.";
+  if (category.captureMode === "link")
+    return "No captures yet. Import in-game item links for this source.";
+  return "No captures yet. The last catalog refresh returned no encounters here.";
+}
+
 function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses, consumableSelections, onChangeConsumables }: { profileId?: number; inventory?: Inventory; minSetBonuses?: Record<string, number>; setMinSetBonuses?: (v: Record<string, number>) => void; consumableSelections:Record<string,string>; onChangeConsumables:()=>void }) {
   const [sources, setSources] = useState<any[]>([]),
     [source, setSource] = useState(""),
     [difficulty, setDifficulty] = useState(""),
     [drops, setDrops] = useState<any[]>([]),
     [error, setError] = useState("");
+  const [categories, setCategories] = useState<SourceCategory[] | null>(null);
   const [upgradeTargets, setUpgradeTargets] = useState<any[]>([]);
   const [upgradeTarget, setUpgradeTarget] = useState<number>(0);
   const [upgradeEquipped, setUpgradeEquipped] = useState<boolean>(false);
   const compute = useComputePower("droptimizer");
   useEffect(() => {
     api("/catalog/sources").then(setSources);
+    api("/catalog/source-categories")
+      .then((value) => setCategories(Array.isArray(value) ? value : []))
+      .catch(() => setCategories([]));
     api("/droptimizer/targets").then(setUpgradeTargets).catch(() => {});
   }, []);
   useEffect(() => {
@@ -1936,19 +2024,35 @@ function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses, co
               <span>{s.instanceName}</span>
             </button>
           ))}
-          {[
-            "Great Vault",
-            "Bonus rolls",
-            "Delves",
-            "Crafted items",
-            "Catalyst",
-          ].map((name) => (
-            <div className="source-tile unavailable" key={name}>
-              <span>{name}</span>
-              <small>Catalog data not installed</small>
+          {(categories || []).map((category) => (
+            <div
+              className={
+                category.sources
+                  ? "source-tile category"
+                  : "source-tile category unavailable"
+              }
+              key={category.id}
+            >
+              <small>{(category.tracks || []).join(" · ") || category.captureMode}</small>
+              <span>{category.name}</span>
+              <em>
+                {category.verifiedVariants} verified variant
+                {category.verifiedVariants === 1 ? "" : "s"}
+              </em>
+              <em>
+                {category.sources
+                  ? `${category.sources} source${category.sources === 1 ? "" : "s"}, listed above`
+                  : categoryReason(category, sources.length > 0)}
+              </em>
             </div>
           ))}
         </div>
+        {categories !== null && categories.length === 0 && (
+          <p className="source-note">
+            Source categories are not installed, so only the instances above are
+            listed.
+          </p>
+        )}
         {source && (
           <>
             <h3>Difficulty / track</h3>
@@ -2039,16 +2143,7 @@ function Droptimizer({ profileId, inventory, minSetBonuses, setMinSetBonuses, co
                   key={`${d.id}-${d.boss}-${d.difficulty}`}
                   className={d.status === "verified" ? "" : "unavailable"}
                 >
-                  <span className="item-icon">
-                    {d.id && (
-                      <img
-                        src={`/api/catalog/items/${d.id}/icon`}
-                        onError={(e) =>
-                          (e.currentTarget.style.display = "none")
-                        }
-                      />
-                    )}
-                  </span>
+                  <ItemIcon itemId={d.id} slot={d.slot} fallback="◈" />
                   <b>{d.name}</b>
                   <small>
                     {d.status === "verified"
@@ -2222,25 +2317,26 @@ function Result({ runId, back }: { runId?: number; back: () => void }) {
             </p>
             <div className="result-gear">
               {result.gear?.map((g: any, i: number) => (
-                <span
-                  className="item-icon"
+                <ItemIcon
+                  itemId={g.itemId}
+                  slot={g.slot}
                   title={g.name}
                   key={`${g.slot}-${i}`}
-                >
-                  {g.itemId && (
-                    <img
-                      src={`/api/catalog/items/${g.itemId}/icon`}
-                      onError={(e) => (e.currentTarget.style.display = "none")}
-                    />
-                  )}
-                </span>
+                />
               ))}
             </div>
           </section>
           {result.warnings?.length > 0 && (
             <section className="result-warnings">
-              SimC reported {result.warnings.length} notification
-              {result.warnings.length === 1 ? "" : "s"}.
+              <strong>
+                SimC reported {result.warnings.length} notification
+                {result.warnings.length === 1 ? "" : "s"}.
+              </strong>
+              <ul className="result-warnings-list">
+                {result.warnings.map((warning: string, i: number) => (
+                  <li key={i}>{warning}</li>
+                ))}
+              </ul>
             </section>
           )}
           {result.kind === "topgear" ? (
@@ -2293,20 +2389,13 @@ function Result({ runId, back }: { runId?: number; back: () => void }) {
                         <span className="muted">Equipped — Current Gear</span>
                       ) : diffs.length ? (
                         diffs.map((g: any, j: number) => (
-                          <span
+                          <ItemIcon
                             className="item-icon changed"
+                            itemId={g.itemId}
+                            slot={g.slot}
                             title={g.name}
                             key={`${g.slot}-${j}`}
-                          >
-                            {g.itemId && (
-                              <img
-                                src={`/api/catalog/items/${g.itemId}/icon`}
-                                onError={(e: any) =>
-                                  (e.currentTarget.style.display = "none")
-                                }
-                              />
-                            )}
-                          </span>
+                          />
                         ))
                       ) : (
                         <span className="muted">No items changed</span>
@@ -2442,14 +2531,7 @@ function DroptimizerResults({
           key={`${x.itemId}-${x.slot}`}
         >
           <b>#{i + 1}</b>
-          <span className="item-icon">
-            {x.itemId && (
-              <img
-                src={`/api/catalog/items/${x.itemId}/icon`}
-                onError={(e) => (e.currentTarget.style.display = "none")}
-              />
-            )}
-          </span>
+          <ItemIcon itemId={x.itemId} slot={x.slot} fallback="◈" />
           <div>
             <strong>{x.name}</strong>
             {x.verificationEligible && !x.targeted && <button className="verify-item" title={`This item seems to have a potentially erroneous sim value. Would you like to run a targeted sim for it to ensure its ranking is accurate?${x.verificationReasons?.length ? ` ${x.verificationReasons.join(' ')}` : ''}`} onClick={() => verify(x)} disabled={verifying[`${x.itemId}-${x.slot}`]}>{verifying[`${x.itemId}-${x.slot}`] ? '…' : '⚠'}</button>}

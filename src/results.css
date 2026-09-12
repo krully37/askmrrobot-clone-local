@@ -61,12 +61,20 @@
   position: relative;
 }
 
+/* Item art overlays the slot glyph rather than replacing it, so an icon that
+   fails to load reveals the glyph instead of an empty square. */
 .item-icon img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 4px;
+}
+
+.item-icon img.broken {
+  display: none;
 }
 
 .result-warnings {
@@ -293,4 +301,14 @@
   .result-details {
     width: 100%;
   }
+}
+
+.result-warnings-list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+  line-height: 1.5;
+}
+
+.result-warnings-list li + li {
+  margin-top: 6px;
 }

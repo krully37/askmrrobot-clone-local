@@ -1,7 +1,9 @@
-import { installDerivedCatalog } from './derived-catalog.js';
+import { installDerivedCatalog, installSourceCategories } from './derived-catalog.js';
 import { installEnhancementSeed } from './enhancements.js';
 
 try {
+  const seeded = installSourceCategories();
+  console.log(`Seeded ${seeded.categories} ${seeded.season} source categories.`);
   const result = installDerivedCatalog();
   if (!result.installed) {
     console.error(`DB2 derived catalog was not installed: ${result.reason}`);

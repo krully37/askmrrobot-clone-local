@@ -3,11 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": "^22 || ^24"
+  },
   "main": "electron-main.cjs",
   "scripts": {
-    "start:electron": "wait-on tcp:4317 && electron .",
-    "build:electron": "npm run build:prod && electron-builder --dir",
-    "dist": "npm run build:prod && electron-builder",
+    "start:electron": "electron .",
+    "rebuild:node": "node scripts/rebuild-native.mjs node",
+    "rebuild:electron": "node scripts/rebuild-native.mjs electron",
+    "build:electron": "npm run build:prod && npm run rebuild:electron && electron-builder --dir",
+    "dist": "npm run build:prod && npm run rebuild:electron && electron-builder",
     "dev": "tsx server/dev-supervisor.ts",
     "server": "tsx server/index.ts",
     "catalog:build": "tsx server/catalog-cli.ts",
@@ -16,15 +21,14 @@
     "catalog:db2:prefill": "tsx tools/db2-casc/index.ts",
     "catalog:db2:install": "tsx server/derived-catalog-cli.ts",
     "build": "tsc --noEmit && vite build",
-    "build:server": "tsc --project tsconfig.server.json || exit 0",
+    "build:server": "tsc --project tsconfig.server.json",
     "build:prod": "npm run catalog:variants:validate && npm run build:server && npm run build && tsx scripts/package-release.ts",
     "test": "vitest run"
   },
   "dependencies": {
     "7zip-bin": "^5.2.0",
-    "better-sqlite3": "^11.7.0",
+    "better-sqlite3": "^12.11.1",
     "express": "^4.21.2",
-    "puppeteer": "^19.0.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
@@ -42,7 +46,7 @@
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
     "vite": "^6.0.5",
-    "vitest": "^2.1.8",
+    "vitest": "^3.2.7",
     "wait-on": "^9.1.0"
   },
   "build": {

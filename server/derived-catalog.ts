@@ -16,6 +16,24 @@ function setup(db:Database.Database){
   db.exec(`CREATE TABLE IF NOT EXISTS source_categories (id TEXT PRIMARY KEY, season TEXT NOT NULL, name TEXT NOT NULL, capture_mode TEXT NOT NULL, tracks TEXT NOT NULL); CREATE TABLE IF NOT EXISTS derived_item_metadata (item_id INTEGER PRIMARY KEY, name TEXT, icon_file_data_id INTEGER, inventory_type INTEGER, class_id INTEGER, subclass_id INTEGER, handedness TEXT, client_build TEXT NOT NULL, generated_at TEXT NOT NULL); CREATE TABLE IF NOT EXISTS derived_drop_presence (encounter_id INTEGER NOT NULL, item_id INTEGER NOT NULL, client_build TEXT NOT NULL, generated_at TEXT NOT NULL, PRIMARY KEY(encounter_id,item_id)); CREATE TABLE IF NOT EXISTS derived_enhancements (enchant_id INTEGER PRIMARY KEY, name TEXT NOT NULL, icon_file_data_id INTEGER, type TEXT NOT NULL, slots TEXT NOT NULL, client_build TEXT NOT NULL, generated_at TEXT NOT NULL, status TEXT NOT NULL); CREATE TABLE IF NOT EXISTS catalog_build_diagnostics (id TEXT PRIMARY KEY, payload TEXT NOT NULL, updated_at TEXT NOT NULL);`);
 }
 
+/**
+ * The seven current-season source categories are static repository data with no
+ * DB2 dependency, but they used to be seeded only as a side effect of installing
+ * the optional DB2 derived package. Anyone without an extracted Retail client
+ * therefore got an empty source_categories table, and every capture surface read
+ * as uninstalled. Seeding them is now its own step that runs on every start.
+ */
+export function installSourceCategories(){
+  const db=openCatalog();
+  try {
+    setup(db);
+    const seed=sourceSeed();
+    const category=db.prepare(`INSERT INTO source_categories (id,season,name,capture_mode,tracks) VALUES (?,?,?,?,?) ON CONFLICT(id) DO UPDATE SET season=excluded.season,name=excluded.name,capture_mode=excluded.capture_mode,tracks=excluded.tracks`);
+    db.transaction(()=>{for(const row of seed.categories)category.run(row.id,seed.season,row.name,row.captureMode,JSON.stringify(row.tracks));})();
+    return {season:seed.season,categories:seed.categories.length};
+  } finally { db.close(); }
+}
+
 export function installDerivedCatalog(packagePath=defaultPackage){
   if(!existsSync(packagePath))return {installed:false,reason:'No DB2 derived package found.'};
   const value=JSON.parse(readFileSync(packagePath,'utf8')) as DerivedPackage;

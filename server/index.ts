@@ -2,22 +2,24 @@ import express from 'express';
 import { existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 import { calibration, characters, characterConsumables, cleanupStaleDisposables, createDisposableProfile, createRun, deleteCharacter, deleteRuns, getDroptimizerJob, getProfile, getRun, getTopGearJob, importCandidates, paths, profiles, runResult, runs, saveCalibration, saveCharacterConsumables, saveProfile, saveTopGearJob, updateProfileRaw, updateRun, readSettings, saveSettings } from './db.js';
 import { computeCapacity, safeThreads } from './compute.js';
 import { buildInput, parseInventory, parseProfile } from './profile.js';
 import { cancel, execute, executionActivity } from './runner.js';
 import { assessRunHealth } from './run-health.js';
-import { RESTART_AFTER_RUNTIME_UPDATE, ensureCurrentRuntime, runtime, runtimeStatus, smokeTest } from './runtime.js';
+import { RESTART_AFTER_RUNTIME_UPDATE, ensureCurrentRuntime, rollbackRuntime, runtime, runtimeStatus, scheduleRuntimeUpdates, smokeTest } from './runtime.js';
+import { findAvailablePort, requestedApiPort } from './ports.js';
 import type { Scenario } from './types.js';
 import { catalogDrops, catalogEnhancements, catalogSourceCategories, catalogSources, catalogStatus, ensureItemSets, enrichInventory, searchCatalog, upsertCatalogItem, upsertEnhancement, catalogOmniumSpells, synthesizeVariants } from './catalog.js';
 import { installEnhancementSeed } from './enhancements.js';
-import { derivedCatalogHealth, installDerivedCatalog } from './derived-catalog.js';
+import { derivedCatalogHealth, installDerivedCatalog, installSourceCategories } from './derived-catalog.js';
 import { refreshCatalog, refreshStatus } from './catalog-refresh.js';
 import { calibratePreview, planOptimization, previewOptimization } from './optimizer.js';
 import { recoverTopGearRun, runTopGearBatches } from './topgear-batches.js';
 import { omniumFolioVariants } from '../shared/omnium-folio.js';
 import { runDroptimizer, runDroptimizerVerification } from './droptimizer.js';
-import { localItemIcon, readLocalItemIcon } from './item-media.js';
+import { itemIcon } from './item-media.js';
 import { captureStatus, configureCaptureImport, importCapturePayload, startCaptureWatch } from './captures.js';
 import { resolveTooltip, tooltipStatus } from './tooltips.js';
 
@@ -25,7 +27,12 @@ cleanupStaleDisposables();
 export const app=express(); app.use('/api',(_req,res,next)=>{res.set('Cache-Control','no-store, max-age=0');next();}); app.use(express.json({limit:'5mb'}));
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-app.use(express.static(join(__dirname, '..', 'dist')));
+// Under tsx the module runs from server/, and compiled it runs from
+// dist-server/server/, so the built frontend sits one or two levels up. Probing
+// both keeps the desktop window from loading a 404 when the emitted layout
+// changes.
+const frontendRoot=[join(__dirname,'..','dist'),join(__dirname,'..','..','dist')].find(existsSync);
+if(frontendRoot) app.use(express.static(frontendRoot));
 const defaults:Scenario={name:'Patchwerk - 1 target',fightStyle:'Patchwerk',duration:300,variation:20,targets:1,bloodlust:'pull',raidBuffs:true,consumables:true,powerInfusion:false,rawOverride:''};
 function resolveOmniumFolioVariants(selected:unknown){const ids=Array.isArray(selected)?selected.filter((value):value is number=>typeof value==='number'&&Number.isInteger(value)&&value>0):[];if(!ids.length)return [[]];return omniumFolioVariants(ids).filter(variant=>variant.length===5);}
 const calibrationKey=(p:{className:string;spec:string},s:Scenario,n:number)=>[p.className,p.spec,runtime().version,n,s.fightStyle,s.targets,s.duration].join('|');
@@ -38,7 +45,11 @@ app.post('/api/config/settings',(req,res)=>{try{saveSettings(req.body);res.json(
 app.post('/api/config/browse-simc',async(_,res)=>{
   try {
     let electron;
-    try { electron = require('electron'); } catch (e) {}
+    // This module is ESM, where bare require() is not defined at all, so the
+    // old call always threw and the picker was never available even inside the
+    // desktop app. Under plain Node the electron package resolves to a path
+    // string rather than the API, which the dialog check below filters out.
+    try { electron = createRequire(import.meta.url)('electron'); } catch (e) {}
     if (electron && electron.dialog) {
       const result = await electron.dialog.showOpenDialog({
         title: 'Select SimulationCraft Executable',
@@ -72,8 +83,12 @@ app.post('/api/runs',async(req,res)=>{const p=getProfile(+req.body.profileId);if
 app.post('/api/runs/:id/cancel',(req,res)=>{const id=+req.params.id,run=getRun(id);const wasActive=cancel(id);if(!wasActive&&run&&['queued','running'].includes(run.status))updateRun(id,{status:'cancelled',completedAt:new Date().toISOString()});res.json({cancelled:wasActive||Boolean(run&&['queued','running'].includes(run.status))});});
 app.get('/api/runs/:id/progress',(req,res)=>{const r=getRun(+req.params.id);if(!r)return res.sendStatus(404);const job=getTopGearJob(r.id)||getDroptimizerJob(r.id),progress=job?.progress as any;const health=assessRunHealth({status:r.status,stage:progress?.stage,createdAt:r.createdAt,lastProgressAt:progress?.lastProgressAt,activity:executionActivity(r.id),development:process.env.NODE_ENV!=='production'});if(progress)return res.json({...progress,status:r.status,cancelAvailable:['queued','running'].includes(r.status),health});res.json({stage:r.status==='running'?'simulating':r.status,elapsedMs:Date.now()-new Date(r.createdAt).getTime(),status:r.status,cancelAvailable:['queued','running'].includes(r.status),health});});
 app.get('/api/catalog/status',(_,res)=>res.json(catalogStatus()));app.get('/api/catalog/items',(req,res)=>res.json(searchCatalog(String(req.query.q||''),String(req.query.slot||''))));
-app.get('/api/catalog/icons/:fileDataId',(req,res)=>{const fileDataId=req.params.fileDataId;const iconsDir=join(paths.root,'icons');const file=join(iconsDir,`${fileDataId}.png`);if(existsSync(file)){res.type('image/png').sendFile(file);}else{res.sendStatus(404);}});
-app.get('/api/catalog/items/:id/icon',async(req,res)=>{const id=Number(req.params.id);try{let bytes=readLocalItemIcon(id);let mime='image/png';if(!bytes){const cached=await localItemIcon(id);bytes=readLocalItemIcon(id);mime=cached.mime;}if(!bytes)return res.sendStatus(404);res.type(mime).send(bytes);}catch(e){res.status(404).json({error:e instanceof Error?e.message:String(e)});}});app.get('/api/catalog/enhancements',(_,res)=>res.json(catalogEnhancements()));app.get('/api/catalog/refresh-status',(_,res)=>res.json(refreshStatus()));app.post('/api/catalog/refresh',(_,res)=>{try{res.status(202).json(refreshCatalog());}catch(e){res.status(409).json({error:e instanceof Error?e.message:String(e)});}});app.post('/api/catalog/synthesize',(_,res)=>{try{res.json({synthesized:synthesizeVariants()});}catch(e){res.status(500).json({error:String(e)});}});app.get('/api/catalog/sources',(_,res)=>res.json(catalogSources()));app.get('/api/catalog/drops',(req,res)=>res.json(catalogDrops(String(req.query.instance||''))));app.get('/api/catalog/captures/status',(_,res)=>res.json(captureStatus()));app.put('/api/catalog/captures/config',(req,res)=>{try{res.json(configureCaptureImport(String(req.body.wowPath||''),req.body.account?String(req.body.account):undefined));}catch(e){res.status(422).json({error:e instanceof Error?e.message:String(e)});}});app.post('/api/catalog/captures/import',(req,res)=>{try{res.json(importCapturePayload(String(req.body.payload||'')));}catch(e){res.status(422).json({error:e instanceof Error?e.message:String(e)});}});app.get('/api/catalog/spells',async(_,res)=>{try{res.json(await catalogOmniumSpells());}catch(e){res.status(500).json({error:String(e)});}});
+// Icon art for a given id never changes, so it is worth caching hard. The
+// blanket no-store above is there for API data and used to make every board
+// render re-download all of its icons.
+const ICON_CACHE='public, max-age=31536000, immutable';
+app.get('/api/catalog/icons/:fileDataId',(req,res)=>{const fileDataId=req.params.fileDataId;if(!/^\d+$/.test(fileDataId))return res.sendStatus(400);const file=join(paths.root,'icons',`${fileDataId}.png`);if(existsSync(file)){res.set('Cache-Control',ICON_CACHE).type('image/png').sendFile(file);}else{res.sendStatus(404);}});
+app.get('/api/catalog/items/:id/icon',async(req,res)=>{const icon=await itemIcon(Number(req.params.id));if(!icon)return res.sendStatus(404);res.set('Cache-Control',ICON_CACHE).type(icon.mime).send(icon.bytes);});app.get('/api/catalog/enhancements',(_,res)=>res.json(catalogEnhancements()));app.get('/api/catalog/refresh-status',(_,res)=>res.json(refreshStatus()));app.post('/api/catalog/refresh',(_,res)=>{try{res.status(202).json(refreshCatalog());}catch(e){res.status(409).json({error:e instanceof Error?e.message:String(e)});}});app.post('/api/catalog/synthesize',(_,res)=>{try{res.json({synthesized:synthesizeVariants()});}catch(e){res.status(500).json({error:String(e)});}});app.get('/api/catalog/sources',(_,res)=>res.json(catalogSources()));app.get('/api/catalog/drops',(req,res)=>res.json(catalogDrops(String(req.query.instance||''))));app.get('/api/catalog/captures/status',(_,res)=>res.json(captureStatus()));app.put('/api/catalog/captures/config',(req,res)=>{try{res.json(configureCaptureImport(String(req.body.wowPath||''),req.body.account?String(req.body.account):undefined));}catch(e){res.status(422).json({error:e instanceof Error?e.message:String(e)});}});app.post('/api/catalog/captures/import',(req,res)=>{try{res.json(importCapturePayload(String(req.body.payload||'')));}catch(e){res.status(422).json({error:e instanceof Error?e.message:String(e)});}});app.get('/api/catalog/spells',async(_,res)=>{try{res.json(await catalogOmniumSpells());}catch(e){res.status(500).json({error:String(e)});}});
 app.get('/api/catalog/tooltips/status',(_,res)=>res.json(tooltipStatus()));app.get('/api/catalog/items/:id/tooltip',(req,res)=>{const itemId=Number(req.params.id),itemLevel=Number(req.query.itemLevel)||undefined,bonusIds=String(req.query.bonusIds||'').split('/').map(Number).filter(Number.isFinite),className=req.query.className?String(req.query.className):undefined,spec=req.query.spec?String(req.query.spec):undefined,fallback={name:req.query.name?String(req.query.name):undefined,slot:req.query.slot?String(req.query.slot):undefined,source:req.query.source?String(req.query.source):undefined,enchant:req.query.enchant?String(req.query.enchant):undefined,gems:req.query.gems?String(req.query.gems).split('/').filter(Boolean):undefined};if(!Number.isInteger(itemId)||itemId<=0)return res.status(422).json({error:'An item ID is required.'});res.json(resolveTooltip({itemId,itemLevel,bonusIds,className,spec,fallback}));});
 app.post('/api/topgear/preview',async(req,res)=>{const p=getProfile(+req.body.profileId);if(!p)return res.sendStatus(404);try{const s={...defaults,...req.body.scenario} as Scenario,request={...req.body,omniumFolioVariants:await resolveOmniumFolioVariants(req.body.omniumFolio)};const compute=await safeThreads(req.body.threads);res.json({...calibratePreview(previewOptimization(enrichInventory(parseInventory(p.rawProfile)),request,catalogEnhancements()),calibration(calibrationKey(p,s,compute.threads))?.throughput),appliedThreads:compute.threads,capacity:compute.capacity,clamped:compute.clamped});}catch(e){res.status(422).json({error:(e as Error).message});}});
 app.post('/api/topgear/run',async(req,res)=>{const p=getProfile(+req.body.profileId);if(!p)return res.sendStatus(404);if(p.persistence==='disposable'&&runs().some(r=>r.profileId===p.id))return res.status(422).json({error:'A disposable import can run only once.'});try{const request={...req.body,omniumFolioVariants:await resolveOmniumFolioVariants(req.body.omniumFolio),scenario:{...defaults,...req.body.scenario,rawOverride:req.body.scenario?.rawOverride||''}};const optimized=planOptimization(enrichInventory(parseInventory(p.rawProfile)),request,catalogEnhancements());const compute=await safeThreads(request.threads);const id=createRun({mode:'topgear',title:`${p.name} · ${p.realm} · ${p.spec} — Top Gear`,status:'queued',scenario:request.scenario,input:'',simcVersion:runtime().version,profileId:p.id,characterId:p.characterId,character:{name:p.name,realm:p.realm,className:p.className,spec:p.spec,profileId:p.id,characterId:p.characterId,persistence:p.persistence}});const run=getRun(id);saveTopGearJob(id,catalogStatus().version,optimized.preview,optimized.plans,{...request,threads:compute.threads});runTopGearBatches(id,p.rawProfile,optimized.plans,request.scenario,compute.threads,(_results,elapsedMs)=>saveCalibration(calibrationKey(p,request.scenario,compute.threads),Math.max(1,optimized.preview.profilesets*optimized.preview.iterations)/(elapsedMs/1000))).catch(()=>undefined);res.status(202).json({id,run,preview:optimized.preview,planned:optimized.plans.length,appliedThreads:compute.threads,capacity:compute.capacity,clamped:compute.clamped});}catch(e){res.status(422).json({error:(e as Error).message});}});
@@ -102,8 +117,33 @@ app.post('/api/advisor/run', async (req, res) => {
     res.status(422).json({ error: (e as Error).message });
   }
 });
-app.get('/api/topgear/:runId',(req,res)=>{const j=getTopGearJob(+req.params.runId);if(!j)return res.sendStatus(404);res.json({...j,run:getRun(+req.params.runId)});});app.post('/api/runtime/smoke-test',async(_,res)=>{const rt=runtime();if(!rt.path)return res.status(409).json({error:'No SimC executable configured'});try{res.json({ok:true,version:await smokeTest(rt.path)});}catch(e){res.status(422).json({error:(e as Error).message});}});app.get('/api/config',async(_,res)=>res.json({defaults,compute:await computeCapacity(),dataDir:paths.root}));
-async function start(){try{installDerivedCatalog();}catch(error){console.warn(`DB2 derived catalog was not installed: ${(error as Error).message}`);}installEnhancementSeed();const outcome=await ensureCurrentRuntime();if(outcome.updated&&process.env.SIMC_RUNTIME_SUPERVISED==='1'){console.log(`Activated SimC ${outcome.status.version}; restart required.`);process.exitCode=RESTART_AFTER_RUNTIME_UPDATE;return;}if(outcome.updated)console.log(`Activated SimC ${outcome.status.version}.`);for(const run of runs())if(run.mode==='topgear')recoverTopGearRun(run.id);startCaptureWatch();app.listen(4317,'127.0.0.1',()=>console.log(`Local Sim Dashboard API: http://127.0.0.1:4317 (${runtime().version})`));}
+app.get('/api/topgear/:runId',(req,res)=>{const j=getTopGearJob(+req.params.runId);if(!j)return res.sendStatus(404);res.json({...j,run:getRun(+req.params.runId)});});app.post('/api/runtime/rollback',(_,res)=>{try{res.json(rollbackRuntime());}catch(e){res.status(409).json({error:(e as Error).message});}});app.post('/api/runtime/smoke-test',async(_,res)=>{const rt=runtime();if(!rt.path)return res.status(409).json({error:'No SimC executable configured'});try{res.json({ok:true,version:await smokeTest(rt.path)});}catch(e){res.status(422).json({error:(e as Error).message});}});app.get('/api/config',async(_,res)=>res.json({defaults,compute:await computeCapacity(),dataDir:paths.root}));
+/**
+ * Express 4 does not forward a rejected async handler to its error middleware,
+ * so before this a single failing request took the whole API down and every
+ * later call from the open dashboard got ECONNREFUSED. A local dashboard should
+ * degrade one request instead of dying, so failures are logged and answered.
+ */
+app.use((error:unknown,_req:express.Request,res:express.Response,_next:express.NextFunction)=>{
+  console.error('Unhandled request error:',error);
+  if(!res.headersSent) res.status(500).json({error:error instanceof Error?error.message:String(error)});
+});
+process.on('unhandledRejection',reason=>console.error('Unhandled promise rejection:',reason));
+process.on('uncaughtException',error=>console.error('Uncaught exception:',error));
+
+async function start(){try{installSourceCategories();}catch(error){console.warn(`Source categories were not seeded: ${(error as Error).message}`);}try{installDerivedCatalog();}catch(error){console.warn(`DB2 derived catalog was not installed: ${(error as Error).message}`);}installEnhancementSeed();const outcome=await ensureCurrentRuntime();if(outcome.updated&&process.env.SIMC_RUNTIME_SUPERVISED==='1'){console.log(`Activated SimC ${outcome.status.version}; restart required.`);process.exitCode=RESTART_AFTER_RUNTIME_UPDATE;return;}if(outcome.updated)console.log(`Activated SimC ${outcome.status.version}.`);for(const run of runs())if(run.mode==='topgear')recoverTopGearRun(run.id);startCaptureWatch();const requested=requestedApiPort();
+  // Under the dev supervisor and the desktop app the port is already resolved,
+  // so this normally agrees. Running the API on its own still checks, because
+  // binding blind is what produced the original EADDRINUSE crash.
+  const apiPort=await findAvailablePort(requested);
+  if(apiPort!==requested) console.warn(`Port ${requested} is already in use; the dashboard API is using ${apiPort} instead.`);
+  const server=app.listen(apiPort,'127.0.0.1',()=>{console.log(`Local Sim Dashboard API: http://127.0.0.1:${apiPort} (${runtime().version})`);scheduleRuntimeUpdates();});
+  server.on('error',error=>{
+    const failure=error as NodeJS.ErrnoException;
+    if(failure.code==='EADDRINUSE') console.error(`Port ${apiPort} was taken between the check and the bind. Restart the dashboard.`);
+    else console.error('Dashboard API server error:',failure);
+    process.exitCode=1;
+  });}
 if (process.env.VITEST !== 'true') {
   start().catch(error=>{console.error(`Local Sim Dashboard failed to start: ${error instanceof Error?error.message:String(error)}`);process.exitCode=1;});
 }
