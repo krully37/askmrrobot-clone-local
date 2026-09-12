@@ -5,10 +5,28 @@ Local Sim Dashboard is a Windows-local browser interface for SimulationCraft. It
 ## Run it
 
 1. Install Node.js 18+ and run `npm install`.
-2. Optionally set `SIMC_PATH` to an existing `simc.exe` for first-run fallback. The dashboard checks the official Windows nightly at most once every three days, installs verified builds under `.localsimdash/runtime/`, and keeps the prior build for rollback. To update sooner, replace the managed runtime with a manually downloaded SimC build through `SIMC_PATH`.
+2. Leave SimulationCraft to the dashboard, or set `SIMC_PATH` to pin a specific `simc.exe`. See [Keeping SimC current](#keeping-simc-current).
 3. Run `npm run dev` and open `http://localhost:5173`.
 
+The API listens on port 4317. Set `LOCALSIMDASH_PORT` if something else already holds it.
+
 Use `/simc` in World of Warcraft with the SimulationCraft addon, paste the generated profile into **Import character**, configure a scenario, and start a local run.
+
+## Keeping SimC current
+
+The dashboard manages its own SimulationCraft build under `.localsimdash/runtime/`. It checks the official Windows nightly index once a day, and `SIMC_UPDATE_INTERVAL_HOURS` changes that interval.
+
+A build found while the dashboard is running is installed but not activated, because swapping the executable would change the engine underneath sims already in progress. It becomes active on the next start. Only the active, previous and pending builds are kept on disk; `POST /api/runtime/rollback` returns to the previous one.
+
+Setting `SIMC_PATH`, or choosing an executable in the Catalog page, **pins** the dashboard to that build and disables nightly updates entirely. This is an override rather than a fallback, so the runtime status says so while it is set. Clear it to return to the managed runtime.
+
+Each installed build is smoke-tested by running `simc version`, and the archive's SHA-256 is recorded in its manifest for audit. SimulationCraft does not publish per-archive checksums, so that hash is not verified against an upstream value.
+
+### Why a stale catalog is dangerous
+
+SimulationCraft does not reject gear it cannot resolve. An item ID missing from the build's item database is dropped from the actor silently: no error, no non-zero exit, and a normal-looking DPS figure computed with that slot empty.
+
+Runs therefore reconcile the gear they requested against the gear SimC reported back, and any dropped slot is raised as a warning on the result. Treat those warnings as a signal to refresh the catalog or the runtime before trusting the number.
 
 ## What is implemented
 
