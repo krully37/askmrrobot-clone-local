@@ -1,5 +1,9 @@
 node_modules/
 dist/
+dist-server/
+release/
+release-build/
+release-installer/
 .localsimdash/
 runtime/
 *.log
