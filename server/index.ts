@@ -113,6 +113,19 @@ app.post('/api/advisor/run', async (req, res) => {
   }
 });
 app.get('/api/topgear/:runId',(req,res)=>{const j=getTopGearJob(+req.params.runId);if(!j)return res.sendStatus(404);res.json({...j,run:getRun(+req.params.runId)});});app.post('/api/runtime/rollback',(_,res)=>{try{res.json(rollbackRuntime());}catch(e){res.status(409).json({error:(e as Error).message});}});app.post('/api/runtime/smoke-test',async(_,res)=>{const rt=runtime();if(!rt.path)return res.status(409).json({error:'No SimC executable configured'});try{res.json({ok:true,version:await smokeTest(rt.path)});}catch(e){res.status(422).json({error:(e as Error).message});}});app.get('/api/config',async(_,res)=>res.json({defaults,compute:await computeCapacity(),dataDir:paths.root}));
+/**
+ * Express 4 does not forward a rejected async handler to its error middleware,
+ * so before this a single failing request took the whole API down and every
+ * later call from the open dashboard got ECONNREFUSED. A local dashboard should
+ * degrade one request instead of dying, so failures are logged and answered.
+ */
+app.use((error:unknown,_req:express.Request,res:express.Response,_next:express.NextFunction)=>{
+  console.error('Unhandled request error:',error);
+  if(!res.headersSent) res.status(500).json({error:error instanceof Error?error.message:String(error)});
+});
+process.on('unhandledRejection',reason=>console.error('Unhandled promise rejection:',reason));
+process.on('uncaughtException',error=>console.error('Uncaught exception:',error));
+
 async function start(){try{installDerivedCatalog();}catch(error){console.warn(`DB2 derived catalog was not installed: ${(error as Error).message}`);}installEnhancementSeed();const outcome=await ensureCurrentRuntime();if(outcome.updated&&process.env.SIMC_RUNTIME_SUPERVISED==='1'){console.log(`Activated SimC ${outcome.status.version}; restart required.`);process.exitCode=RESTART_AFTER_RUNTIME_UPDATE;return;}if(outcome.updated)console.log(`Activated SimC ${outcome.status.version}.`);for(const run of runs())if(run.mode==='topgear')recoverTopGearRun(run.id);startCaptureWatch();const apiPort=Number(process.env.LOCALSIMDASH_PORT||4317);app.listen(apiPort,'127.0.0.1',()=>{console.log(`Local Sim Dashboard API: http://127.0.0.1:${apiPort} (${runtime().version})`);scheduleRuntimeUpdates();});}
 if (process.env.VITEST !== 'true') {
   start().catch(error=>{console.error(`Local Sim Dashboard failed to start: ${error instanceof Error?error.message:String(error)}`);process.exitCode=1;});
