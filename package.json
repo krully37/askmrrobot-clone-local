@@ -5,7 +5,7 @@
   "type": "module",
   "main": "electron-main.cjs",
   "scripts": {
-    "start:electron": "wait-on tcp:4317 && electron .",
+    "start:electron": "electron .",
     "rebuild:node": "node scripts/rebuild-native.mjs node",
     "rebuild:electron": "node scripts/rebuild-native.mjs electron",
     "build:electron": "npm run build:prod && npm run rebuild:electron && electron-builder --dir",

@@ -2,11 +2,17 @@ import { createServer } from 'node:net';
 
 /**
  * Binding a hardcoded port and hoping it is free is how this app used to fail:
- * an unrelated local service held 4317, the API died with EADDRINUSE, and the
- * dashboard came up with every request refused. Ports are shared machine state,
- * so check before claiming one.
+ * an unrelated local service held the default, the API died with EADDRINUSE,
+ * and the dashboard came up with every request refused. Ports are shared
+ * machine state, so check before claiming one.
+ *
+ * The old default of 4317 was the root of that collision: 4317 and 4318 are the
+ * OpenTelemetry OTLP defaults, for gRPC and HTTP respectively, so anything
+ * running a collector owns both. This port is deliberately far from the
+ * well-known services, and below 49152 so it cannot clash with an ephemeral
+ * port the OS hands out to an outgoing connection.
  */
-export const DEFAULT_API_PORT = 4317;
+export const DEFAULT_API_PORT = 17317;
 export const DEFAULT_UI_PORT = 5173;
 
 export function isPortFree(port: number, host = '127.0.0.1'): Promise<boolean> {
