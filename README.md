@@ -59,6 +59,10 @@ Set `BLIZZARD_CLIENT_ID` and `BLIZZARD_CLIENT_SECRET` as user environment variab
 
 The pipeline reads the pinned sources in `data/season-manifest.json`, uses Blizzard's Game Data API, writes a staged SQLite package, validates it, and atomically replaces `.localsimdash/catalog/catalog.db`. It keeps a rollback copy and never stores credentials or access tokens.
 
+### Item icons
+
+Icons are cached under `.localsimdash/catalog-media` and fetched once per item, then never again. Blizzard's media API is used when credentials are configured. Because gear icons should not depend on registering an API client, the dashboard otherwise falls back to Wowhead's public tooltip endpoint for the icon slug and downloads the image from the public icon CDN. Only the item ID leaves the machine, and only on the first request for that item. Delete the directory to force a refetch.
+
 ### Verified difficulty variants
 
 Blizzard's item API exposes a base item level, not the exact difficulty/upgrade variant required for a trustworthy Droptimizer result. The dashboard therefore never promotes that base value to a simmable drop. Exact current-season variants live in [data/midnight-season-2-variants.json](data/midnight-season-2-variants.json) and are gated until they have been captured from the live Encounter Journal.
