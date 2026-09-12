@@ -61,7 +61,7 @@ describe('Pipeline API validation', () => {
       const res = await post('/api/droptimizer/run', { profileId: testProfileId, source: 'FakeSource', difficulty: 'FakeDifficulty', threads: 1 });
       expect(res.status).toBe(422);
       const body = await res.json();
-      expect(body.error).toContain('Choose a source and difficulty with catalog drops first');
+      expect(body.error).toContain('Choose a source and difficulty with usable catalog drops first');
     });
   });
 });
