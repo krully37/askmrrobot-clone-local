@@ -9,3 +9,4 @@ runtime/
 *.log
 .env
 .catalog-staging/
+data/catalog.db

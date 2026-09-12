@@ -13,7 +13,7 @@ import { findAvailablePort, requestedApiPort } from './ports.js';
 import type { Scenario } from './types.js';
 import { catalogDrops, catalogEnhancements, catalogSourceCategories, catalogSources, catalogStatus, ensureItemSets, enrichInventory, searchCatalog, upsertCatalogItem, upsertEnhancement, catalogOmniumSpells, synthesizeVariants } from './catalog.js';
 import { installEnhancementSeed } from './enhancements.js';
-import { derivedCatalogHealth, installDerivedCatalog } from './derived-catalog.js';
+import { derivedCatalogHealth, installDerivedCatalog, installSourceCategories } from './derived-catalog.js';
 import { refreshCatalog, refreshStatus } from './catalog-refresh.js';
 import { calibratePreview, planOptimization, previewOptimization } from './optimizer.js';
 import { recoverTopGearRun, runTopGearBatches } from './topgear-batches.js';
@@ -127,7 +127,7 @@ app.use((error:unknown,_req:express.Request,res:express.Response,_next:express.N
 process.on('unhandledRejection',reason=>console.error('Unhandled promise rejection:',reason));
 process.on('uncaughtException',error=>console.error('Uncaught exception:',error));
 
-async function start(){try{installDerivedCatalog();}catch(error){console.warn(`DB2 derived catalog was not installed: ${(error as Error).message}`);}installEnhancementSeed();const outcome=await ensureCurrentRuntime();if(outcome.updated&&process.env.SIMC_RUNTIME_SUPERVISED==='1'){console.log(`Activated SimC ${outcome.status.version}; restart required.`);process.exitCode=RESTART_AFTER_RUNTIME_UPDATE;return;}if(outcome.updated)console.log(`Activated SimC ${outcome.status.version}.`);for(const run of runs())if(run.mode==='topgear')recoverTopGearRun(run.id);startCaptureWatch();const requested=requestedApiPort();
+async function start(){try{installSourceCategories();}catch(error){console.warn(`Source categories were not seeded: ${(error as Error).message}`);}try{installDerivedCatalog();}catch(error){console.warn(`DB2 derived catalog was not installed: ${(error as Error).message}`);}installEnhancementSeed();const outcome=await ensureCurrentRuntime();if(outcome.updated&&process.env.SIMC_RUNTIME_SUPERVISED==='1'){console.log(`Activated SimC ${outcome.status.version}; restart required.`);process.exitCode=RESTART_AFTER_RUNTIME_UPDATE;return;}if(outcome.updated)console.log(`Activated SimC ${outcome.status.version}.`);for(const run of runs())if(run.mode==='topgear')recoverTopGearRun(run.id);startCaptureWatch();const requested=requestedApiPort();
   // Under the dev supervisor and the desktop app the port is already resolved,
   // so this normally agrees. Running the API on its own still checks, because
   // binding blind is what produced the original EADDRINUSE crash.

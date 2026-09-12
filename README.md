@@ -4,9 +4,11 @@ Local Sim Dashboard is a Windows-local browser interface for SimulationCraft. It
 
 ## Run it
 
-1. Install Node.js 18+ and run `npm install`.
+1. Install Node.js 22 or 24 and run `npm install`, then `npm run rebuild:node`.
 2. Leave SimulationCraft to the dashboard, or set `SIMC_PATH` to pin a specific `simc.exe`. See [Keeping SimC current](#keeping-simc-current).
 3. Run `npm run dev` and open `http://localhost:5173`.
+
+better-sqlite3 publishes a prebuilt binary per ABI, and only Node 22 and Node 24 are covered on Windows. Other versions have no matching asset and fall back to a source build that needs a C++ toolchain. `npm run rebuild:node` fetches the right binary, and it is a required step whenever npm is configured to block package install scripts, because then `npm install` never runs the one that would fetch it.
 
 Ports are checked before anything binds. The API prefers 17317 and the UI prefers 5173, and if either is already taken the next free port is used and the chosen URL is printed at startup. `LOCALSIMDASH_PORT` sets the preferred API port; it is still checked rather than assumed.
 
@@ -45,7 +47,7 @@ Top Gear candidate enumeration and the seasonal item catalog require the charact
 
 `npm run dist` builds the installer and `npm run build:electron` produces an unpacked directory.
 
-better-sqlite3 ships one compiled binary per ABI, and Node and Electron do not share one: Node 22 is NODE_MODULE_VERSION 127 while Electron 32 is 128. Loading the wrong one fails with `ERR_DLOPEN_FAILED`. Both packaging scripts therefore run `npm run rebuild:electron` first, which downloads the published Electron binary rather than compiling, so no C++ toolchain is needed.
+better-sqlite3 ships one compiled binary per ABI, and Node and Electron do not share one: Node 22 is NODE_MODULE_VERSION 127 and Node 24 is 137, while Electron 32 is 128. Loading the wrong one fails with `ERR_DLOPEN_FAILED`. Both packaging scripts therefore run `npm run rebuild:electron` first, which downloads the published Electron binary rather than compiling, so no C++ toolchain is needed.
 
 That swap is global to `node_modules`, so run `npm run rebuild:node` before going back to `npm run dev`.
 
@@ -87,6 +89,8 @@ Copy [addon/LocalSimDashCatalog](addon/LocalSimDashCatalog) into `World of Warcr
 For Mythic+, set a real-link context first, for example `/lsdmplus Altar of Fangs|+10`, then run `/lsdcapture ` and shift-click an actual item link. The dashboard will only mark that track verified when its item maps to a known local dungeon drop. Delves, Vault rewards, bonus-roll variants, crafted gear, and Catalyst conversions use the same exact-link safety model: set a generic context such as `/lsdcontext great-vault|Great Vault|Raid`, then run `/lsdcapture` with a live item link. These entries remain capture-required until that link validates locally.
 
 `npm run catalog:db2:prefill -- --wow <Retail folder> --db2-dir <extracted DB2 folder> --out .localsimdash/catalog/db2-derived-variants.json` decodes the pinned DB2 tables and writes an advisory derived package. Then run `npm run catalog:db2:install` (or restart the dashboard) to atomically install it. Extract `Item`, `ItemSparse`, `JournalEncounterItem`, `Difficulty`, `ContentTuning`, `ItemBonus`, and `ItemBonusTree` from the same Retail build. `ItemXItemEffect`, `SpellItemEnchantment`, `ItemEffect`, and `SpellEffect` enrich enhancement discovery but are optional. The reader handles wow.export's zeroed/encrypted sections and records table hashes and the client build. Derived rows are intentionally not simmable until a live addon capture corroborates them.
+
+The current-season source categories in [data/current-season-source-categories.json](data/current-season-source-categories.json) are plain repository data and carry no DB2 dependency, so the dashboard seeds them on every start. They used to be written only as a side effect of installing the DB2 package, which left anyone without an extracted Retail client with no capture categories at all.
 
 ### Enhancement review
 

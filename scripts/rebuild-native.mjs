@@ -1,8 +1,10 @@
 /**
  * better-sqlite3 ships a compiled binary per ABI, and Node and Electron use
- * different ones. Node 22 is NODE_MODULE_VERSION 127 while Electron 32 is 128,
- * so a single node_modules cannot satisfy both at once: running the desktop app
- * against the Node binary fails with ERR_DLOPEN_FAILED, and vice versa.
+ * different ones. Node 22 is NODE_MODULE_VERSION 127 and Node 24 is 137, while
+ * Electron 32 is 128, so a single node_modules cannot satisfy both at once:
+ * running the desktop app against the Node binary fails with ERR_DLOPEN_FAILED,
+ * and vice versa. npm may also block the package install script, in which case
+ * no binary is fetched at install time and this is the only thing that gets one.
  *
  * This fetches the published prebuilt binary for whichever runtime is asked for,
  * so switching between `npm run dev` and packaging never needs a C++ toolchain.
