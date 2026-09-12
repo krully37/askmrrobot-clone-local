@@ -86,7 +86,7 @@ export async function runDroptimizer(runId:number, rawProfile:string, drops:Drop
   saveDroptimizerJob(runId,{scenario,threads,drops,upgradeTarget,upgradeEquipped,rawProfile:finalRawProfile},entries);
   writeDiagnostics();
 
-  updateRun(runId,{status:'running'}); const started=Date.now(); let baseline=0,baselineError=0; let currentBatch=0; let batchSize=10;
+  updateRun(runId,{status:'running'}); const started=Date.now(); let baseline=0,baselineError=0,baselineWarnings:string[]=[]; let currentBatch=0; let batchSize=10;
   const scores=new Map<string,number>(), scoreErrors=new Map<string,number>(), failures=new Map<string,string>(); const reports:string[]=[];
   const rows=()=>Array.from(new Map(entries.map(entry=>[entry.drop.id,entry])).values()).map(drop=>{const candidates=entries.filter(entry=>entry.drop.id===drop.drop.id).map(entry=>({slot:entry.slot,dps:scores.get(entry.name)||0,error:failures.get(entry.name),simulationError:scoreErrors.get(entry.name)||0})).filter(x=>x.dps);const best=candidates.sort((a,b)=>b.dps-a.dps)[0];const entry=entries.find(value=>value.drop.id===drop.drop.id&&value.slot===(best?.slot||drop.slot));const failure=entries.filter(entry=>entry.drop.id===drop.drop.id).map(entry=>failures.get(entry.name)).find(Boolean);const dps=best?.dps||0,delta=dps-baseline,uncertainty=Math.sqrt(baselineError**2+(best?.simulationError||0)**2),replaced=entry?.gear.find(line=>line.slot===(best?.slot||drop.slot));const significant=Math.abs(delta)>1.96*uncertainty,warningReasons=[...(entry?.warnings||[])];const verificationEligible=Boolean(significant&&delta/baseline<=-.02&&(drop.drop.itemLevel||0)>=(replaced?.itemLevel||0)+5||warningReasons.some(warning=>/No verified bonus IDs/i.test(warning)));return {itemId:drop.drop.id,name:drop.drop.name,boss:drop.drop.boss,difficulty:drop.drop.difficulty,slot:best?.slot||drop.slot,itemLevel:displayedItemLevels.get(drop.drop.id) ?? drop.drop.itemLevel,replacedItemLevel:replaced?.itemLevel,dps,delta,relative:baseline?delta/baseline:0,uncertainty,significant,verificationEligible,verificationReasons:warningReasons,error:best?undefined:failure};}).sort((a,b)=>b.delta-a.delta);
   const save=(patch:Partial<DropProgress>={})=>{
@@ -118,19 +118,20 @@ export async function runDroptimizer(runId:number, rawProfile:string, drops:Drop
   save({stage:'queued',currentBatch:0,totalBatches:Math.ceil(entries.length/batchSize)});
   try {
     save({stage:'baseline'});
-    const base=await execute(runId,buildInput(finalRawProfile,scenario,threads),{suffix:'baseline',finalize:false}); const baselineResult=parseSimcResult(base.jsonPath); baseline=baselineResult?.dps||0;baselineError=baselineResult?.error||0; reports.push(base.reportPath); writeDiagnostics(reports);
+    const baselineInput=buildInput(finalRawProfile,scenario,threads);
+    const base=await execute(runId,baselineInput,{suffix:'baseline',finalize:false}); const baselineResult=parseSimcResult(base.jsonPath,'quick',baselineInput); baseline=baselineResult?.dps||0;baselineError=baselineResult?.error||0;baselineWarnings=baselineResult?.warnings||[]; reports.push(base.reportPath); writeDiagnostics(reports);
     if(!baseline)throw new Error('Baseline simulation returned no DPS result.');
     save({stage:'simulating'});
     let cursor=0;
     while(cursor<entries.length&&!cancelled()) { currentBatch++; const batch=entries.slice(cursor,cursor+batchSize); await runBatch(batch); cursor+=batch.length; save(); }
     const finalRows=rows(); const state=cancelled()?'cancelled':'completed';
     save({stage:state,currentBatch,estimatedRemainingMs:state==='completed'?0:undefined,totalBatches:currentBatch});
-    saveRunResult(runId,{version:1,kind:'droptimizer',dps:finalRows[0]?.dps||baseline,error:0,iterations:0,elapsedSeconds:(Date.now()-started)/1000,warnings:[],gear:[],damage:[],buffs:[],comparisons:finalRows,baselineDps:baseline,diagnosticsPath});
+    saveRunResult(runId,{version:1,kind:'droptimizer',dps:finalRows[0]?.dps||baseline,error:0,iterations:0,elapsedSeconds:(Date.now()-started)/1000,warnings:baselineWarnings,gear:[],damage:[],buffs:[],comparisons:finalRows,baselineDps:baseline,diagnosticsPath});
     updateRun(runId,{status:state,reportPath:reports[0],summary:`${finalRows.filter(x=>x.dps).length}/${finalRows.length} drops ranked against equipped gear${state==='cancelled'?' (partial)':''}`,completedAt:new Date().toISOString()});
     return finalRows;
   } catch(error) {
     const message=error instanceof Error?error.message:String(error);
-    if(cancelled()){const partial=rows();save({stage:'cancelled',estimatedRemainingMs:undefined});saveRunResult(runId,{version:1,kind:'droptimizer',dps:partial[0]?.dps||baseline,error:0,iterations:0,elapsedSeconds:(Date.now()-started)/1000,warnings:[],gear:[],damage:[],buffs:[],comparisons:partial,baselineDps:baseline});updateRun(runId,{status:'cancelled',summary:`${partial.filter(x=>x.dps).length}/${partial.length} drops ranked before cancellation`,completedAt:new Date().toISOString()});return partial;}
+    if(cancelled()){const partial=rows();save({stage:'cancelled',estimatedRemainingMs:undefined});saveRunResult(runId,{version:1,kind:'droptimizer',dps:partial[0]?.dps||baseline,error:0,iterations:0,elapsedSeconds:(Date.now()-started)/1000,warnings:baselineWarnings,gear:[],damage:[],buffs:[],comparisons:partial,baselineDps:baseline});updateRun(runId,{status:'cancelled',summary:`${partial.filter(x=>x.dps).length}/${partial.length} drops ranked before cancellation`,completedAt:new Date().toISOString()});return partial;}
     save({stage:'failed',error:message}); updateRun(runId,{status:'failed',summary:message.slice(-2000),completedAt:new Date().toISOString()}); throw error;
   }
 }
@@ -140,14 +141,15 @@ export async function runDroptimizerVerification(runId:number,rawProfile:string,
   const verificationScenario={...scenario,rawOverride:`${scenario.rawOverride||''}\ntarget_error=0.05`.trim()};
   try {
     updateRun(runId,{status:'running'});
-    const baselineRun=await execute(runId,buildInput(rawProfile,verificationScenario,threads),{suffix:'verification-baseline',finalize:false});
-    const baseline=parseSimcResult(baselineRun.jsonPath);
+    const verificationInput=buildInput(rawProfile,verificationScenario,threads);
+    const baselineRun=await execute(runId,verificationInput,{suffix:'verification-baseline',finalize:false});
+    const baseline=parseSimcResult(baselineRun.jsonPath,'quick',verificationInput);
     if(!baseline?.dps)throw new Error('Verification baseline returned no DPS result.');
     const candidateRun=await execute(runId,buildInput(buildDroptimizerGearsetInput(rawProfile,[entry]),verificationScenario,threads),{suffix:'verification-candidate',finalize:false});
     const candidate=candidateRun.profilesets.find(result=>result.name===entry.name);
     if(!candidate?.dps)throw new Error('Verification candidate returned no DPS result.');
     const delta=candidate.dps-baseline.dps, uncertainty=Math.sqrt((baseline.error||0)**2+(candidate.error||0)**2);
-    saveRunResult(runId,{version:1,kind:'droptimizer-verify',dps:candidate.dps,error:candidate.error||0,iterations:candidate.iterations||0,elapsedSeconds:0,warnings:[],gear:entry.gear,damage:[],buffs:[],baselineDps:baseline.dps,comparisons:[{itemId:entry.drop.id,slot:entry.slot,dps:candidate.dps,delta,relative:delta/baseline.dps,uncertainty,significant:Math.abs(delta)>1.96*uncertainty,targeted:true}],diagnosticsPath:undefined});
+    saveRunResult(runId,{version:1,kind:'droptimizer-verify',dps:candidate.dps,error:candidate.error||0,iterations:candidate.iterations||0,elapsedSeconds:0,warnings:baseline.warnings||[],gear:entry.gear,damage:[],buffs:[],baselineDps:baseline.dps,comparisons:[{itemId:entry.drop.id,slot:entry.slot,dps:candidate.dps,delta,relative:delta/baseline.dps,uncertainty,significant:Math.abs(delta)>1.96*uncertainty,targeted:true}],diagnosticsPath:undefined});
     updateRun(runId,{status:'completed',reportPath:candidateRun.reportPath,summary:`Targeted verification for ${entry.drop.name}`,completedAt:new Date().toISOString()});
   } catch(error) { updateRun(runId,{status:'failed',summary:error instanceof Error?error.message:String(error),completedAt:new Date().toISOString()}); throw error; }
 }

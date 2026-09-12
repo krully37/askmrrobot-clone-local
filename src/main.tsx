@@ -2239,8 +2239,15 @@ function Result({ runId, back }: { runId?: number; back: () => void }) {
           </section>
           {result.warnings?.length > 0 && (
             <section className="result-warnings">
-              SimC reported {result.warnings.length} notification
-              {result.warnings.length === 1 ? "" : "s"}.
+              <strong>
+                SimC reported {result.warnings.length} notification
+                {result.warnings.length === 1 ? "" : "s"}.
+              </strong>
+              <ul className="result-warnings-list">
+                {result.warnings.map((warning: string, i: number) => (
+                  <li key={i}>{warning}</li>
+                ))}
+              </ul>
             </section>
           )}
           {result.kind === "topgear" ? (

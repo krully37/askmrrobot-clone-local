@@ -1,5 +1,6 @@
 import { existsSync, readFileSync } from 'node:fs';
 import type { PlannedLoadout } from './optimizer.js';
+import { reconcileGear, requestedGear } from './gear-reconciliation.js';
 
 const list=(value:any)=>Array.isArray(value)?value:value&&typeof value==='object'?Object.values(value):[];
 const number=(value:any)=>Number.isFinite(Number(value))?Number(value):0;
@@ -7,7 +8,12 @@ const label=(value:any)=>String(value?.spell_name||value?.name||value?.id||'Unkn
 
 export interface LocalResult { version:1; kind:'quick'|'topgear'|'droptimizer'|'droptimizer-verify'; dps:number; error:number; iterations:number; elapsedSeconds:number; warnings:string[]; character?:any; scenario?:any; gear:any[]; damage:any[]; buffs:any[]; comparisons?:any[]; diagnosticsPath?:string; }
 
-export function parseSimcResult(jsonPath:string, kind:LocalResult['kind']='quick'):LocalResult|undefined {
+/**
+ * `simcInput` is the profile that produced this report. When supplied, the gear
+ * it asked for is reconciled against the gear SimC reported back, because SimC
+ * drops unresolvable items silently rather than failing the run.
+ */
+export function parseSimcResult(jsonPath:string, kind:LocalResult['kind']='quick', simcInput?:string):LocalResult|undefined {
   if(!existsSync(jsonPath)) return;
   const root=JSON.parse(readFileSync(jsonPath,'utf8')); const sim=root?.sim||{}; const player=list(sim.players)[0]||{};
   const data=player.collected_data||{}; const dps=data.dps||{};
@@ -15,6 +21,7 @@ export function parseSimcResult(jsonPath:string, kind:LocalResult['kind']='quick
   const buffs=list(player.buffs).map((x:any)=>({name:label(x),uptime:number(x?.uptime),count:number(x?.start_count??x?.trigger),school:String(x?.spell_school||'')})).filter((x:any)=>x.uptime>0).sort((a:any,b:any)=>b.uptime-a.uptime);
   const gear=Object.entries(player.gear||{}).filter(([,x]:any)=>x?.name).map(([slot,x]:any)=>({slot,name:String(x.name).replace(/_/g,' '),itemId:Number(String(x.encoded_item||'').match(/(?:^|,)id=(\d+)/)?.[1])||undefined,itemLevel:number(x.ilevel),encodedItem:x.encoded_item}));
   const warnings=list(root.logs).map((x:any)=>typeof x==='string'?x:String(x?.message||'')).filter(Boolean);
+  if(simcInput) warnings.unshift(...reconcileGear(requestedGear(simcInput),gear));
   return {version:1,kind,dps:number(dps.mean),error:number(dps.mean_std_dev),iterations:number(dps.count),elapsedSeconds:number(sim.statistics?.elapsed_time_seconds),warnings,character:{name:player.name,race:player.race,level:player.level,specialization:player.specialization,talents:player.talents,potion:player.potion,flask:player.flask,food:player.food},gear,damage:actions,buffs};
 }
 
